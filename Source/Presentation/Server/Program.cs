@@ -1,5 +1,10 @@
-using PlayGround.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using PlayGround.Application.Interfaces;
+using PlayGround.Infrastructure.Database;
+using PlayGround.Persistence.Repositories;
+using PlayGround.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +15,36 @@ builder.AddServiceDefaults();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-// EF Core
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Database Configuration (Dapper)
+builder.Services.Configure<DatabaseConfiguration>(
+    builder.Configuration.GetSection(DatabaseConfiguration.Section));
+
+// DI: Auth
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
+// JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key is not configured")))
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // SignalR
 builder.Services.AddSignalR();

@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions", "Solutions", "{
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.KFA", "Source\Tools\Crawler.KFA\Crawler.KFA.csproj", "{327FAB73-D7C8-4431-B1BF-21F60F2A9361}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,6 +240,18 @@ Global
 		{8A2DCA74-0266-4DFE-B988-FAA78FB9AC6B}.Release|x86.ActiveCfg = Release|Any CPU
 		{8A2DCA74-0266-4DFE-B988-FAA78FB9AC6B}.Release|x86.Build.0 = Release|Any CPU
 		{8A2DCA74-0266-4DFE-B988-FAA78FB9AC6B}.Release|x86.Deploy.0 = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|x64.Build.0 = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Debug|x86.Build.0 = Debug|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|x64.ActiveCfg = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|x64.Build.0 = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|x86.ActiveCfg = Release|Any CPU
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +276,7 @@ Global
 		{2BC86642-A1CB-4BB7-B7AC-4398397F79BC} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{8A2DCA74-0266-4DFE-B988-FAA78FB9AC6B} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
 		{C8D5274F-AC00-46C7-1F8D-E88E81087A52} = {B8EFCA5F-814F-285C-A8CB-F00F14650265}
+		{327FAB73-D7C8-4431-B1BF-21F60F2A9361} = {82952E8A-BE24-56EA-13F6-4DD522780281}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FE0740B-0C21-4B76-ACC5-D18A4F870F32}
