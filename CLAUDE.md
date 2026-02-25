@@ -7,14 +7,14 @@
 ```
 Source/
 ├── Core/                              (핵심 비즈니스 레이어)
-│   ├── PlayGround.Shared/             범용 .NET 유틸리티 (도메인 무관, 의존성 없음)
+│   ├── Shared/                        범용 .NET 유틸리티 (도메인 무관, 의존성 없음)
 │   │   ├── DTOs/                      ApiResponse<T>, PagedList<T>
 │   │   ├── Result/                    Result<T> 모나드 패턴
 │   │   │   └── Codes/                 범용 DetailCode, ErrorCode, SuccessCode 등
 │   │   ├── Extensions/               문자열, Enum, 변환 확장 메서드
 │   │   └── Validation/               범용 검증 유틸리티
 │   │
-│   ├── PlayGround.Domain/             비즈니스 규칙, 엔티티, 도메인 Enum (Shared 참조)
+│   ├── Domain/                        비즈니스 규칙, 엔티티, 도메인 Enum (Shared 참조)
 │   │   ├── Common/                    Entity, ValueObject, Enumeration 베이스
 │   │   ├── Enums/                     도메인 Enum (PlayerCategory, MatchStatus 등)
 │   │   │   └── Soccer/               축구 전용 Enum (SoccerPosition, PreferredFoot 등)
@@ -22,7 +22,7 @@ Source/
 │   │   ├── SubDomains/                서브도메인별 엔티티, 값 객체
 │   │   └── Interfaces/               리포지토리 인터페이스 (포트 정의)
 │   │
-│   └── PlayGround.Application/        유즈케이스, 서비스 오케스트레이션 (Domain, Shared 참조)
+│   └── Application/                   유즈케이스, 서비스 오케스트레이션 (Domain, Shared 참조)
 │       ├── {기능}/Commands/           상태 변경 유즈케이스 (생성, 수정, 삭제)
 │       ├── {기능}/Queries/            조회 유즈케이스
 │       ├── Interfaces/                인프라 포트 (ICacheService 등)
@@ -30,14 +30,14 @@ Source/
 │       └── Validators/                입력값 검증
 │
 ├── Infrastructure/
-│   ├── PlayGround.Infrastructure/     외부 라이브러리 래핑 + DB 기반 라이브러리 (Application, Domain, Shared 참조)
+│   ├── Infrastructure/                외부 라이브러리 래핑 + DB 기반 라이브러리 (Application, Domain, Shared 참조)
 │   │   ├── Database/
 │   │   │   └── Base/                  CommandBase, ProcedureBase, QueryBase, RepositoryBase, ResultBase
 │   │   ├── Caching/                   Redis 래핑
 │   │   ├── Messaging/                 Akka, SignalR 래핑
 │   │   └── Logging/                   NLog 설정/래핑
 │   │
-│   └── PlayGround.Persistence/        DB 전용 (Application, Domain, Shared, Infrastructure 참조)
+│   └── Persistence/                   DB 전용 (Application, Domain, Shared, Infrastructure 참조)
 │       ├── Database/
 │       │   └── Generated/            Generator.Database 생성 코드 출력 위치
 │       │       └── {DB명}/
@@ -48,8 +48,8 @@ Source/
 │       └── Repositories/              리포지토리 구현체
 │
 ├── Presentation/                      (웹 애플리케이션)
-│   ├── PlayGround.Server/             ASP.NET Core API Server
-│   └── PlayGround.Client/             Blazor WebAssembly (프론트엔드)
+│   ├── Server/                        ASP.NET Core API Server
+│   └── Client/                        Blazor WebAssembly (프론트엔드)
 │       ├── Layout/                    MainLayout, DashboardLayout
 │       ├── Pages/                     Auth, Team, Player, Agent
 │       ├── Components/                KpiCard, StatusBadge 등 재사용 컴포넌트
@@ -58,23 +58,23 @@ Source/
 │       └── Styles/                    Tailwind CSS 소스
 │
 ├── Database/
-│   └── Database.Main/                 SQL 테이블/프로시저 정의
+│   └── Main/                          SQL 테이블/프로시저 정의
 │       ├── Schema/                    스키마 정의
 │       ├── Tables/                    테이블 DDL
 │       ├── Procedures/                저장 프로시저
 │       ├── Queries/                   쿼리 정의
 │       └── Indexes/                   인덱스 정의
 │
-├── PlayGround.AppHost/                .NET Aspire 호스트 (오케스트레이션)
-├── PlayGround.ServiceDefaults/        서비스 기본 설정 (OpenTelemetry, HealthCheck)
+├── AppHost/                           .NET Aspire 호스트 (오케스트레이션)
+├── ServiceDefaults/                   서비스 기본 설정 (OpenTelemetry, HealthCheck)
 │
 └── Tools/
     └── Generator.Database/            데이터베이스 코드 생성기 → Persistence 출력
 
 Tests/
-├── PlayGround.Tests.Unit/             단위 테스트 (Domain, Application, Shared)
-├── PlayGround.Tests.Integration/      통합 테스트 (API 엔드포인트)
-└── PlayGround.Tests.Infrastructure/   인프라 테스트 (DB, 외부 서비스)
+├── Tests.Unit/                        단위 테스트 (Domain, Application, Shared)
+├── Tests.Integration/                 통합 테스트 (API 엔드포인트)
+└── Tests.Infrastructure/              인프라 테스트 (DB, 외부 서비스)
 ```
 
 ## 기술 스택
@@ -333,10 +333,10 @@ public IReadOnlyList<PlayerDto> GetActivePlayers(int count = 10)
 ## 빌드 & 테스트
 
 - **빌드**: `dotnet build PlayGround.sln`
-- **실행 (Aspire)**: `dotnet run --project Source/PlayGround.AppHost`
-- **실행 (서버만)**: `dotnet run --project Source/Presentation/PlayGround.Server`
+- **실행 (Aspire)**: `dotnet run --project Source/AppHost`
+- **실행 (서버만)**: `dotnet run --project Source/Presentation/Server`
 - **테스트**: `dotnet test`
-- **Tailwind 빌드**: `cd Source/Presentation/PlayGround.Client && npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css`
+- **Tailwind 빌드**: `cd Source/Presentation/Client && npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css`
 
 ## 중요 규칙
 

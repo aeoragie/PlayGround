@@ -44,8 +44,12 @@ bld/
 node_modules/
 package-lock.json
 
+## SQL Server Database Project
+*.dbmdl
+*.jfm
+
 ## Tailwind CSS output
-Source/Presentation/PlayGround.Client/wwwroot/css/app.css
+Source/Presentation/Client/wwwroot/css/app.css
 
 ## OS files
 .DS_Store
