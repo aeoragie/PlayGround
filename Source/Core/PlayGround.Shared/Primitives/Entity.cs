@@ -1,0 +1,1 @@
+namespace PlayGround.Shared.Primitives;

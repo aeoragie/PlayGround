@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Database.Main</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{8a2dca74-0266-4dfe-b988-faa78fb9ac6b}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Database.Main</RootNamespace>
+    <AssemblyName>Database.Main</AssemblyName>
+    <ModelCollation>1033,CS</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Latin1_General_100_CS_AS_KS_WS_SC_UTF8</DefaultCollation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Tables\Nested" />
+    <Folder Include="Procedures" />
+    <Folder Include="Schemas" />
+    <Folder Include="Indexes" />
+    <Folder Include="Procedures\Nested" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Nested\Exceptions.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\UserFamilies.sql" />
+    <Build Include="Tables\AuditLogs.sql" />
+    <Build Include="Tables\EmailVerifications.sql" />
+    <Build Include="Tables\UserRefreshTokens.sql" />
+    <Build Include="Tables\UserSessions.sql" />
+    <Build Include="Tables\UserSocialAccounts.sql" />
+    <Build Include="Tables\UserSocialLinks.sql" />
+    <Build Include="Indexes\Indexes.sql" />
+    <Build Include="Tables\LoginAttemptLogs.sql" />
+    <Build Include="Tables\PasswordResetTokens.sql" />
+    <!-- Soccer -->
+    <Build Include="Tables\Teams.sql" />
+    <Build Include="Tables\Competitions.sql" />
+    <Build Include="Tables\Players.sql" />
+    <Build Include="Tables\CareerEntries.sql" />
+    <Build Include="Tables\SeasonStats.sql" />
+    <Build Include="Tables\PortfolioItems.sql" />
+    <Build Include="Tables\PhysicalRecords.sql" />
+    <Build Include="Tables\SkillRatings.sql" />
+    <Build Include="Tables\Honors.sql" />
+    <Build Include="Tables\Matches.sql" />
+    <Build Include="Tables\PlayerMatchStats.sql" />
+    <Build Include="Tables\PlayerGoals.sql" />
+    <Build Include="Tables\TrainingLogs.sql" />
+    <Build Include="Tables\ScoutingMemos.sql" />
+    <Build Include="Tables\PlayerPrivacySettings.sql" />
+    <Build Include="Tables\Schedules.sql" />
+    <Build Include="Tables\PlayerEvaluations.sql" />
+    <Build Include="Tables\CareerPaths.sql" />
+    <Build Include="Tables\CareerPathTargetTeams.sql" />
+    <Build Include="Tables\TryoutHistories.sql" />
+    <Build Include="Procedures\UspCreateUserByEmail.sql" />
+    <Build Include="Procedures\UspCreateUserWithSocialAccount.sql" />
+    <Build Include="Procedures\UspGetUser.sql" />
+    <Build Include="Procedures\UspGetUserByEmail.sql" />
+    <Build Include="Procedures\UspGetUserList.sql" />
+    <Build Include="Procedures\UspGetUserWithSocialAccount.sql" />
+    <Build Include="Procedures\UspUpdateUser.sql" />
+    <Build Include="Procedures\UspCreateRefreshToken.sql" />
+    <Build Include="Procedures\UspUpdateLastLogin.sql" />
+    <Build Include="Procedures\Nested\NspException.sql" />
+    <Build Include="Procedures\Nested\NspGetUser.sql" />
+    <Build Include="Procedures\Nested\NspGetUserWithSocialAccount.sql" />
+    <Build Include="Schemas\Nested.sql" />
+  </ItemGroup>
+</Project>

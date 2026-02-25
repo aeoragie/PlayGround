@@ -1,0 +1,43 @@
+@inherits LayoutComponentBase
+
+<div class="flex min-h-screen bg-bg">
+    <!-- Sidebar -->
+    <aside class="w-[240px] bg-surface border-r border-border fixed h-full">
+        <div class="p-5">
+            <h2 class="text-lg font-extrabold text-primary">PlayGround</h2>
+        </div>
+        <nav class="mt-4">
+            @SidebarContent
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="ml-[240px] flex-1">
+        <!-- Topbar -->
+        <div class="bg-surface border-b border-border px-8 py-3.5
+                    flex items-center justify-between sticky top-0 z-40">
+            <div>
+                <h1 class="text-[17px] font-extrabold">@PageTitle</h1>
+                @if (!string.IsNullOrEmpty(PageSubtitle))
+                {
+                    <div class="text-xs text-text-light mt-0.5">@PageSubtitle</div>
+                }
+            </div>
+            <div class="flex items-center gap-2">
+                @TopbarActions
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 md:p-8">
+            @Body
+        </div>
+    </main>
+</div>
+
+@code {
+    [Parameter] public string PageTitle { get; set; } = "";
+    [Parameter] public string? PageSubtitle { get; set; }
+    [Parameter] public RenderFragment? TopbarActions { get; set; }
+    [Parameter] public RenderFragment? SidebarContent { get; set; }
+}

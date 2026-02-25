@@ -1,0 +1,18 @@
+@* 상태 뱃지 컴포넌트 *@
+
+<span class="@GetClasses()">@Text</span>
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string Variant { get; set; } = "default";
+
+    private string GetClasses() => Variant switch
+    {
+        "success" => "px-2 py-0.5 rounded text-[11px] font-bold bg-green-50 text-green-700",
+        "warning" => "px-2 py-0.5 rounded text-[11px] font-bold bg-yellow-50 text-yellow-700",
+        "error"   => "px-2 py-0.5 rounded text-[11px] font-bold bg-red-50 text-red-700",
+        "info"    => "px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-700",
+        "primary" => "px-2 py-0.5 rounded text-[11px] font-bold bg-primary-subtle text-primary",
+        _         => "px-2 py-0.5 rounded text-[11px] font-bold bg-bg text-text-light",
+    };
+}

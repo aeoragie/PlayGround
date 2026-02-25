@@ -1,0 +1,61 @@
+## .NET
+bin/
+obj/
+Binary/
+Intermediate/
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio
+.vs/
+*.sln.ide/
+
+## Rider
+.idea/
+
+## VS Code
+.vscode/
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Node
+node_modules/
+package-lock.json
+
+## Tailwind CSS output
+Source/Presentation/PlayGround.Client/wwwroot/css/app.css
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Secrets
+*.pfx
+*.publishsettings
+appsettings.*.local.json
+
+## Test results
+TestResults/
+coverage/

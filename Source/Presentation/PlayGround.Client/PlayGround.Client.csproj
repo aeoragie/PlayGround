@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\PlayGround.Shared\PlayGround.Shared.csproj" />
+  </ItemGroup>
+
+  <!-- Tailwind CSS 빌드 시 자동 컴파일 -->
+  <Target Name="Tailwind" BeforeTargets="Build">
+    <Exec Command="npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css --minify" Condition="Exists('node_modules')" />
+  </Target>
+
+</Project>

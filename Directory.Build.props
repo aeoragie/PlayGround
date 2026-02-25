@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <!-- 빌드 결과물(bin)은 Binary 디렉터리로 분리 -->
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+
+    <BaseOutputPath Condition="'$(Configuration)'=='Debug'">$(SolutionDir)Binary\Debug\$(MSBuildProjectName)</BaseOutputPath>
+    <BaseOutputPath Condition="'$(Configuration)'=='Release'">$(SolutionDir)Binary\Release\$(MSBuildProjectName)</BaseOutputPath>
+    <BaseOutputPath Condition="'$(BaseOutputPath)'==''">bin\$(Configuration)\</BaseOutputPath>
+    <BaseOutputPath>$([MSBuild]::NormalizeDirectory('$(BaseOutputPath)'))</BaseOutputPath>
+
+    <BaseIntermediateOutputPath Condition="'$(Configuration)'=='Debug'">$(SolutionDir)Intermediate\Debug\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(Configuration)'=='Release'">$(SolutionDir)Intermediate\Release\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'==''">obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>$([MSBuild]::NormalizeDirectory('$(BaseIntermediateOutputPath)'))</BaseIntermediateOutputPath>
+
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+
+    <OutputPath>$(BaseOutputPath)</OutputPath>
+    <PublishDir>$(BaseIntermediateOutputPath)$(Configuration)\.publish\</PublishDir>
+
+    <EnableDefaultOutputPath>false</EnableDefaultOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+
+	  <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <Target Name="ShowBuildPaths" BeforeTargets="BeforeBuild">
+    <Message Text="BaseOutputPath: $(BaseOutputPath)" Importance="High" />
+    <Message Text="BaseIntermediateOutputPath: $(BaseIntermediateOutputPath)" Importance="High" />
+    <Message Text="OutputPath: $(OutputPath)" Importance="High" />
+    <Message Text="MSBuildProjectName: $(MSBuildProjectName)" Importance="High" />
+  </Target>
+
+</Project>
