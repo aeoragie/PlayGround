@@ -1,0 +1,45 @@
+@page "/auth/complete"
+@layout MainLayout
+@inject NavigationManager Navigation
+
+<PageTitle>가입 완료 — PlayGround</PageTitle>
+
+<AuthLayout Variant="AuthLayout.AuthVariant.Complete">
+
+    <div class="text-center py-5">
+
+        @* 성공 아이콘 *@
+        <div class="w-14 h-14 rounded-full bg-trust-subtle flex items-center justify-center
+                    mx-auto mb-4 text-2xl text-trust">
+            &#10003;
+        </div>
+
+        <h1 class="text-lg font-bold text-navy mb-1.5">가입이 완료되었습니다!</h1>
+
+        <p class="text-[13px] text-text-secondary mb-6 leading-relaxed">
+            선수 프로필이 자동 생성되었습니다.<br />
+            지금 바로 팀을 찾아보거나 대시보드에서 시작하세요.
+        </p>
+
+        @* CTA 버튼 *@
+        <div class="flex gap-2.5 justify-center flex-wrap">
+            <button class="btn-auth-navy" @onclick='() => Navigation.NavigateTo("/")'>
+                대시보드로 이동
+            </button>
+            <button class="btn-auth-submit w-auto px-7" @onclick='() => Navigation.NavigateTo("/")'>
+                팀 찾아보기 &rarr;
+            </button>
+        </div>
+
+        @* 정보 배지 *@
+        <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full
+                    text-[10px] font-semibold bg-navy-subtle text-navy mt-5">
+            리뷰 작성은 본인 인증 후 가능합니다 · 설정에서 인증하기
+        </div>
+
+    </div>
+
+</AuthLayout>
+
+@code {
+}

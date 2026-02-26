@@ -1,0 +1,160 @@
+@page "/auth/register"
+@layout MainLayout
+@inject Services.AuthService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>회원가입 — PlayGround</PageTitle>
+
+<AuthLayout Variant="AuthLayout.AuthVariant.LoginRegister">
+
+    @* 헤더 *@
+    <div class="mb-6">
+        <h1 class="text-xl font-bold text-navy mb-1">회원가입</h1>
+        <p class="text-[13px] text-text-secondary">소셜 계정 또는 이메일로 가입하세요.</p>
+    </div>
+
+    @* 탭 *@
+    <AuthTabs IsLoginActive="false" />
+
+    @* 역할 선택 *@
+    <RoleSelector SelectedRole="mSelectedRole" SelectedRoleChanged="(role) => mSelectedRole = role" />
+
+    @* 소셜 로그인 (Google + 카카오만) *@
+    <SocialLoginButtons ShowAll="false" ActionText="가입하기"
+                        OnSocialLogin="HandleSocialLogin" />
+
+    @* 구분선 *@
+    <div class="flex items-center gap-3.5 mb-5">
+        <div class="flex-1 h-px bg-border"></div>
+        <span class="text-[11px] font-semibold text-text-light tracking-wide">또는 이메일</span>
+        <div class="flex-1 h-px bg-border"></div>
+    </div>
+
+    @* 에러 메시지 *@
+    @if (!string.IsNullOrEmpty(mErrorMessage))
+    {
+        <div class="px-3.5 py-2.5 rounded-btn text-xs font-semibold mb-4
+                    bg-red-50 text-red-600 border border-red-200">
+            @mErrorMessage
+        </div>
+    }
+
+    @* 이름 *@
+    <div class="mb-3.5">
+        <label class="block text-xs font-semibold text-slate mb-1.5">이름</label>
+        <input type="text" class="auth-input" placeholder="이름을 입력하세요"
+               @bind="mFullName" @bind:event="oninput" />
+    </div>
+
+    @* 이메일 *@
+    <div class="mb-3.5">
+        <label class="block text-xs font-semibold text-slate mb-1.5">이메일</label>
+        <input type="email" class="auth-input" placeholder="email@example.com"
+               @bind="mEmail" @bind:event="oninput" />
+    </div>
+
+    @* 비밀번호 *@
+    <div class="mb-3.5">
+        <label class="block text-xs font-semibold text-slate mb-1.5">비밀번호</label>
+        <input type="password" class="auth-input" placeholder="8자 이상"
+               @bind="mPassword" @bind:event="oninput" />
+    </div>
+
+    @* 비밀번호 확인 *@
+    <div class="mb-3.5">
+        <label class="block text-xs font-semibold text-slate mb-1.5">비밀번호 확인</label>
+        <input type="password" class="auth-input" placeholder="비밀번호를 다시 입력하세요"
+               @bind="mConfirmPassword" @bind:event="oninput" />
+    </div>
+
+    @* 제출 *@
+    <button class="btn-auth-submit" @onclick="HandleRegister" disabled="@mIsLoading">
+        @(mIsLoading ? "가입 중..." : "가입하기")
+    </button>
+
+    @* 약관 *@
+    <div class="text-[11px] text-text-light text-center mt-3.5 leading-relaxed">
+        가입 시 <a href="#" class="text-slate-light underline">이용약관</a> 및
+        <a href="#" class="text-slate-light underline">개인정보처리방침</a>에 동의합니다.
+    </div>
+
+    @* 푸터 *@
+    <div class="text-center mt-[18px] text-[13px] text-text-secondary">
+        이미 계정이 있으신가요?
+        <a href="/auth/login" class="text-navy font-bold no-underline hover:text-primary">로그인</a>
+    </div>
+
+</AuthLayout>
+
+@code {
+    private string mSelectedRole = "Player";
+    private string mFullName = string.Empty;
+    private string mEmail = string.Empty;
+    private string mPassword = string.Empty;
+    private string mConfirmPassword = string.Empty;
+    private bool mIsLoading;
+    private string? mErrorMessage;
+
+    private async Task HandleRegister()
+    {
+        mErrorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(mFullName) ||
+            string.IsNullOrWhiteSpace(mEmail) ||
+            string.IsNullOrWhiteSpace(mPassword))
+        {
+            mErrorMessage = "모든 필드를 입력해주세요.";
+            return;
+        }
+
+        if (mPassword.Length < 8)
+        {
+            mErrorMessage = "비밀번호는 8자 이상이어야 합니다.";
+            return;
+        }
+
+        if (mPassword != mConfirmPassword)
+        {
+            mErrorMessage = "비밀번호가 일치하지 않습니다.";
+            return;
+        }
+
+        mIsLoading = true;
+
+        try
+        {
+            var registerResult = await AuthService.RegisterAsync(mEmail, mPassword, mFullName, mSelectedRole);
+            if (!registerResult.IsSuccess)
+            {
+                mErrorMessage = registerResult.Error ?? "회원가입에 실패했습니다.";
+                return;
+            }
+
+            // 가입 후 자동 로그인
+            var loginResult = await AuthService.LoginAsync(mEmail, mPassword);
+            if (loginResult.IsSuccess)
+            {
+                Navigation.NavigateTo("/auth/onboarding");
+            }
+            else
+            {
+                // 가입 성공했지만 로그인 실패 시 로그인 페이지로
+                Navigation.NavigateTo("/auth/login");
+            }
+        }
+        catch
+        {
+            mErrorMessage = "서버와 통신할 수 없습니다.";
+        }
+        finally
+        {
+            mIsLoading = false;
+        }
+    }
+
+    private Task HandleSocialLogin(string provider)
+    {
+        // OAuth 미구현
+        return Task.CompletedTask;
+    }
+}

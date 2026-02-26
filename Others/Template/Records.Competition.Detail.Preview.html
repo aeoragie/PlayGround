@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayGround — 대회 상세</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-hover: #2A4A72;
+  --navy-dark: #152D4A;
+  --slate: #475569;
+  --orange: #FF6B35;
+  --orange-hover: #FF8F5E;
+  --teal: #0D9488;
+  --teal-bg: #F0FDFA;
+  --green: #16A34A;
+  --green-bg: #F0FDF4;
+  --amber: #D97706;
+  --amber-bg: #FFFBEB;
+  --red: #DC2626;
+  --blue: #2563EB;
+  --blue-bg: #EFF6FF;
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --text: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #E5E7EB;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 100px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+
+/* ========== TOP NAV ========== */
+.topnav {
+  background: var(--navy); height: 56px;
+  display: flex; align-items: center; padding: 0 32px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topnav-logo {
+  display: flex; align-items: center; gap: 10px;
+  color: #fff; text-decoration: none;
+}
+.topnav-logo span { font-size: 15px; font-weight: 700; }
+.topnav-links { display: flex; gap: 4px; margin-left: 40px; }
+.topnav-link {
+  padding: 8px 16px; border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  transition: all 0.15s;
+}
+.topnav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.topnav-link.active { color: #fff; background: rgba(255,255,255,0.1); font-weight: 600; }
+.topnav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.topnav-btn {
+  padding: 7px 16px; border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8); background: transparent;
+  cursor: pointer; font-family: inherit;
+}
+.topnav-btn.cta { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+/* ========== CONTAINER ========== */
+.container {
+  max-width: 960px; margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* ========== BREADCRUMB + BACK ========== */
+.page-back {
+  display: flex; align-items: center; gap: 8px;
+  padding: 20px 0 16px;
+  font-size: 13px; color: var(--text-secondary);
+}
+.page-back a {
+  color: var(--navy); text-decoration: none; font-weight: 500;
+  display: flex; align-items: center; gap: 4px;
+}
+.page-back a:hover { text-decoration: underline; }
+.page-back .sep { color: var(--text-muted); }
+
+/* ========== COMP HEADER ========== */
+.comp-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  color: #fff;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+.comp-header::after {
+  content: ''; position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.comp-header-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 16px; position: relative; z-index: 1;
+}
+.comp-badge-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.comp-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: var(--radius-pill);
+  font-size: 11px; font-weight: 600;
+}
+.comp-badge.live { background: rgba(22,163,74,0.2); color: #4ADE80; }
+.comp-badge.live::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: #4ADE80;
+  margin-right: 6px;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.comp-badge.type { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
+.comp-badge.age { background: rgba(13,148,136,0.2); color: #5EEAD4; }
+
+.comp-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+
+.comp-info-grid {
+  display: flex; gap: 24px; flex-wrap: wrap;
+  font-size: 13px; color: rgba(255,255,255,0.7);
+  position: relative; z-index: 1;
+}
+.comp-info-item { display: flex; align-items: center; gap: 6px; }
+.comp-info-item .label { color: rgba(255,255,255,0.5); }
+.comp-info-item .value { color: rgba(255,255,255,0.95); font-weight: 500; }
+
+.comp-stats-bar {
+  display: flex; gap: 0;
+  margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  position: relative; z-index: 1;
+}
+.comp-stat {
+  flex: 1; text-align: center;
+  padding: 0 16px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.comp-stat:last-child { border-right: none; }
+.comp-stat-value {
+  font-size: 22px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: #fff;
+}
+.comp-stat-value .highlight {
+  background: rgba(255,107,53,0.25); padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+.comp-stat-label {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+/* ========== CONTENT TABS ========== */
+.content-tabs {
+  display: flex; gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.content-tab {
+  flex: 1; padding: 14px 0;
+  text-align: center;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  background: transparent;
+  border-right: 1px solid var(--border);
+}
+.content-tab:last-child { border-right: none; }
+.content-tab:hover { color: var(--text-secondary); background: #FAFBFC; }
+.content-tab.active {
+  color: var(--navy); border-bottom-color: var(--navy);
+  background: #F8FAFC;
+}
+
+/* ========== TAB PANELS ========== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ========== TOURNAMENT INFO ========== */
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px; margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.info-card-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--text); margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.info-row {
+  display: flex; padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid #F5F5F5;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label {
+  width: 120px; flex-shrink: 0;
+  color: var(--text-muted); font-weight: 500;
+}
+.info-value { color: var(--text); font-weight: 400; }
+
+.award-section { margin-top: 20px; }
+.award-placeholder {
+  text-align: center; padding: 32px;
+  color: var(--text-muted); font-size: 13px;
+}
+
+/* ========== GROUP TABS ========== */
+.group-tabs {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--surface);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.group-tab {
+  flex: 1; padding: 10px 0;
+  text-align: center;
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-right: 1px solid var(--border);
+}
+.group-tab:last-child { border-right: none; }
+.group-tab:hover { background: #F8FAFC; color: var(--text-secondary); }
+.group-tab.active {
+  background: var(--navy); color: #fff;
+}
+
+/* ========== STANDINGS TABLE ========== */
+.standings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.standings-table thead th {
+  padding: 10px 8px;
+  background: var(--navy);
+  color: rgba(255,255,255,0.85);
+  font-weight: 600; font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+.standings-table thead th:nth-child(1) { width: 36px; }
+.standings-table thead th:nth-child(2) { text-align: left; padding-left: 12px; }
+.standings-table tbody tr {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+}
+.standings-table tbody tr:hover { background: #FAFBFC; }
+.standings-table tbody tr:last-child { border-bottom: none; }
+.standings-table tbody tr.rank-1 { background: #FEFCE8; }
+.standings-table tbody tr.rank-2 { background: #FFF7ED; }
+.standings-table tbody td {
+  padding: 10px 8px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-secondary);
+}
+.standings-table tbody td:nth-child(1) {
+  font-weight: 700; color: var(--text);
+}
+.standings-table tbody td:nth-child(2) {
+  text-align: left; padding-left: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600; color: var(--text);
+}
+.team-cell {
+  display: flex; align-items: center; gap: 8px;
+}
+.team-emblem {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #F1F5F9; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--slate);
+  flex-shrink: 0;
+}
+.td-win { color: var(--navy) !important; font-weight: 700 !important; }
+.td-pts { color: var(--navy) !important; font-weight: 800 !important; font-size: 13px !important; }
+.td-gd-pos { color: var(--green) !important; }
+.td-gd-neg { color: var(--red) !important; }
+.scroll-hint {
+  text-align: right; font-size: 11px;
+  color: var(--text-muted); padding: 8px 16px 0;
+}
+
+/* ========== ROUND TABS ========== */
+.round-tabs {
+  display: flex; gap: 0;
+  margin-bottom: 16px;
+}
+.round-tab {
+  padding: 8px 20px;
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  transition: all 0.15s;
+}
+.round-tab:hover { background: #F1F5F9; color: var(--text-secondary); }
+.round-tab.active {
+  background: var(--navy); color: #fff;
+}
+
+/* ========== MATCH RESULTS ========== */
+.match-section-title {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 16px; color: var(--text);
+}
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.match-date-header {
+  padding: 8px 20px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 500;
+  color: var(--text-muted);
+}
+.match-row {
+  display: flex; align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.match-row:last-child { border-bottom: none; }
+.match-row:hover { background: #FAFBFC; }
+
+.match-meta-left {
+  width: 200px; flex-shrink: 0;
+  font-size: 11px; color: var(--text-muted);
+  line-height: 1.5; padding-right: 16px;
+}
+.match-meta-round { font-weight: 600; color: var(--text-secondary); }
+
+.match-teams {
+  flex: 1; display: flex; align-items: center;
+  min-width: 0;
+}
+.match-team {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+}
+.match-team.home { justify-content: flex-end; text-align: right; }
+.match-team.away { justify-content: flex-start; text-align: left; }
+.team-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.team-name.win { color: var(--text); }
+.team-name.lose { color: var(--text-muted); }
+.match-score-box {
+  width: 72px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 8px;
+}
+.match-score-num {
+  font-size: 20px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text); line-height: 1;
+  width: 24px; text-align: center;
+}
+.match-score-num.win { color: var(--red); }
+.match-score-num.lose { color: var(--text-muted); }
+.match-score-sep { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+.match-detail-link {
+  width: 32px; flex-shrink: 0;
+  text-align: center;
+  font-size: 14px; color: var(--text-muted);
+}
+
+/* ========== MEDIA TAB ========== */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.media-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.media-item:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.media-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: #E5E7EB;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 12px;
+}
+.media-info { padding: 12px; }
+.media-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.media-meta { font-size: 11px; color: var(--text-muted); }
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+  text-align: center; padding: 48px 20px;
+  color: var(--text-muted); font-size: 13px;
+}
+.empty-state .icon { font-size: 32px; margin-bottom: 12px; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .container { padding: 0 16px 40px; }
+  .comp-header { padding: 20px; border-radius: var(--radius-lg); }
+  .comp-title { font-size: 18px; }
+  .comp-info-grid { gap: 12px; }
+  .comp-stats-bar { flex-wrap: wrap; }
+  .comp-stat { min-width: 50%; padding: 8px 0; }
+  .match-meta-left { width: 120px; }
+  .match-score-num { font-size: 18px; }
+  .group-tabs { flex-wrap: wrap; }
+  .group-tab { min-width: calc(33.33% - 1px); }
+  .media-grid { grid-template-columns: repeat(2, 1fr); }
+  .standings-card { overflow-x: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="topnav">
+  <a class="topnav-logo" href="#">
+    <span>PlayGround</span>
+  </a>
+  <div class="topnav-links">
+    <a class="topnav-link" href="#">홈</a>
+    <a class="topnav-link" href="#">팀 찾기</a>
+    <a class="topnav-link active" href="#">기록실</a>
+    <a class="topnav-link" href="#">리그</a>
+    <a class="topnav-link" href="#">커뮤니티</a>
+    <a class="topnav-link" href="#">대회</a>
+  </div>
+  <div class="topnav-right">
+    <button class="topnav-btn">로그인</button>
+    <button class="topnav-btn cta">시작하기</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Breadcrumb -->
+  <div class="page-back">
+    <a href="#">← 기록실</a>
+    <span class="sep">/</span>
+    <span>U12</span>
+    <span class="sep">/</span>
+    <span style="color:var(--text);">2026 만세보령머드배 JS컵</span>
+  </div>
+
+  <!-- ========== COMP HEADER ========== -->
+  <div class="comp-header">
+    <div class="comp-header-top">
+      <div>
+        <div class="comp-badge-row">
+          <span class="comp-badge live">진행 중</span>
+          <span class="comp-badge type">대회</span>
+          <span class="comp-badge age">U12</span>
+        </div>
+        <h1 class="comp-title">[충남/보령] 2026 만세보령머드배 JS컵</h1>
+      </div>
+    </div>
+    <div class="comp-info-grid">
+      <div class="comp-info-item">
+        <span class="label">기간</span>
+        <span class="value">2026.02.20 (금) ~ 02.26 (목)</span>
+      </div>
+      <div class="comp-info-item">
+        <span class="label">장소</span>
+        <span class="value">JS트레이닝센터</span>
+      </div>
+      <div class="comp-info-item">
+        <span class="label">주최</span>
+        <span class="value">JS스포츠</span>
+      </div>
+      <div class="comp-info-item">
+        <span class="label">방식</span>
+        <span class="value">풀리그 → 스플릿리그</span>
+      </div>
+    </div>
+    <div class="comp-stats-bar">
+      <div class="comp-stat">
+        <div class="comp-stat-value">36<span style="font-size:13px;font-weight:400;opacity:0.6">팀</span></div>
+        <div class="comp-stat-label">참가팀</div>
+      </div>
+      <div class="comp-stat">
+        <div class="comp-stat-value"><span class="highlight">108</span> / 106</div>
+        <div class="comp-stat-label">총 경기 · 종료 경기</div>
+      </div>
+      <div class="comp-stat">
+        <div class="comp-stat-value">575</div>
+        <div class="comp-stat-label">총 득점</div>
+      </div>
+      <div class="comp-stat">
+        <div class="comp-stat-value">5.42</div>
+        <div class="comp-stat-label">평균 득점</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CONTENT TABS ========== -->
+  <div class="content-tabs">
+    <div class="content-tab active" onclick="switchTab('info')">대회 정보</div>
+    <div class="content-tab" onclick="switchTab('full')">풀리그</div>
+    <div class="content-tab" onclick="switchTab('split')">스플릿리그</div>
+    <div class="content-tab" onclick="switchTab('media')">미디어</div>
+  </div>
+
+  <!-- ========== TAB 1: TOURNAMENT INFO ========== -->
+  <div id="tab-info" class="tab-panel active">
+    <div class="info-card">
+      <div class="info-card-title">대회 개요</div>
+      <div class="info-row">
+        <div class="info-label">경기 일정</div>
+        <div class="info-value">2026년 02월 20일(금) ~ 02월 26일(목)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">장소</div>
+        <div class="info-value">JS트레이닝센터, 보령스포츠파크 천연4구장</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">1차 풀리그</div>
+        <div class="info-value">추첨으로 조 편성</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">2차 스플릿</div>
+        <div class="info-value">순위별 조 편성 (1위 4팀, 2위 4팀, 3위 4팀, 4위 4팀으로 구성)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">조별 순위결정</div>
+        <div class="info-value">승점 → 페어플레이 → 추첨</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">경기 시간</div>
+        <div class="info-value">전후반 각 25분으로 진행</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">대회 수상</div>
+      <div class="award-placeholder">
+        수상 내역은 대회 종료 후 제공됩니다
+      </div>
+    </div>
+
+    <div class="info-card" style="text-align:center; padding:32px;">
+      <div style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">—— 역대 우승팀 ——</div>
+      <div style="font-size:13px; color:var(--text-muted);">역대 우승팀 정보가 없습니다</div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 2: FULL LEAGUE ========== -->
+  <div id="tab-full" class="tab-panel">
+    <!-- Group Tabs -->
+    <div class="group-tabs">
+      <div class="group-tab active" onclick="switchGroup(this, 'full')">1 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">2 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">3 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">4 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">5 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">6 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">7 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">8 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'full')">9 조</div>
+    </div>
+    <div class="scroll-hint">※ 좌우 스크롤이 가능합니다</div>
+
+    <!-- Standings Table -->
+    <div class="standings-card">
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>팀</th>
+            <th>경기</th>
+            <th>승점</th>
+            <th>승</th>
+            <th>무</th>
+            <th>패</th>
+            <th>득</th>
+            <th>실</th>
+            <th>+/-</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rank-1">
+            <td>1</td>
+            <td><div class="team-cell"><span class="team-emblem">서</span><span>서울총합</span></div></td>
+            <td>3</td>
+            <td class="td-pts">9</td>
+            <td class="td-win">3</td>
+            <td>0</td>
+            <td>0</td>
+            <td>14</td>
+            <td>3</td>
+            <td class="td-gd-pos">11</td>
+          </tr>
+          <tr class="rank-2">
+            <td>2</td>
+            <td><div class="team-cell"><span class="team-emblem">경</span><span>경기TOP-FC</span></div></td>
+            <td>3</td>
+            <td class="td-pts">6</td>
+            <td class="td-win">2</td>
+            <td>0</td>
+            <td>1</td>
+            <td>8</td>
+            <td>3</td>
+            <td class="td-gd-pos">5</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><div class="team-cell"><span class="team-emblem">경</span><span>경기벽자성클럽</span></div></td>
+            <td>3</td>
+            <td class="td-pts">1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>2</td>
+            <td>7</td>
+            <td class="td-gd-neg">-5</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><div class="team-cell"><span class="team-emblem">충</span><span>충남홍주MSC</span></div></td>
+            <td>3</td>
+            <td class="td-pts">1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>2</td>
+            <td>13</td>
+            <td class="td-gd-neg">-11</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Match Results -->
+    <div class="match-section-title">경기일정 및 결과</div>
+    <div class="round-tabs">
+      <div class="round-tab active" onclick="switchRound(this)">전체</div>
+      <div class="round-tab" onclick="switchRound(this)">1R</div>
+      <div class="round-tab" onclick="switchRound(this)">2R</div>
+      <div class="round-tab" onclick="switchRound(this)">3R</div>
+    </div>
+    <div class="match-card">
+      <!-- Day 1 -->
+      <div class="match-date-header">2026-02-20 (금) 13:00, JS트레이닝센터 3 B구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">경기TOP-FC</span>
+            <span class="team-emblem">경</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">2</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">서</span>
+            <span class="team-name win">서울총합</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-20 (금) 14:00, 보령스포츠파크 천연4구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">경기벽자성클럽</span>
+            <span class="team-emblem">경</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num">0</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">충</span>
+            <span class="team-name">충남홍주MSC</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="match-date-header">2026-02-21 (토) 15:00, 보령스포츠파크 천연4구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name win">서울총합</span>
+            <span class="team-emblem">서</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">4</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">1</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">경</span>
+            <span class="team-name lose">경기벽자성클럽</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-21 (토) 15:00, JS트레이닝센터 3 B구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">충남홍주MSC</span>
+            <span class="team-emblem">충</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">5</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">경</span>
+            <span class="team-name win">경기TOP-FC</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="match-date-header">2026-02-22 (일) 16:00, 보령스포츠파크 천연4구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">충남홍주MSC</span>
+            <span class="team-emblem">충</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">2</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">8</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">서</span>
+            <span class="team-name win">서울총합</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-22 (일) 17:00, JS트레이닝센터 1 B구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">경기벽자성클럽</span>
+            <span class="team-emblem">경</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">1</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">3</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">경</span>
+            <span class="team-name win">경기TOP-FC</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 3: SPLIT LEAGUE ========== -->
+  <div id="tab-split" class="tab-panel">
+    <div class="group-tabs">
+      <div class="group-tab active" onclick="switchGroup(this, 'split')">1 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'split')">2 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'split')">3 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'split')">4 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'split')">5 조</div>
+      <div class="group-tab" onclick="switchGroup(this, 'split')">6 조</div>
+    </div>
+    <div class="scroll-hint">※ 좌우 스크롤이 가능합니다</div>
+
+    <div class="standings-card">
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>팀</th>
+            <th>경기</th>
+            <th>승점</th>
+            <th>승</th>
+            <th>무</th>
+            <th>패</th>
+            <th>득</th>
+            <th>실</th>
+            <th>+/-</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rank-1">
+            <td>1</td>
+            <td><div class="team-cell"><span class="team-emblem">충</span><span>충남천안윤FC</span></div></td>
+            <td>3</td>
+            <td class="td-pts">7</td>
+            <td class="td-win">2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>11</td>
+            <td>3</td>
+            <td class="td-gd-pos">8</td>
+          </tr>
+          <tr class="rank-2">
+            <td>2</td>
+            <td><div class="team-cell"><span class="team-emblem">서</span><span>서울중앙축구단</span></div></td>
+            <td>3</td>
+            <td class="td-pts">7</td>
+            <td class="td-win">2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>9</td>
+            <td>4</td>
+            <td class="td-gd-pos">5</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><div class="team-cell"><span class="team-emblem">천</span><span>천안라이온스</span></div></td>
+            <td>3</td>
+            <td class="td-pts">3</td>
+            <td>1</td>
+            <td>0</td>
+            <td>2</td>
+            <td>6</td>
+            <td>6</td>
+            <td class="td-gd-neg">-4</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><div class="team-cell"><span class="team-emblem">천</span><span>천안라떼시아</span></div></td>
+            <td>3</td>
+            <td class="td-pts">0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>3</td>
+            <td>1</td>
+            <td>10</td>
+            <td class="td-gd-neg">-9</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="match-section-title">경기일정 및 결과</div>
+    <div class="round-tabs">
+      <div class="round-tab active" onclick="switchRound(this)">전체</div>
+      <div class="round-tab" onclick="switchRound(this)">1R</div>
+      <div class="round-tab" onclick="switchRound(this)">2R</div>
+      <div class="round-tab" onclick="switchRound(this)">3R</div>
+    </div>
+    <div class="match-card">
+      <div class="match-date-header">2026-02-24 (화) 14:00, JS트레이닝센터 보조축구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name win">서울중앙축구단</span>
+            <span class="team-emblem">서</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">5</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">1</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">천</span>
+            <span class="team-name lose">천안라떼시아</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-24 (화) 15:00, JS트레이닝센터 보조축구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name win">충남천안윤FC</span>
+            <span class="team-emblem">충</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">5</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">0</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">천</span>
+            <span class="team-name lose">천안라이온스</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-25 (수) 17:00, JS트레이닝센터 1 A구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">천안라이온스</span>
+            <span class="team-emblem">천</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">1</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">서</span>
+            <span class="team-name win">서울중앙축구단</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-25 (수) 17:00, JS트레이닝센터 1 B구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">천안라떼시아</span>
+            <span class="team-emblem">천</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">3</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">충</span>
+            <span class="team-name win">충남천안윤FC</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-26 (목) 16:00, JS트레이닝센터 1 A구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name lose">천안라떼시아</span>
+            <span class="team-emblem">천</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">2</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">천</span>
+            <span class="team-name win">천안라이온스</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+
+      <div class="match-date-header">2026-02-26 (목) 16:00, JS트레이닝센터 1 B구장</div>
+      <div class="match-row">
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">서울중앙축구단</span>
+            <span class="team-emblem">서</span>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num">3</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num">3</span>
+          </div>
+          <div class="match-team away">
+            <span class="team-emblem">충</span>
+            <span class="team-name">충남천안윤FC</span>
+          </div>
+        </div>
+        <div class="match-detail-link">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 4: MEDIA ========== -->
+  <div id="tab-media" class="tab-panel">
+    <div class="media-grid">
+      <div class="media-item">
+        <div class="media-thumb">📷 사진</div>
+        <div class="media-info">
+          <div class="media-title">1조 서울총합 vs 경기TOP-FC</div>
+          <div class="media-meta">2026.02.20 · 12장</div>
+        </div>
+      </div>
+      <div class="media-item">
+        <div class="media-thumb">📷 사진</div>
+        <div class="media-info">
+          <div class="media-title">개막식 현장</div>
+          <div class="media-meta">2026.02.20 · 8장</div>
+        </div>
+      </div>
+      <div class="media-item">
+        <div class="media-thumb">🎬 영상</div>
+        <div class="media-info">
+          <div class="media-title">하이라이트 — 1조 2R</div>
+          <div class="media-meta">2026.02.21 · 3:42</div>
+        </div>
+      </div>
+      <div class="media-item">
+        <div class="media-thumb">📷 사진</div>
+        <div class="media-info">
+          <div class="media-title">스플릿리그 1조 1R</div>
+          <div class="media-meta">2026.02.24 · 15장</div>
+        </div>
+      </div>
+      <div class="media-item">
+        <div class="media-thumb">🎬 영상</div>
+        <div class="media-info">
+          <div class="media-title">서울중앙 vs 천안라떼시아</div>
+          <div class="media-meta">2026.02.24 · 5:18</div>
+        </div>
+      </div>
+      <div class="media-item">
+        <div class="media-thumb">📷 사진</div>
+        <div class="media-info">
+          <div class="media-title">대회 전경 및 시설</div>
+          <div class="media-meta">2026.02.20 · 6장</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+function switchGroup(el, context) {
+  el.parentElement.querySelectorAll('.group-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function switchRound(el) {
+  el.parentElement.querySelectorAll('.round-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

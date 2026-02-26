@@ -79,7 +79,9 @@ namespace PlayGround.Infrastructure.Store
                     return RedisResult<bool>.Fail();
                 }
 
-                var result = await mDatabase.StringSetAsync(key, value, expiry);
+                var result = expiry.HasValue
+                    ? await mDatabase.StringSetAsync(key, value, new Expiration(expiry.Value))
+                    : await mDatabase.StringSetAsync(key, value);
                 return RedisResult<bool>.Ok(result);
             }
             catch (Exception ex)

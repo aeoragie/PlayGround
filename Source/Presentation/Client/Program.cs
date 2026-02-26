@@ -12,4 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
 
+// 서비스 등록
+builder.Services.AddScoped<PlayGround.Client.Services.AuthService>();
+
 await builder.Build().RunAsync();

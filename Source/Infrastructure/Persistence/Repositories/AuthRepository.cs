@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Main.Entities;
 using Main.Procedures;
 using PlayGround.Application.Interfaces;
+using PlayGround.Domain.SubDomains.Auth;
 using PlayGround.Infrastructure.Database;
 using PlayGround.Infrastructure.Database.Base;
 
@@ -19,27 +20,27 @@ namespace PlayGround.Persistence.Repositories
         {
         }
 
-        public async Task<UsersEntity?> GetUserByEmailAsync(string email)
+        public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be null or empty");
 
             var procedure = new UspGetUserByEmail(this) { Email = email };
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? result.Value : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
         }
 
-        public async Task<UsersEntity?> GetUserByIdAsync(Guid userId)
+        public async Task<UserModel?> GetUserByIdAsync(Guid userId)
         {
             Debug.Assert(userId != Guid.Empty, "UserId cannot be empty");
 
             var procedure = new UspGetUser(this) { UserId = userId };
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? result.Value : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
         }
 
-        public async Task<UsersEntity?> CreateUserByEmailAsync(string email, string passwordHash, string fullName, string userRole)
+        public async Task<UserModel?> CreateUserByEmailAsync(string email, string passwordHash, string fullName, string userRole)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be null or empty");
             Debug.Assert(!string.IsNullOrWhiteSpace(passwordHash), "PasswordHash cannot be null or empty");
@@ -54,10 +55,10 @@ namespace PlayGround.Persistence.Repositories
 
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? result.Value : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
         }
 
-        public async Task<UsersEntity?> CreateUserWithSocialAccountAsync(
+        public async Task<UserModel?> CreateUserWithSocialAccountAsync(
             string email, string fullName, string? profileImageUrl,
             string provider, string providerUserId,
             string? ipAddress, string? userAgent)
@@ -78,7 +79,7 @@ namespace PlayGround.Persistence.Repositories
 
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? result.Value : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
         }
 
         public async Task<RefreshTokenResult?> CreateRefreshTokenAsync(
@@ -152,6 +153,25 @@ namespace PlayGround.Persistence.Repositories
             var result = await ExecuteAsync(sql, new { TokenId = tokenId, Reason = reason });
 
             return result.IsSuccess && result.Value > 0;
+        }
+
+        private static UserModel ToUserModel(UsersEntity entity)
+        {
+            return new UserModel
+            {
+                UserId = entity.UserId,
+                Email = entity.Email,
+                FullName = entity.FullName,
+                NickName = entity.NickName,
+                PasswordHash = entity.PasswordHash,
+                ProfileImageUrl = string.IsNullOrEmpty(entity.ProfileImageUrl) ? null : entity.ProfileImageUrl,
+                UserRole = entity.UserRole,
+                UserStatus = entity.UserStatus,
+                EmailConfirmed = entity.EmailConfirmed,
+                LockoutEndAt = entity.LockoutEndAt,
+                LastLoginAt = entity.LastLoginAt,
+                CreatedAt = entity.CreatedAt
+            };
         }
     }
 }

@@ -45,8 +45,11 @@ namespace PlayGround.Infrastructure.Logging
 
         private static void RegisterCustomRenderers()
         {
-            LayoutRenderers.LayoutRenderer.Register<ArchiveDateLayoutRenderer>("archivedate");
-            LayoutRenderers.LayoutRenderer.Register<ThreadIdLayoutRenderer>("threadid");
+            LogManager.Setup().SetupExtensions(ext =>
+            {
+                ext.RegisterLayoutRenderer<ArchiveDateLayoutRenderer>("archivedate");
+                ext.RegisterLayoutRenderer<PaddedThreadIdLayoutRenderer>("paddedthreadid");
+            });
         }
 
         /// <summary>

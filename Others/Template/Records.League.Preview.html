@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayGround — 리그</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-hover: #2A4A72;
+  --navy-dark: #152D4A;
+  --slate: #475569;
+  --orange: #FF6B35;
+  --orange-hover: #FF8F5E;
+  --teal: #0D9488;
+  --teal-bg: #F0FDFA;
+  --green: #16A34A;
+  --green-bg: #F0FDF4;
+  --amber: #D97706;
+  --amber-bg: #FFFBEB;
+  --red: #DC2626;
+  --blue: #2563EB;
+  --blue-bg: #EFF6FF;
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --text: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #E5E7EB;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 100px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+
+/* ========== TOP NAV ========== */
+.topnav {
+  background: var(--navy); height: 56px;
+  display: flex; align-items: center; padding: 0 32px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topnav-logo {
+  display: flex; align-items: center; gap: 10px;
+  color: #fff; text-decoration: none;
+}
+.topnav-logo span { font-size: 15px; font-weight: 700; }
+.topnav-links { display: flex; gap: 4px; margin-left: 40px; }
+.topnav-link {
+  padding: 8px 16px; border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  transition: all 0.15s;
+}
+.topnav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.topnav-link.active { color: #fff; background: rgba(255,255,255,0.1); font-weight: 600; }
+.topnav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.topnav-btn {
+  padding: 7px 16px; border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8); background: transparent;
+  cursor: pointer; font-family: inherit;
+}
+.topnav-btn.cta { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+/* ========== CONTAINER ========== */
+.container {
+  max-width: 960px; margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ========== PAGE HEADER ========== */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+
+/* ========== YEAR TABS ========== */
+.year-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.year-tab {
+  padding: 6px 16px; border-radius: var(--radius-pill);
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary); background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.year-tab:hover { border-color: var(--navy); color: var(--navy); }
+.year-tab.active {
+  background: var(--navy); color: #fff; border-color: var(--navy);
+}
+
+/* ========== AGE ACCORDION ========== */
+.age-accordion { margin-bottom: 12px; }
+.age-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.age-header:hover { background: #F8FAFC; }
+.age-header.open {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-bottom-color: transparent;
+  background: #F0F4F8;
+}
+.age-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.age-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: var(--radius-pill);
+  font-size: 11px; font-weight: 600;
+  background: var(--blue-bg); color: var(--blue);
+  margin-left: 8px;
+}
+.age-toggle {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text-muted);
+  transition: transform 0.2s;
+}
+.age-header.open .age-toggle { transform: rotate(180deg); }
+
+.age-body {
+  display: none;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.age-body.open { display: block; }
+
+/* ========== REGION LIST (inside accordion) ========== */
+.region-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px;
+  border-bottom: 1px solid #F3F4F6;
+  cursor: pointer;
+  transition: background 0.1s;
+  font-size: 13px; font-weight: 500;
+  color: var(--text);
+}
+.region-item:last-child { border-bottom: none; }
+.region-item:hover { background: #FAFBFC; }
+.region-item .arrow { color: var(--text-muted); font-size: 14px; }
+.region-item .league-count {
+  font-size: 11px; color: var(--text-muted);
+  margin-left: auto; margin-right: 12px;
+}
+
+/* ========== LEAGUE DETAIL VIEW ========== */
+.league-detail { display: none; }
+.league-detail.active { display: block; }
+
+.league-back {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 0 20px;
+  font-size: 13px; color: var(--text-secondary);
+}
+.league-back a {
+  color: var(--navy); text-decoration: none; font-weight: 500;
+  display: flex; align-items: center; gap: 4px;
+}
+.league-back a:hover { text-decoration: underline; }
+.league-back .sep { color: var(--text-muted); }
+
+/* ========== LEAGUE HEADER ========== */
+.league-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  color: #fff;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.league-header::after {
+  content: ''; position: absolute;
+  top: -30px; right: -30px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(13,148,136,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.league-badges { display: flex; gap: 8px; margin-bottom: 8px; }
+.league-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: var(--radius-pill);
+  font-size: 11px; font-weight: 600;
+}
+.league-badge.season { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
+.league-badge.age { background: rgba(13,148,136,0.2); color: #5EEAD4; }
+.league-badge.region { background: rgba(255,107,53,0.2); color: #FDBA74; }
+.league-title-text {
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.5px; margin-bottom: 12px;
+  position: relative; z-index: 1;
+}
+.league-info-row {
+  display: flex; gap: 24px; font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  position: relative; z-index: 1;
+}
+.league-info-item .label { color: rgba(255,255,255,0.5); margin-right: 6px; }
+.league-info-item .value { color: rgba(255,255,255,0.95); font-weight: 500; }
+
+/* ========== SUB TABS (일정/순위/팀기록) ========== */
+.sub-tabs {
+  display: flex; gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 24px;
+}
+.sub-tab {
+  padding: 12px 24px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+}
+.sub-tab:hover { color: var(--text-secondary); }
+.sub-tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+.sub-panel { display: none; }
+.sub-panel.active { display: block; }
+
+/* ========== SCHEDULE: CALENDAR ========== */
+.cal-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-bottom: 20px;
+}
+.cal-month {
+  font-size: 18px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.cal-arrow {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.cal-arrow:hover { background: #F1F5F9; }
+
+.cal-dates {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--surface);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.cal-date {
+  flex: 1; padding: 10px 0;
+  text-align: center; cursor: pointer;
+  transition: all 0.15s;
+  border-right: 1px solid #F3F4F6;
+}
+.cal-date:last-child { border-right: none; }
+.cal-date:hover { background: #F8FAFC; }
+.cal-date.active { background: var(--navy); }
+.cal-date.active .cal-day { color: #fff; }
+.cal-date.active .cal-num { color: #fff; }
+.cal-date.today .cal-num {
+  color: var(--orange); font-weight: 800;
+}
+.cal-day {
+  font-size: 11px; font-weight: 500;
+  color: var(--text-muted); margin-bottom: 2px;
+}
+.cal-num {
+  font-size: 15px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.cal-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%; background: var(--orange);
+  margin: 4px auto 0;
+}
+.cal-date.active .cal-dot { background: #fff; }
+
+/* ========== MATCH LIST ========== */
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.match-group-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; font-weight: 600;
+  color: var(--text);
+}
+.match-group-header .round-tag {
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: var(--radius-sm);
+  background: var(--navy); color: #fff;
+}
+.match-row {
+  display: flex; align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.match-row:last-child { border-bottom: none; }
+.match-row:hover { background: #FAFBFC; }
+.match-meta-col {
+  width: 140px; flex-shrink: 0;
+  font-size: 11px; color: var(--text-muted);
+  line-height: 1.5;
+}
+.match-meta-time {
+  font-weight: 600; color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+.match-teams {
+  flex: 1; display: flex; align-items: center;
+  min-width: 0;
+}
+.match-team {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+}
+.match-team.home { justify-content: flex-end; text-align: right; }
+.match-team.away { justify-content: flex-start; text-align: left; }
+.team-emblem {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #F1F5F9; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--slate);
+  flex-shrink: 0;
+}
+.team-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.team-name.win { color: var(--text); }
+.team-name.lose { color: var(--text-muted); }
+.match-score-box {
+  width: 72px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 8px;
+}
+.match-score-num {
+  font-size: 20px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text); line-height: 1;
+  width: 24px; text-align: center;
+}
+.match-score-num.win { color: var(--red); }
+.match-score-num.lose { color: var(--text-muted); }
+.match-score-sep { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+.match-status {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: var(--radius-sm);
+  font-size: 10px; font-weight: 600;
+}
+.match-status.done { background: #F3F4F6; color: var(--text-muted); }
+.match-status.live { background: rgba(22,163,74,0.1); color: var(--green); }
+
+.match-round-col {
+  width: 48px; flex-shrink: 0;
+  text-align: center;
+  font-size: 11px; font-weight: 500;
+  color: var(--text-muted);
+}
+.match-detail-btn {
+  padding: 4px 12px; border-radius: var(--radius-sm);
+  font-size: 11px; font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.match-detail-btn:hover { background: #F1F5F9; }
+
+/* ========== STANDINGS TABLE ========== */
+.standings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.standings-section-title {
+  font-size: 14px; font-weight: 700;
+  padding: 16px 20px 8px;
+  color: var(--text);
+}
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.standings-table thead th {
+  padding: 10px 8px;
+  background: var(--navy);
+  color: rgba(255,255,255,0.85);
+  font-weight: 600; font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+.standings-table thead th:nth-child(1) { width: 40px; }
+.standings-table thead th:nth-child(2) { text-align: left; padding-left: 12px; }
+.standings-table thead th:last-child { width: 100px; }
+.standings-table tbody tr {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+}
+.standings-table tbody tr:hover { background: #FAFBFC; }
+.standings-table tbody tr:last-child { border-bottom: none; }
+.standings-table tbody tr.rank-1 { background: #FEFCE8; }
+.standings-table tbody tr.rank-2 { background: #FFF7ED; }
+.standings-table tbody td {
+  padding: 10px 8px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-secondary);
+}
+.standings-table tbody td:nth-child(1) { font-weight: 700; color: var(--text); }
+.standings-table tbody td:nth-child(2) {
+  text-align: left; padding-left: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600; color: var(--text);
+}
+.team-cell { display: flex; align-items: center; gap: 8px; }
+.td-pts { color: var(--navy) !important; font-weight: 800 !important; font-size: 13px !important; }
+.td-win { color: var(--navy) !important; font-weight: 700 !important; }
+.td-gd-pos { color: var(--green) !important; }
+.td-gd-neg { color: var(--red) !important; }
+
+/* Recent form badges */
+.form-badges { display: flex; gap: 3px; justify-content: center; }
+.form-badge {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: #fff;
+}
+.form-badge.w { background: var(--navy); }
+.form-badge.d { background: var(--text-muted); }
+.form-badge.l { background: var(--red); }
+
+/* ========== TEAM RECORDS GRID ========== */
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.record-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.record-card-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--text); margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.record-top {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F5F5F5;
+}
+.record-top-rank {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff; font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.record-top-emblem {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #F1F5F9; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: var(--slate);
+}
+.record-top-info { flex: 1; }
+.record-top-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.record-top-value {
+  font-size: 18px; font-weight: 800; color: var(--orange);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.record-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0;
+}
+.record-list-rank {
+  width: 18px; font-size: 12px; font-weight: 700;
+  color: var(--text-muted); text-align: center;
+}
+.record-list-emblem {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #F1F5F9; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--slate);
+}
+.record-list-name {
+  flex: 1; font-size: 12px; font-weight: 500; color: var(--text-secondary);
+}
+.record-list-value {
+  font-size: 12px; font-weight: 700; color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+}
+.record-more {
+  display: block; text-align: center;
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid #F5F5F5;
+  font-size: 12px; font-weight: 600;
+  color: var(--navy); cursor: pointer;
+  text-decoration: none;
+}
+.record-more:hover { text-decoration: underline; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px 40px; }
+  .records-grid { grid-template-columns: 1fr; }
+  .cal-dates { overflow-x: auto; }
+  .cal-date { min-width: 48px; }
+  .match-meta-col { width: 100px; }
+  .match-score-num { font-size: 18px; }
+  .league-header { padding: 20px; border-radius: var(--radius-lg); }
+  .standings-card { overflow-x: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="topnav">
+  <a class="topnav-logo" href="#">
+    <span>PlayGround</span>
+  </a>
+  <div class="topnav-links">
+    <a class="topnav-link" href="#">홈</a>
+    <a class="topnav-link" href="#">팀 찾기</a>
+    <a class="topnav-link" href="#">기록실</a>
+    <a class="topnav-link active" href="#">리그</a>
+    <a class="topnav-link" href="#">커뮤니티</a>
+    <a class="topnav-link" href="#">대회</a>
+  </div>
+  <div class="topnav-right">
+    <button class="topnav-btn">로그인</button>
+    <button class="topnav-btn cta">시작하기</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ========== LIST VIEW (default) ========== -->
+  <div id="view-list">
+    <div class="page-header">
+      <h1 class="page-title">리그</h1>
+    </div>
+
+    <!-- Year Tabs -->
+    <div class="year-tabs">
+      <div class="year-tab active">2026</div>
+      <div class="year-tab">2025</div>
+      <div class="year-tab">2024</div>
+      <div class="year-tab">2023</div>
+      <div class="year-tab">2022</div>
+      <div class="year-tab">2021</div>
+      <div class="year-tab">2020</div>
+    </div>
+
+    <!-- U22 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U22</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body"></div>
+    </div>
+
+    <!-- U20 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U20</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body"></div>
+    </div>
+
+    <!-- U18 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U18</span><span class="age-badge">2개 리그</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body">
+        <div class="region-item" onclick="showLeagueDetail()">
+          <span>서울/인천</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>경기</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- U17 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U17</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body"></div>
+    </div>
+
+    <!-- U15 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U15</span><span class="age-badge">3개 리그</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body">
+        <div class="region-item">
+          <span>서울/인천</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>경기</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>호남/제주</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- U14 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U14</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body"></div>
+    </div>
+
+    <!-- U12 (expanded by default) -->
+    <div class="age-accordion">
+      <div class="age-header open" onclick="toggleAge(this)">
+        <div><span class="age-label">U12</span><span class="age-badge">5개 리그</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body open">
+        <div class="region-item" onclick="showLeagueDetail()">
+          <span>서울/인천</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>중부/강원</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>경기</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>호남/제주</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="region-item">
+          <span>영남</span>
+          <span class="league-count">1개 리그</span>
+          <span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- U11 -->
+    <div class="age-accordion">
+      <div class="age-header" onclick="toggleAge(this)">
+        <div><span class="age-label">U11</span></div>
+        <div class="age-toggle">▼</div>
+      </div>
+      <div class="age-body"></div>
+    </div>
+  </div>
+
+  <!-- ========== LEAGUE DETAIL VIEW ========== -->
+  <div id="view-detail" class="league-detail">
+    <div class="league-back">
+      <a href="#" onclick="backToList(); return false;">← 리그</a>
+      <span class="sep">/</span>
+      <span>U12</span>
+      <span class="sep">/</span>
+      <span style="color:var(--text);">서울/인천</span>
+    </div>
+
+    <div class="league-header">
+      <div class="league-badges">
+        <span class="league-badge season">2026 시즌</span>
+        <span class="league-badge age">U12</span>
+        <span class="league-badge region">서울/인천</span>
+      </div>
+      <h2 class="league-title-text">2026 U12 서울/인천 유소년 리그</h2>
+      <div class="league-info-row">
+        <div class="league-info-item"><span class="label">시즌</span><span class="value">2026.03 ~ 2026.11</span></div>
+        <div class="league-info-item"><span class="label">참가팀</span><span class="value">16팀</span></div>
+        <div class="league-info-item"><span class="label">진행</span><span class="value">8R / 30R</span></div>
+      </div>
+    </div>
+
+    <!-- Sub Tabs -->
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="switchSub('schedule')">일정·결과</div>
+      <div class="sub-tab" onclick="switchSub('standings')">순위</div>
+      <div class="sub-tab" onclick="switchSub('records')">팀 기록</div>
+    </div>
+
+    <!-- ===== SUB 1: SCHEDULE ===== -->
+    <div id="sub-schedule" class="sub-panel active">
+      <!-- Calendar -->
+      <div class="cal-nav">
+        <button class="cal-arrow">‹</button>
+        <span class="cal-month">2026.02</span>
+        <button class="cal-arrow">›</button>
+      </div>
+      <div class="cal-dates">
+        <div class="cal-date">
+          <div class="cal-day">월</div><div class="cal-num">16</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">화</div><div class="cal-num">17</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">수</div><div class="cal-num">18</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">목</div><div class="cal-num">19</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">금</div><div class="cal-num">20</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">토</div><div class="cal-num">21</div>
+          <div class="cal-dot"></div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">일</div><div class="cal-num">22</div>
+          <div class="cal-dot"></div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">월</div><div class="cal-num">23</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">화</div><div class="cal-num">24</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">수</div><div class="cal-num">25</div>
+        </div>
+        <div class="cal-date today active">
+          <div class="cal-day">오늘</div><div class="cal-num">26</div>
+          <div class="cal-dot"></div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">금</div><div class="cal-num">27</div>
+        </div>
+        <div class="cal-date">
+          <div class="cal-day">토</div><div class="cal-num">28</div>
+          <div class="cal-dot"></div>
+        </div>
+      </div>
+
+      <!-- Match List -->
+      <div class="match-card">
+        <div class="match-group-header">
+          U12 서울/인천 리그 <span class="round-tag">8R</span>
+        </div>
+        <div class="match-row">
+          <div class="match-meta-col">
+            <div class="match-meta-time">10:00</div>
+            <div>서울월드컵 보조</div>
+          </div>
+          <div class="match-teams">
+            <div class="match-team home">
+              <span class="team-name win">서초FC</span>
+              <span class="team-emblem">서</span>
+            </div>
+            <div class="match-score-box">
+              <span class="match-score-num win">3</span>
+              <span class="match-score-sep">:</span>
+              <span class="match-score-num lose">1</span>
+            </div>
+            <div class="match-team away">
+              <span class="team-emblem">강</span>
+              <span class="team-name lose">강남유나이티드</span>
+            </div>
+          </div>
+          <div class="match-round-col">8R</div>
+          <button class="match-detail-btn">기록</button>
+        </div>
+
+        <div class="match-row">
+          <div class="match-meta-col">
+            <div class="match-meta-time">10:00</div>
+            <div>잠실종합 보조</div>
+          </div>
+          <div class="match-teams">
+            <div class="match-team home">
+              <span class="team-name lose">송파킥스</span>
+              <span class="team-emblem">송</span>
+            </div>
+            <div class="match-score-box">
+              <span class="match-score-num lose">0</span>
+              <span class="match-score-sep">:</span>
+              <span class="match-score-num win">2</span>
+            </div>
+            <div class="match-team away">
+              <span class="team-emblem">인</span>
+              <span class="team-name win">인천시티FC</span>
+            </div>
+          </div>
+          <div class="match-round-col">8R</div>
+          <button class="match-detail-btn">기록</button>
+        </div>
+
+        <div class="match-row">
+          <div class="match-meta-col">
+            <div class="match-meta-time">12:00</div>
+            <div>서울월드컵 보조</div>
+          </div>
+          <div class="match-teams">
+            <div class="match-team home">
+              <span class="team-name">마포FC</span>
+              <span class="team-emblem">마</span>
+            </div>
+            <div class="match-score-box">
+              <span class="match-score-num">2</span>
+              <span class="match-score-sep">:</span>
+              <span class="match-score-num">2</span>
+            </div>
+            <div class="match-team away">
+              <span class="team-emblem">용</span>
+              <span class="team-name">용산드래곤즈</span>
+            </div>
+          </div>
+          <div class="match-round-col">8R</div>
+          <button class="match-detail-btn">기록</button>
+        </div>
+
+        <div class="match-row">
+          <div class="match-meta-col">
+            <div class="match-meta-time">14:00</div>
+            <div>잠실종합 보조</div>
+          </div>
+          <div class="match-teams">
+            <div class="match-team home">
+              <span class="team-name win">노원FC</span>
+              <span class="team-emblem">노</span>
+            </div>
+            <div class="match-score-box">
+              <span class="match-score-num win">4</span>
+              <span class="match-score-sep">:</span>
+              <span class="match-score-num lose">0</span>
+            </div>
+            <div class="match-team away">
+              <span class="team-emblem">부</span>
+              <span class="team-name lose">부천FC유스</span>
+            </div>
+          </div>
+          <div class="match-round-col">8R</div>
+          <button class="match-detail-btn">기록</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SUB 2: STANDINGS ===== -->
+    <div id="sub-standings" class="sub-panel">
+      <div class="standings-card">
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>순위</th>
+              <th>팀</th>
+              <th>경기</th>
+              <th>승점</th>
+              <th>승</th>
+              <th>무</th>
+              <th>패</th>
+              <th>득</th>
+              <th>실</th>
+              <th>+/-</th>
+              <th>최근 5경기</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="rank-1">
+              <td>1</td>
+              <td><div class="team-cell"><span class="team-emblem">서</span><span>서초FC</span></div></td>
+              <td>8</td>
+              <td class="td-pts">22</td>
+              <td class="td-win">7</td>
+              <td>1</td>
+              <td>0</td>
+              <td>28</td>
+              <td>5</td>
+              <td class="td-gd-pos">23</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge d">무</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                </div>
+              </td>
+            </tr>
+            <tr class="rank-2">
+              <td>2</td>
+              <td><div class="team-cell"><span class="team-emblem">인</span><span>인천시티FC</span></div></td>
+              <td>8</td>
+              <td class="td-pts">19</td>
+              <td class="td-win">6</td>
+              <td>1</td>
+              <td>1</td>
+              <td>22</td>
+              <td>8</td>
+              <td class="td-gd-pos">14</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><div class="team-cell"><span class="team-emblem">노</span><span>노원FC</span></div></td>
+              <td>8</td>
+              <td class="td-pts">16</td>
+              <td class="td-win">5</td>
+              <td>1</td>
+              <td>2</td>
+              <td>19</td>
+              <td>10</td>
+              <td class="td-gd-pos">9</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge d">무</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><div class="team-cell"><span class="team-emblem">마</span><span>마포FC</span></div></td>
+              <td>8</td>
+              <td class="td-pts">14</td>
+              <td class="td-win">4</td>
+              <td>2</td>
+              <td>2</td>
+              <td>16</td>
+              <td>12</td>
+              <td class="td-gd-pos">4</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge d">무</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><div class="team-cell"><span class="team-emblem">강</span><span>강남유나이티드</span></div></td>
+              <td>8</td>
+              <td class="td-pts">11</td>
+              <td class="td-win">3</td>
+              <td>2</td>
+              <td>3</td>
+              <td>14</td>
+              <td>13</td>
+              <td class="td-gd-pos">1</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge d">무</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><div class="team-cell"><span class="team-emblem">용</span><span>용산드래곤즈</span></div></td>
+              <td>8</td>
+              <td class="td-pts">8</td>
+              <td class="td-win">2</td>
+              <td>2</td>
+              <td>4</td>
+              <td>11</td>
+              <td>16</td>
+              <td class="td-gd-neg">-5</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge d">무</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                  <span class="form-badge l">패</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><div class="team-cell"><span class="team-emblem">송</span><span>송파킥스</span></div></td>
+              <td>8</td>
+              <td class="td-pts">5</td>
+              <td>1</td>
+              <td>2</td>
+              <td>5</td>
+              <td>7</td>
+              <td>20</td>
+              <td class="td-gd-neg">-13</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge d">무</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><div class="team-cell"><span class="team-emblem">부</span><span>부천FC유스</span></div></td>
+              <td>8</td>
+              <td class="td-pts">3</td>
+              <td>1</td>
+              <td>0</td>
+              <td>7</td>
+              <td>5</td>
+              <td>28</td>
+              <td class="td-gd-neg">-23</td>
+              <td>
+                <div class="form-badges">
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge l">패</span>
+                  <span class="form-badge w">승</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== SUB 3: TEAM RECORDS ===== -->
+    <div id="sub-records" class="sub-panel">
+      <div class="records-grid">
+        <!-- 경기당 득점 -->
+        <div class="record-card">
+          <div class="record-card-title">경기당 득점</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">서</span>
+            <div class="record-top-info">
+              <div class="record-top-name">서초FC</div>
+              <div class="record-top-value">3.50골</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">2.75골</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">2.38골</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">마</span>
+            <span class="record-list-name">마포FC</span>
+            <span class="record-list-value">2.00골</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+
+        <!-- 경기당 실점 -->
+        <div class="record-card">
+          <div class="record-card-title">경기당 실점</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">서</span>
+            <div class="record-top-info">
+              <div class="record-top-name">서초FC</div>
+              <div class="record-top-value">0.63골</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">1.00골</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">1.25골</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">마</span>
+            <span class="record-list-name">마포FC</span>
+            <span class="record-list-value">1.50골</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+
+        <!-- 무실점 경기수 -->
+        <div class="record-card">
+          <div class="record-card-title">무실점 경기수</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">서</span>
+            <div class="record-top-info">
+              <div class="record-top-name">서초FC</div>
+              <div class="record-top-value">4경기</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">3경기</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">2경기</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">마</span>
+            <span class="record-list-name">마포FC</span>
+            <span class="record-list-value">2경기</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+
+        <!-- 최다 연승 -->
+        <div class="record-card">
+          <div class="record-card-title">최다 연승</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">서</span>
+            <div class="record-top-info">
+              <div class="record-top-name">서초FC</div>
+              <div class="record-top-value">5연승</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">4연승</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">3연승</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">강</span>
+            <span class="record-list-name">강남유나이티드</span>
+            <span class="record-list-value">2연승</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+
+        <!-- 최다 득점차 승리 -->
+        <div class="record-card">
+          <div class="record-card-title">최다 득점차 승리</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">서</span>
+            <div class="record-top-info">
+              <div class="record-top-name">서초FC</div>
+              <div class="record-top-value">6골 차</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">4골 차</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">4골 차</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">마</span>
+            <span class="record-list-name">마포FC</span>
+            <span class="record-list-value">3골 차</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+
+        <!-- 페어플레이 -->
+        <div class="record-card">
+          <div class="record-card-title">페어플레이 (최소 경고)</div>
+          <div class="record-top">
+            <span class="record-top-rank">1</span>
+            <span class="record-top-emblem">마</span>
+            <div class="record-top-info">
+              <div class="record-top-name">마포FC</div>
+              <div class="record-top-value">2장</div>
+            </div>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">2</span>
+            <span class="record-list-emblem">서</span>
+            <span class="record-list-name">서초FC</span>
+            <span class="record-list-value">3장</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">3</span>
+            <span class="record-list-emblem">인</span>
+            <span class="record-list-name">인천시티FC</span>
+            <span class="record-list-value">4장</span>
+          </div>
+          <div class="record-list-item">
+            <span class="record-list-rank">4</span>
+            <span class="record-list-emblem">노</span>
+            <span class="record-list-name">노원FC</span>
+            <span class="record-list-value">5장</span>
+          </div>
+          <a class="record-more" href="#">더보기</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /view-detail -->
+
+</div>
+
+<script>
+function toggleAge(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  
+  // Close all others
+  document.querySelectorAll('.age-header.open').forEach(h => {
+    if (h !== header) {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    }
+  });
+  
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+function showLeagueDetail() {
+  document.getElementById('view-list').style.display = 'none';
+  document.getElementById('view-detail').classList.add('active');
+}
+
+function backToList() {
+  document.getElementById('view-list').style.display = 'block';
+  document.getElementById('view-detail').classList.remove('active');
+}
+
+function switchSub(id) {
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('sub-' + id).classList.add('active');
+}
+</script>
+</body>
+</html>

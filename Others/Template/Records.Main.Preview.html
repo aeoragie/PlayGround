@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayGround — Records 기록실</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-hover: #2A4A72;
+  --navy-dark: #152D4A;
+  --slate: #475569;
+  --orange: #FF6B35;
+  --orange-hover: #FF8F5E;
+  --teal: #0D9488;
+  --teal-bg: #F0FDFA;
+  --green: #16A34A;
+  --green-bg: #F0FDF4;
+  --amber: #D97706;
+  --amber-bg: #FFFBEB;
+  --red: #DC2626;
+  --blue: #2563EB;
+  --blue-bg: #EFF6FF;
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --text: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #E5E7EB;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 100px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+
+/* ========== TOP NAV ========== */
+.topnav {
+  background: var(--navy); height: 56px;
+  display: flex; align-items: center; padding: 0 32px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topnav-logo {
+  display: flex; align-items: center; gap: 10px;
+  color: #fff; text-decoration: none;
+}
+.topnav-logo .icon {
+  width: 30px; height: 30px; background: var(--orange);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800;
+}
+.topnav-logo span { font-size: 15px; font-weight: 700; }
+.topnav-links {
+  display: flex; gap: 4px; margin-left: 40px;
+}
+.topnav-link {
+  padding: 8px 16px; border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  transition: all 0.15s;
+}
+.topnav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.topnav-link.active { color: #fff; background: rgba(255,255,255,0.1); font-weight: 600; }
+.topnav-right {
+  margin-left: auto; display: flex; align-items: center; gap: 10px;
+}
+.topnav-btn {
+  padding: 7px 16px; border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8); background: transparent;
+  cursor: pointer; font-family: inherit;
+}
+.topnav-btn.cta { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+/* ========== CONTAINER ========== */
+.container {
+  max-width: 960px; margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ========== SECTION ========== */
+.section { margin-bottom: 36px; }
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  letter-spacing: -0.3px;
+}
+.section-subtitle {
+  font-size: 12px; color: var(--text-muted); font-weight: 400;
+}
+.section-link {
+  margin-left: auto; font-size: 12px; color: var(--navy);
+  font-weight: 500; text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+}
+.section-link:hover { text-decoration: underline; }
+
+/* ========== AGE TABS ========== */
+.age-tabs {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--surface);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.age-tab {
+  flex: 1; padding: 10px 0;
+  text-align: center; font-size: 13px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer; transition: all 0.15s;
+  border-right: 1px solid var(--border);
+  position: relative; background: var(--surface);
+}
+.age-tab:last-child { border-right: none; }
+.age-tab:hover { background: #F8F9FA; color: var(--text); }
+.age-tab.active {
+  background: var(--navy); color: #fff; font-weight: 700;
+}
+.age-tab .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--orange); display: inline-block;
+  margin-left: 2px; vertical-align: top;
+}
+
+/* ========== COMPETITION LIST ========== */
+.comp-list {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.comp-item {
+  display: flex; align-items: center;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  cursor: pointer; transition: all 0.15s;
+  gap: 14px;
+}
+.comp-item:hover { box-shadow: var(--shadow-hover); border-color: var(--navy); }
+.comp-status {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.comp-status.live { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+.comp-status.upcoming { background: var(--blue); }
+.comp-status.ended { background: var(--text-muted); }
+.comp-info { flex: 1; min-width: 0; }
+.comp-name {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.comp-name .c-badge {
+  font-size: 10px; font-weight: 600;
+  padding: 1px 7px; border-radius: var(--radius-pill);
+}
+.c-badge.league { background: #EEF2FF; color: var(--navy); }
+.c-badge.tourn { background: var(--amber-bg); color: var(--amber); }
+.comp-meta {
+  font-size: 12px; color: var(--text-secondary); margin-top: 2px;
+}
+.comp-arrow {
+  font-size: 16px; color: var(--text-muted);
+  flex-shrink: 0; transition: transform 0.15s;
+}
+.comp-item:hover .comp-arrow { transform: translateX(3px); color: var(--navy); }
+
+/* ========== DATE DIVIDER ========== */
+.date-header {
+  display: flex; align-items: center; gap: 12px;
+  margin: 24px 0 12px;
+}
+.date-text {
+  font-size: 14px; font-weight: 700; color: var(--text);
+  white-space: nowrap;
+}
+.date-note {
+  font-size: 11px; color: var(--text-muted); font-weight: 400;
+}
+.date-line {
+  flex: 1; height: 1px; background: var(--border);
+}
+
+/* ========== MATCH GROUP ========== */
+.match-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.match-group-header {
+  padding: 12px 20px;
+  background: #F8F9FB;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+}
+.match-group-name {
+  font-size: 13px; font-weight: 600; color: var(--navy);
+  flex: 1;
+}
+.match-group-count {
+  font-size: 11px; color: var(--text-muted);
+}
+.match-group-toggle {
+  font-size: 14px; color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+/* ========== MATCH ROW ========== */
+.match-row {
+  display: flex; align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.match-row:last-child { border-bottom: none; }
+.match-row:hover { background: #FAFBFC; }
+
+.match-meta-left {
+  width: 200px; flex-shrink: 0;
+  font-size: 11px; color: var(--text-muted);
+  line-height: 1.5;
+  padding-right: 16px;
+}
+.match-meta-round {
+  font-weight: 600; color: var(--text-secondary);
+}
+
+.match-teams {
+  flex: 1; display: flex; align-items: center;
+  min-width: 0;
+}
+.match-team {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+}
+.match-team.home { justify-content: flex-end; text-align: right; }
+.match-team.away { justify-content: flex-start; text-align: left; }
+.team-emblem {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #F1F5F9; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--slate);
+  flex-shrink: 0;
+}
+.team-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.match-score-box {
+  width: 72px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 8px;
+}
+.match-score-num {
+  font-size: 20px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text); line-height: 1;
+  width: 24px; text-align: center;
+}
+.match-score-num.win { color: var(--red); }
+.match-score-num.lose { color: var(--text-muted); }
+.match-score-sep {
+  font-size: 14px; color: var(--text-muted);
+  font-weight: 400;
+}
+
+.match-detail-link {
+  width: 32px; flex-shrink: 0;
+  text-align: center;
+  font-size: 14px; color: var(--text-muted);
+}
+
+/* ========== UPCOMING SCHEDULE ========== */
+.schedule-row {
+  display: flex; align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.schedule-row:last-child { border-bottom: none; }
+.schedule-time-col {
+  width: 60px; flex-shrink: 0;
+  font-size: 13px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.schedule-venue {
+  width: 160px; flex-shrink: 0;
+  font-size: 11px; color: var(--text-muted);
+  padding-right: 12px;
+}
+.schedule-teams {
+  flex: 1; display: flex; align-items: center;
+}
+.schedule-vs {
+  width: 40px; flex-shrink: 0;
+  text-align: center; font-size: 11px;
+  color: var(--text-muted); font-weight: 500;
+}
+
+/* ========== FILTER BAR ========== */
+.filter-bar {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.filter-chip {
+  padding: 6px 14px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+.filter-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.filter-chip .arrow { font-size: 9px; opacity: 0.5; }
+
+/* ========== PAGINATION ========== */
+.more-btn {
+  display: block; width: 100%;
+  padding: 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface); color: var(--navy);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s; text-align: center;
+  margin-top: 12px;
+}
+.more-btn:hover { background: #F1F5F9; border-color: var(--navy); }
+
+/* ========== EXPAND BUTTON ========== */
+.comp-expand-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; width: 100%;
+  padding: 12px; margin-top: 8px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--navy); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.comp-expand-btn:hover {
+  background: #F1F5F9; border-color: var(--navy); border-style: solid;
+}
+.expand-arrow {
+  font-size: 12px; transition: transform 0.2s;
+}
+.expand-arrow.up { transform: rotate(180deg); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px 40px; }
+  .age-tabs { flex-wrap: wrap; }
+  .age-tab { flex: none; padding: 8px 14px; }
+  .match-meta-left { width: 140px; font-size: 10px; }
+  .match-score-num { font-size: 18px; }
+  .schedule-venue { display: none; }
+  .topnav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="topnav">
+  <a class="topnav-logo" href="#">
+    <span>PlayGround</span>
+  </a>
+  <div class="topnav-links">
+    <a class="topnav-link" href="#">홈</a>
+    <a class="topnav-link" href="#">팀 찾기</a>
+    <a class="topnav-link active" href="#">기록실</a>
+    <a class="topnav-link" href="#">리그</a>
+    <a class="topnav-link" href="#">커뮤니티</a>
+    <a class="topnav-link" href="#">대회</a>
+  </div>
+  <div class="topnav-right">
+    <button class="topnav-btn">로그인</button>
+    <button class="topnav-btn cta">가입하기</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ==================== 진행 중인 대회 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">진행 중인 대회</div>
+    </div>
+
+    <!-- Age Tabs -->
+    <div class="age-tabs">
+      <div class="age-tab">U22</div>
+      <div class="age-tab">U20</div>
+      <div class="age-tab">U18</div>
+      <div class="age-tab">U17</div>
+      <div class="age-tab">U15</div>
+      <div class="age-tab">U14</div>
+      <div class="age-tab active">U12<span class="dot"></span></div>
+      <div class="age-tab">U11<span class="dot"></span></div>
+    </div>
+
+    <!-- Competition List -->
+    <div class="comp-list">
+      <div class="comp-item">
+        <div class="comp-status live"></div>
+        <div class="comp-info">
+          <div class="comp-name">
+            [강원/홍천] 2026 홍천무궁화컵
+            <span class="c-badge tourn">대회</span>
+          </div>
+          <div class="comp-meta">02.20 (금) ~ 02.26 (목) · 강원 홍천</div>
+        </div>
+        <span class="comp-arrow">→</span>
+      </div>
+      <div class="comp-item">
+        <div class="comp-status live"></div>
+        <div class="comp-info">
+          <div class="comp-name">
+            [전남/순천] 2026 순천만국가정원배
+            <span class="c-badge tourn">대회</span>
+          </div>
+          <div class="comp-meta">02.20 (금) ~ 02.26 (목) · 전남 순천</div>
+        </div>
+        <span class="comp-arrow">→</span>
+      </div>
+      <div class="comp-item">
+        <div class="comp-status live"></div>
+        <div class="comp-info">
+          <div class="comp-name">
+            [충남/보령] 2026 만세보령머드배 JS컵
+            <span class="c-badge tourn">대회</span>
+          </div>
+          <div class="comp-meta">02.20 (금) ~ 02.26 (목) · 충남 보령</div>
+        </div>
+        <span class="comp-arrow">→</span>
+      </div>
+      <div class="comp-item">
+        <div class="comp-status live"></div>
+        <div class="comp-info">
+          <div class="comp-name">
+            [전남/구례] 2026 구례노고단배
+            <span class="c-badge tourn">대회</span>
+          </div>
+          <div class="comp-meta">02.20 (금) ~ 02.26 (목) · 전남 구례</div>
+        </div>
+        <span class="comp-arrow">→</span>
+      </div>
+      <div class="comp-item">
+        <div class="comp-status live"></div>
+        <div class="comp-info">
+          <div class="comp-name">
+            [경북/영덕] 2026 STAY 영덕
+            <span class="c-badge tourn">대회</span>
+          </div>
+          <div class="comp-meta">02.22 (월) ~ 02.28 (토) · 경북 영덕</div>
+        </div>
+        <span class="comp-arrow">→</span>
+      </div>
+
+      <!-- 숨겨진 추가 대회 (더보기 클릭 시 표시) -->
+      <div id="comp-more" style="display:none;">
+        <div class="comp-item">
+          <div class="comp-status live"></div>
+          <div class="comp-info">
+            <div class="comp-name">
+              [경기/파주] 2026 파주NFC배
+              <span class="c-badge tourn">대회</span>
+            </div>
+            <div class="comp-meta">02.23 (화) ~ 02.27 (금) · 경기 파주</div>
+          </div>
+          <span class="comp-arrow">→</span>
+        </div>
+        <div class="comp-item">
+          <div class="comp-status live"></div>
+          <div class="comp-info">
+            <div class="comp-name">
+              [제주/서귀포] 2026 제주윈터챌린지
+              <span class="c-badge tourn">대회</span>
+            </div>
+            <div class="comp-meta">02.24 (수) ~ 02.28 (토) · 제주 서귀포</div>
+          </div>
+          <span class="comp-arrow">→</span>
+        </div>
+        <div class="comp-item">
+          <div class="comp-status live"></div>
+          <div class="comp-info">
+            <div class="comp-name">
+              [경남/거제] 2026 거제바다배컵
+              <span class="c-badge tourn">대회</span>
+            </div>
+            <div class="comp-meta">02.22 (월) ~ 02.26 (목) · 경남 거제</div>
+          </div>
+          <span class="comp-arrow">→</span>
+        </div>
+        <div class="comp-item">
+          <div class="comp-status live"></div>
+          <div class="comp-info">
+            <div class="comp-name">
+              [서울/마포] 2026 서울시장배 유소년축구
+              <span class="c-badge tourn">대회</span>
+            </div>
+            <div class="comp-meta">02.24 (수) ~ 02.28 (토) · 서울 마포</div>
+          </div>
+          <span class="comp-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- 더보기 버튼 -->
+      <button class="comp-expand-btn" id="comp-expand-btn" onclick="toggleCompMore()">
+        <span id="comp-expand-text">진행 중인 대회 4개 더보기</span>
+        <span id="comp-expand-icon" class="expand-arrow">↓</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== 대회 경기 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">대회 경기</div>
+      <div class="section-subtitle">02.26</div>
+      <div class="section-subtitle" style="margin-left:auto; font-size:11px; color:var(--text-muted);">※ 경기를 터치하시면 상세보기가 가능합니다.</div>
+    </div>
+
+    <!-- Age Tabs (matches) -->
+    <div class="age-tabs">
+      <div class="age-tab">U22</div>
+      <div class="age-tab">U20</div>
+      <div class="age-tab">U18</div>
+      <div class="age-tab">U17</div>
+      <div class="age-tab">U15</div>
+      <div class="age-tab">U14</div>
+      <div class="age-tab active">U12<span class="dot"></span></div>
+      <div class="age-tab">U11<span class="dot"></span></div>
+    </div>
+
+    <!-- Match Group 1 -->
+    <div class="match-group">
+      <div class="match-group-header">
+        <div class="match-group-name">[전남/순천] 2026 순천만국가정원배</div>
+        <div class="match-group-count">8경기</div>
+        <div class="match-group-toggle">∧</div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">7R</div>
+          02-26 (목) 13:00, 썬배유소년A
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">인천남동구청</span>
+            <div class="team-emblem">인</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num">2</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num">2</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">부</div>
+            <span class="team-name">부산효림SC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">7R</div>
+          02-26 (목) 13:00, 썬배보소A
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경기드림싸커</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">5</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">0</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">인</div>
+            <span class="team-name">인천포그클럽</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">7R</div>
+          02-26 (목) 13:00, 썬배유소년B
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경남AMIGO-FC</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">2</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">3</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경남거제경승포</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">7R</div>
+          02-26 (목) 13:00, 썬배보소B
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경기GS경수</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">3</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">1</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">인</div>
+            <span class="team-name">인천마추홀FC</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="more-btn" style="margin:0; border:none; border-top:1px solid #F3F4F6; border-radius:0;">대회 자세히 보기 →</button>
+    </div>
+
+    <!-- Match Group 2 -->
+    <div class="match-group">
+      <div class="match-group-header">
+        <div class="match-group-name">[충남/보령] 2026 만세보령머드배 JS컵</div>
+        <div class="match-group-count">12경기</div>
+        <div class="match-group-toggle">∧</div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 13:00, JS트레이닝센터 3-B구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">세종레알FC</span>
+            <div class="team-emblem">세</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">1</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">2</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">충</div>
+            <span class="team-name">충남홍주MSC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 13:00, 보령스포츠타운 전연4구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">전북JK-FC</span>
+            <div class="team-emblem">전</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">10</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경기크라키</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 14:00, 보령스포츠타운 전연4구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">서울풋굿코리아</span>
+            <div class="team-emblem">서</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">2</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">전</div>
+            <span class="team-name">전북어리둥클럽</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 14:00, JS트레이닝센터 1-A구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경기백지성클럽</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">3</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">1</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경기군포유소년</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 14:00, JS트레이닝센터 3-B구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">서울강남갤럭시</span>
+            <div class="team-emblem">서</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">2</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경기월드클래스</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 15:00, JS트레이닝센터 3-B구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경기송탄유소년</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num win">5</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num lose">1</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">대</div>
+            <span class="team-name">대구SOO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 15:00, JS트레이닝센터 1-B구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">경기남국UTD</span>
+            <div class="team-emblem">경</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num">0</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num">0</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경기HRPRO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-row">
+        <div class="match-meta-left">
+          <div class="match-meta-round">5R</div>
+          02-26 (목) 15:00, 보령스포츠타운 전연4구장
+        </div>
+        <div class="match-teams">
+          <div class="match-team home">
+            <span class="team-name">용인니케FC</span>
+            <div class="team-emblem">용</div>
+          </div>
+          <div class="match-score-box">
+            <span class="match-score-num lose">3</span>
+            <span class="match-score-sep">:</span>
+            <span class="match-score-num win">5</span>
+          </div>
+          <div class="match-team away">
+            <div class="team-emblem">경</div>
+            <span class="team-name">경기영기훈</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="more-btn" style="margin:0; border:none; border-top:1px solid #F3F4F6; border-radius:0;">대회 자세히 보기 →</button>
+    </div>
+
+  </div><!-- /section matches -->
+
+</div><!-- /container -->
+
+<script>
+function toggleCompMore() {
+  const more = document.getElementById('comp-more');
+  const text = document.getElementById('comp-expand-text');
+  const icon = document.getElementById('comp-expand-icon');
+  const isHidden = more.style.display === 'none';
+  
+  more.style.display = isHidden ? 'flex' : 'none';
+  more.style.flexDirection = 'column';
+  more.style.gap = '8px';
+  text.textContent = isHidden ? '접기' : '진행 중인 대회 4개 더보기';
+  icon.classList.toggle('up', isHidden);
+}
+</script>
+</body>
+</html>

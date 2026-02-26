@@ -1,4 +1,4 @@
-using Main.Entities;
+using PlayGround.Domain.SubDomains.Auth;
 
 namespace PlayGround.Application.Interfaces
 {
@@ -7,10 +7,10 @@ namespace PlayGround.Application.Interfaces
     /// </summary>
     public interface IAuthRepository
     {
-        Task<UsersEntity?> GetUserByEmailAsync(string email);
-        Task<UsersEntity?> GetUserByIdAsync(Guid userId);
-        Task<UsersEntity?> CreateUserByEmailAsync(string email, string passwordHash, string fullName, string userRole);
-        Task<UsersEntity?> CreateUserWithSocialAccountAsync(string email, string fullName, string? profileImageUrl, string provider, string providerUserId, string? ipAddress, string? userAgent);
+        Task<UserModel?> GetUserByEmailAsync(string email);
+        Task<UserModel?> GetUserByIdAsync(Guid userId);
+        Task<UserModel?> CreateUserByEmailAsync(string email, string passwordHash, string fullName, string userRole);
+        Task<UserModel?> CreateUserWithSocialAccountAsync(string email, string fullName, string? profileImageUrl, string provider, string providerUserId, string? ipAddress, string? userAgent);
         Task<RefreshTokenResult?> CreateRefreshTokenAsync(Guid userId, string tokenHash, string? deviceInfo, string? ipAddress, DateTime expiresAt);
         Task<bool> UpdateLastLoginAsync(Guid userId, string? ipAddress, string? userAgent, string? deviceType, Guid? refreshTokenId, DateTime? sessionExpiresAt);
         Task<UserRefreshTokenRow?> GetValidRefreshTokenAsync(string tokenHash);

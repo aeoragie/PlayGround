@@ -17,4 +17,32 @@
   .kpi-card {
     @apply bg-surface rounded-xl border border-border px-5 py-4;
   }
+
+  /* Auth 페이지 */
+  .auth-input {
+    @apply w-full px-3.5 py-2.5 rounded-btn border-[1.5px] border-border
+           text-[13px] outline-none bg-surface text-text-primary
+           focus:border-navy focus:shadow-[0_0_0_3px_rgba(30,58,95,0.08)]
+           placeholder:text-text-light transition-colors;
+  }
+  .auth-select {
+    @apply w-full px-3.5 py-2.5 rounded-btn border-[1.5px] border-border
+           text-[13px] outline-none bg-surface text-text-primary
+           focus:border-navy focus:shadow-[0_0_0_3px_rgba(30,58,95,0.08)]
+           transition-colors appearance-none cursor-pointer;
+  }
+  .btn-auth-submit {
+    @apply w-full py-3 rounded-btn text-sm font-bold border-none
+           bg-primary text-white cursor-pointer
+           hover:bg-primary-dark hover:-translate-y-px
+           shadow-[0_2px_8px_rgba(255,107,53,0.2)]
+           hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)]
+           transition-all disabled:opacity-60 disabled:cursor-not-allowed
+           disabled:hover:translate-y-0;
+  }
+  .btn-auth-navy {
+    @apply inline-flex items-center gap-2 px-7 py-3 rounded-btn
+           text-sm font-bold border-none bg-navy text-white cursor-pointer
+           hover:bg-navy-light hover:-translate-y-px transition-all;
+  }
 }

@@ -8,9 +8,8 @@ namespace PlayGround.Infrastructure.Logging.Render
     /// 스레드 ID 렌더러 (4자리 0-패딩)
     /// 예: Thread 5 → "0005"
     /// </summary>
-    [LayoutRenderer("threadid")]
-    [ThreadAgnostic]
-    public class ThreadIdLayoutRenderer : LayoutRenderer
+    [LayoutRenderer("paddedthreadid")]
+    public class PaddedThreadIdLayoutRenderer : LayoutRenderer
     {
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {

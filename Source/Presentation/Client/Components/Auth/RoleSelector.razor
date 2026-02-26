@@ -1,0 +1,58 @@
+@* 역할 선택 카드 (회원가입 페이지) *@
+
+<div class="text-xs font-semibold text-text-secondary mb-2.5">어떤 목적으로 사용하시나요?</div>
+<div class="grid grid-cols-3 gap-2 mb-5 max-md:grid-cols-2">
+    @foreach (var role in Roles)
+    {
+        var isSelected = SelectedRole == role.Value;
+        <div class="@GetCardClass(isSelected)" @onclick="() => SelectRole(role.Value)">
+            <div class="@GetIconClass(isSelected)">@role.Icon</div>
+            <div class="@GetNameClass(isSelected)">@role.Name</div>
+            <div class="@GetDescClass(isSelected)">@role.Description</div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string SelectedRole { get; set; } = "Player";
+    [Parameter] public EventCallback<string> SelectedRoleChanged { get; set; }
+
+    private record RoleOption(string Value, string Icon, string Name, string Description);
+
+    private static readonly RoleOption[] Roles =
+    [
+        new("Player", "\ud83d\udc64", "학부모 / 선수", "팀 찾기 · 리뷰"),
+        new("TeamAdmin", "\ud83c\udfe0", "팀 관리자", "팀 운영 · 모집"),
+        new("Agent", "\u21cb", "에이전트", "매칭 · 추천"),
+    ];
+
+    private async Task SelectRole(string role)
+    {
+        SelectedRole = role;
+        await SelectedRoleChanged.InvokeAsync(role);
+    }
+
+    private static string GetCardClass(bool isSelected)
+    {
+        var baseClass = "py-3.5 px-2.5 rounded-btn border-[1.5px] text-center cursor-pointer transition-all";
+        return isSelected
+            ? $"{baseClass} border-navy bg-navy-subtle"
+            : $"{baseClass} border-border bg-surface hover:border-navy hover:bg-navy-subtle";
+    }
+
+    private static string GetIconClass(bool isSelected)
+    {
+        var baseClass = "w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-1.5 text-sm";
+        return isSelected
+            ? $"{baseClass} bg-navy text-white"
+            : $"{baseClass} bg-border-light text-text-light";
+    }
+
+    private static string GetNameClass(bool isSelected) => isSelected
+        ? "text-[11px] font-bold text-navy"
+        : "text-[11px] font-semibold text-text-secondary";
+
+    private static string GetDescClass(bool isSelected) => isSelected
+        ? "text-[10px] text-slate-light mt-0.5 leading-tight"
+        : "text-[10px] text-text-light mt-0.5 leading-tight";
+}

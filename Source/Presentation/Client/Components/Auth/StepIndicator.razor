@@ -1,0 +1,29 @@
+@* 온보딩 단계 표시 *@
+
+<div class="flex items-center justify-center gap-2 mb-6">
+    @for (int i = 1; i <= TotalSteps; i++)
+    {
+        var step = i;
+        <div class="@GetDotClass(step)"></div>
+    }
+</div>
+
+@code {
+    [Parameter] public int CurrentStep { get; set; } = 2;
+    [Parameter] public int TotalSteps { get; set; } = 3;
+
+    private string GetDotClass(int step)
+    {
+        if (step < CurrentStep)
+        {
+            return "w-2 h-2 rounded-full bg-trust transition-all";
+        }
+
+        if (step == CurrentStep)
+        {
+            return "w-6 h-2 rounded bg-navy transition-all";
+        }
+
+        return "w-2 h-2 rounded-full bg-border transition-all";
+    }
+}
