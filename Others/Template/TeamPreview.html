@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayGround — Team Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--navy:#1E3A5F;--navy-light:#2A4A73;--navy-dark:#152D4A;--navy-subtle:#F0F4F8;--slate:#475569;--slate-light:#64748B;--accent:#FF6B35;--accent-hover:#E55A2B;--accent-subtle:#FFF7F3;--trust:#0D9488;--trust-subtle:#F0FDFA;--violet:#6D28D9;--violet-subtle:#F5F3FF;--success:#16A34A;--warning:#D97706;--error:#DC2626;--bg:#FAFAFA;--surface:#FFFFFF;--text-primary:#1F2937;--text-secondary:#6B7280;--text-light:#9CA3AF;--border:#E5E7EB;--border-light:#F3F4F6;--shadow:0 4px 16px rgba(0,0,0,0.07);--shadow-sm:0 1px 3px rgba(0,0,0,0.05);--radius:12px;--radius-sm:8px;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Plus Jakarta Sans','Pretendard',-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;}
+
+        /* GNB */
+        .gnb{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+        .gnb-logo{font-size:17px;font-weight:700;color:var(--navy);text-decoration:none;}.gnb-logo span{color:var(--accent);}
+        .gnb-nav{display:flex;gap:24px;}
+        .gnb-link{font-size:13px;font-weight:600;color:var(--slate);text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:all .12s;}
+        .gnb-link:hover{color:var(--navy);}.gnb-link.active{color:var(--navy);border-bottom-color:var(--navy);}
+        .gnb-right{display:flex;align-items:center;gap:10px;}
+        .btn-sm{padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--slate);cursor:pointer;font-family:inherit;transition:all .12s;}
+        .btn-sm:hover{border-color:var(--navy);color:var(--navy);}
+        .btn-sm-accent{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+        /* VIEW TOGGLE */
+        .view-toggle{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;margin-bottom:24px;}
+        .vt-btn{padding:8px 20px;border-radius:6px;font-size:12px;font-weight:600;border:none;background:transparent;color:var(--text-light);cursor:pointer;font-family:inherit;transition:all .12s;}
+        .vt-btn.active{background:var(--navy);color:#fff;}
+
+        .container{max-width:1080px;margin:0 auto;padding:24px 32px 60px;}
+
+        /* COVER */
+        .team-cover{height:200px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius) var(--radius) 0 0;position:relative;display:flex;align-items:flex-end;padding:20px 24px;overflow:hidden;}
+        .team-cover::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+        .cover-info{position:relative;z-index:1;display:flex;align-items:flex-end;gap:16px;width:100%;}
+        .team-emblem{width:72px;height:72px;border-radius:var(--radius);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--navy);box-shadow:0 4px 12px rgba(0,0,0,0.15);flex-shrink:0;cursor:pointer;position:relative;overflow:hidden;}
+        .team-emblem-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;}
+        .team-emblem:hover .team-emblem-overlay{opacity:1;}
+        .team-emblem-overlay svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8;}
+        .cover-text{flex:1;}
+        .cover-badges{display:flex;gap:6px;margin-bottom:4px;}
+        .cover-name{font-size:22px;font-weight:700;color:#fff;}
+        .cover-meta{font-size:12px;color:rgba(255,255,255,0.7);}
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;}
+        .badge-white{background:rgba(255,255,255,0.2);color:#fff;}
+        .badge-trust{background:var(--trust-subtle);color:var(--trust);}
+        .badge-accent{background:var(--accent-subtle);color:var(--accent);}
+
+        /* TEAM STATS BAR */
+        .team-stats-bar{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);padding:16px 24px;margin-bottom:24px;}
+        .tsb-item{flex:1;text-align:center;border-right:1px solid var(--border-light);}
+        .tsb-item:last-child{border-right:none;}
+        .tsb-num{font-size:22px;font-weight:700;color:var(--navy);}
+        .tsb-label{font-size:10px;color:var(--text-light);font-weight:500;}
+
+        /* TABS */
+        .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;}
+        .tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text-light);cursor:pointer;border-bottom:2px solid transparent;transition:all .12s;}
+        .tab:hover{color:var(--text-secondary);}.tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+        /* PANELS */
+        .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+        .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;}
+        .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+        .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+        .panel-title{font-size:14px;font-weight:700;color:var(--navy);}
+        .panel-link{font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;text-decoration:none;}
+
+        .tab-content{display:none;}.tab-content.active{display:block;}
+        .view-content{display:none;}.view-content.active{display:block;}
+
+        /* PHILOSOPHY */
+        .values{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+        .value-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;background:var(--navy-subtle);color:var(--navy);}
+
+        /* STAFF CARD */
+        .staff-card{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;}
+        .staff-card:last-child{margin-bottom:0;}
+        .staff-avatar{width:44px;height:44px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
+        .staff-info{flex:1;}
+        .staff-name{font-size:13px;font-weight:700;color:var(--text-primary);}
+        .staff-role{font-size:11px;color:var(--accent);font-weight:600;}
+        .staff-cert{font-size:11px;color:var(--text-light);}
+
+        /* SQUAD CARD */
+        .squad-card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+        .sq-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);text-align:center;overflow:hidden;transition:all .15s;cursor:pointer;}
+        .sq-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+        .sq-card-top{height:28px;display:flex;align-items:center;padding-left:10px;}
+        .sq-card-gk{background:#FEF3C7;}.sq-card-df{background:var(--trust-subtle);}.sq-card-mf{background:var(--navy-subtle);}.sq-card-fw{background:var(--accent-subtle);}
+        .sq-card-num{font-size:12px;font-weight:700;color:var(--slate);}
+        .sq-card-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;margin:14px auto 8px;}
+        .sq-card-name{font-size:13px;font-weight:700;color:var(--text-primary);}
+        .sq-card-pos{margin:4px 0;}
+        .sq-card-meta{font-size:11px;color:var(--text-light);padding-bottom:14px;}
+
+        /* SQUAD TABLE */
+        .squad-table{width:100%;border-collapse:collapse;}
+        .squad-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;color:var(--text-light);border-bottom:1px solid var(--border);}
+        .squad-table td{padding:10px;font-size:13px;border-bottom:1px solid var(--border-light);}
+        .squad-table tr:last-child td{border-bottom:none;}
+        .sq-num{font-weight:700;color:var(--navy);width:36px;text-align:center;}
+        .sq-pos{font-size:11px;font-weight:600;padding:2px 8px;border-radius:100px;}
+        .sq-pos-gk{background:#FEF3C7;color:#D97706;}.sq-pos-df{background:var(--trust-subtle);color:var(--trust);}
+        .sq-pos-mf{background:var(--navy-subtle);color:var(--navy);}.sq-pos-fw{background:var(--accent-subtle);color:var(--accent);}
+
+        /* MATCH */
+        .match-card{display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;}
+        .match-card:last-child{margin-bottom:0;}
+        .mc-date{font-size:11px;font-weight:600;color:var(--text-light);width:48px;flex-shrink:0;text-align:center;line-height:1.3;}
+        .mc-teams{flex:1;}.mc-versus{font-size:13px;font-weight:600;color:var(--text-primary);}.mc-comp{font-size:11px;color:var(--text-light);}
+        .mc-score{font-size:18px;font-weight:700;color:var(--navy);width:60px;text-align:center;}
+        .mc-result{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;width:32px;text-align:center;}
+        .mc-win{background:#DCFCE7;color:var(--success);}.mc-draw{background:#FEF3C7;color:var(--warning);}.mc-loss{background:#FEE2E2;color:var(--error);}
+
+        /* RECRUIT */
+        .recruit-card{padding:16px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;transition:all .12s;}
+        .recruit-card:hover{box-shadow:var(--shadow-sm);}
+        .rc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+        .rc-title{font-size:14px;font-weight:700;color:var(--text-primary);}
+        .rc-status{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;}
+        .rc-open{background:#DCFCE7;color:var(--success);}.rc-closed{background:var(--border-light);color:var(--text-light);}
+        .rc-detail{font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;}
+        .rc-tags{display:flex;gap:6px;flex-wrap:wrap;}
+        .rc-tag{padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;background:var(--navy-subtle);color:var(--navy);}
+
+        /* REVIEW */
+        .review-card{padding:14px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:10px;}
+        .review-card:last-child{margin-bottom:0;}
+        .rv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+        .rv-user{font-size:12px;font-weight:600;color:var(--text-primary);}
+        .rv-stars{color:#F59E0B;font-size:12px;letter-spacing:1px;}
+        .rv-body{font-size:13px;color:var(--text-secondary);line-height:1.7;}
+        .rv-date{font-size:11px;color:var(--text-light);margin-top:6px;}
+
+        /* CALENDAR */
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;}
+        .cal-head{font-size:10px;font-weight:600;color:var(--text-light);padding:6px 0;}
+        .cal-day{font-size:12px;padding:8px 2px;border-radius:6px;cursor:default;position:relative;}
+        .cal-day.today{background:var(--navy);color:#fff;font-weight:700;}
+        .cal-day.has-event::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);}
+        .cal-day.has-training::after{background:var(--trust);}
+        .cal-day.empty{color:var(--text-light);}
+
+        /* ADMIN KPI */
+        .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+        .kpi{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center;}
+        .kpi-num{font-size:24px;font-weight:700;color:var(--navy);}
+        .kpi-label{font-size:10px;color:var(--text-light);font-weight:500;margin-top:2px;}
+        .kpi-change{font-size:10px;font-weight:600;margin-top:4px;}
+        .kpi-up{color:var(--success);}.kpi-down{color:var(--error);}
+
+        /* ATTENDANCE */
+        .att-bar{display:flex;gap:2px;height:20px;border-radius:4px;overflow:hidden;margin-bottom:4px;}
+        .att-seg{transition:width .3s ease;}
+        .att-present{background:var(--success);}.att-late{background:var(--warning);}.att-absent{background:var(--error);}
+
+        /* APPLICANT */
+        .app-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);}
+        .app-item:last-child{border-bottom:none;}
+        .app-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-subtle);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--navy);flex-shrink:0;}
+        .app-info{flex:1;}.app-name{font-size:13px;font-weight:600;color:var(--text-primary);}.app-detail{font-size:11px;color:var(--text-light);}
+        .app-status{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:600;}
+        .app-new{background:var(--accent-subtle);color:var(--accent);}.app-review{background:#FEF3C7;color:var(--warning);}.app-pass{background:#DCFCE7;color:var(--success);}
+
+        /* MAP PLACEHOLDER */
+        .map-placeholder{height:140px;background:var(--navy-subtle);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;gap:8px;color:var(--slate-light);font-size:13px;font-weight:500;}
+
+        @media(max-width:768px){
+            .container{padding:16px;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+            .kpi-grid{grid-template-columns:repeat(2,1fr);}
+            .team-stats-bar{flex-wrap:wrap;}.tsb-item{flex:none;width:25%;}
+            .tabs{overflow-x:auto;flex-wrap:nowrap;}
+            .squad-card-grid{grid-template-columns:repeat(2,1fr);}
+            .cover-info{flex-direction:column;align-items:flex-start;}
+        }
+    </style>
+</head>
+<body>
+
+<nav class="gnb">
+    <a class="gnb-logo">Play<span>Ground</span></a>
+    <div class="gnb-nav">
+        <a class="gnb-link">홈</a>
+        <a class="gnb-link active">팀</a>
+        <a class="gnb-link">기록실</a>
+        <a class="gnb-link">리뷰</a>
+    </div>
+    <div class="gnb-right">
+        <button class="btn-sm">메시지</button>
+        <button class="btn-sm btn-sm-accent">대시보드</button>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- VIEW TOGGLE -->
+    <div class="view-toggle">
+        <button class="vt-btn active" onclick="switchView('public')">공개 프로필</button>
+        <button class="vt-btn" onclick="switchView('admin')">관리자 대시보드</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ═══ PUBLIC VIEW ═══ -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="view-content active" id="viewPublic">
+        <!-- COVER -->
+        <div class="team-cover">
+            <div class="cover-info">
+                <div class="team-emblem" onclick="document.getElementById('emblemInput').click()">
+                    FC
+                    <div class="team-emblem-overlay"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+                    <input type="file" id="emblemInput" accept="image/*" style="display:none">
+                </div>
+                <div class="cover-text">
+                    <div class="cover-badges">
+                        <span class="badge badge-white">⚽ 축구</span>
+                        <span class="badge badge-white">U12</span>
+                        <span class="badge badge-white">클럽팀</span>
+                        <span class="badge" style="background:rgba(13,148,136,0.3);color:#5EEAD4;">✓ 인증팀</span>
+                    </div>
+                    <div class="cover-name">서울 FC 주니어</div>
+                    <div class="cover-meta">서울특별시 강남구 · 창단 2018년 · 월 15만원 · 주 3회 훈련 (화/목/토)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-stats-bar">
+            <div class="tsb-item"><div class="tsb-num">24</div><div class="tsb-label">등록 선수</div></div>
+            <div class="tsb-item"><div class="tsb-num">3</div><div class="tsb-label">코칭 스태프</div></div>
+            <div class="tsb-item"><div class="tsb-num" style="color:var(--trust);">2018</div><div class="tsb-label">창단 연도</div></div>
+            <div class="tsb-item"><div class="tsb-num" style="color:var(--accent);">4.6</div><div class="tsb-label">학부모 평점</div></div>
+            <div class="tsb-item"><div class="tsb-num">156</div><div class="tsb-label">팔로워</div></div>
+        </div>
+
+        <!-- PUBLIC TABS -->
+        <div class="tabs" id="publicTabs">
+            <div class="tab active" onclick="switchTab('info','public')">팀 철학</div>
+            <div class="tab" onclick="switchTab('squad','public')">선수단</div>
+            <div class="tab" onclick="switchTab('activity','public')">활동 기록</div>
+            <div class="tab" onclick="switchTab('recruit','public')">모집 공고</div>
+            <div class="tab" onclick="switchTab('reviews','public')">리뷰</div>
+        </div>
+
+        <!-- TAB: 팀 철학 -->
+        <div class="tab-content active" id="tabInfo">
+            <!-- 철학 메인 -->
+            <div class="panel" style="margin-bottom:16px;">
+                <div class="panel-title" style="margin-bottom:14px;">우리 팀이 추구하는 가치</div>
+                <div class="values" style="margin-bottom:16px;">
+                    <span class="value-chip">성장 중심</span>
+                    <span class="value-chip">팀워크</span>
+                    <span class="value-chip">존중</span>
+                    <span class="value-chip">즐거움</span>
+                </div>
+                <div style="font-size:14px;color:var(--text-primary);line-height:1.9;margin-bottom:20px;padding:16px 20px;background:var(--navy-subtle);border-radius:var(--radius-sm);border-left:4px solid var(--navy);">
+                    "서울 FC 주니어는 <strong>승패보다 과정</strong>을 중시합니다. 모든 선수가 경기에 참여할 기회를 보장하며, 실수를 통해 배우는 환경을 만들어갑니다. 우리의 목표는 축구를 평생 즐길 수 있는 사람을 키우는 것입니다."
+                </div>
+
+                <div class="grid-3" style="margin-bottom:0;">
+                    <div style="text-align:center;padding:20px 12px;background:var(--bg);border-radius:var(--radius-sm);">
+                        <div style="width:44px;height:44px;border-radius:50%;background:var(--trust-subtle);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--trust)" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                        </div>
+                        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">단계별 성장</div>
+                        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">기초 → 전술 이해 → 경기 적응<br>개인별 맞춤 성장 로드맵 제공</div>
+                    </div>
+                    <div style="text-align:center;padding:20px 12px;background:var(--bg);border-radius:var(--radius-sm);">
+                        <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-subtle);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        </div>
+                        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">균등한 출전 기회</div>
+                        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">모든 선수 최소 출전 보장<br>경쟁이 아닌 협력 중심 운영</div>
+                    </div>
+                    <div style="text-align:center;padding:20px 12px;background:var(--bg);border-radius:var(--radius-sm);">
+                        <div style="width:44px;height:44px;border-radius:50%;background:var(--violet-subtle);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        </div>
+                        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">인성 교육 병행</div>
+                        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">예절·배려·책임감 교육<br>학업과 운동의 균형 지도</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- 코칭 스태프 -->
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">코칭 스태프</div>
+                    <div class="staff-card">
+                        <div class="staff-avatar">박</div>
+                        <div class="staff-info">
+                            <div class="staff-name">박성진</div>
+                            <div class="staff-role">감독 (Head Coach)</div>
+                            <div class="staff-cert">AFC C 라이센스 · 전 프로선수 (수원 삼성)</div>
+                            <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;line-height:1.6;">"아이들이 스스로 생각하고 판단하는 선수가 되길 바랍니다"</div>
+                        </div>
+                    </div>
+                    <div class="staff-card">
+                        <div class="staff-avatar">이</div>
+                        <div class="staff-info">
+                            <div class="staff-name">이지훈</div>
+                            <div class="staff-role">수석 코치</div>
+                            <div class="staff-cert">KFA 지도자 자격 · 유소년 전문 10년</div>
+                            <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;line-height:1.6;">"기본기를 탄탄하게, 축구를 즐겁게"</div>
+                        </div>
+                    </div>
+                    <div class="staff-card">
+                        <div class="staff-avatar">김</div>
+                        <div class="staff-info">
+                            <div class="staff-name">김태현</div>
+                            <div class="staff-role">GK 코치</div>
+                            <div class="staff-cert">KFA GK 코치 자격 · 전 K리그 선수</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 운영 정보 + 훈련장 -->
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">운영 정보</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:10px;color:var(--text-light);margin-bottom:2px;">훈련 일정</div><div style="font-size:13px;font-weight:600;">화 · 목 · 토</div><div style="font-size:11px;color:var(--text-secondary);">17:00~19:00 (토 10:00)</div></div>
+                            <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:10px;color:var(--text-light);margin-bottom:2px;">월 회비</div><div style="font-size:13px;font-weight:600;">15만원</div><div style="font-size:11px;color:var(--text-secondary);">유니폼·장비 별도</div></div>
+                            <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:10px;color:var(--text-light);margin-bottom:2px;">연령대</div><div style="font-size:13px;font-weight:600;">U12 (2012~2014)</div></div>
+                            <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:10px;color:var(--text-light);margin-bottom:2px;">팀 규모</div><div style="font-size:13px;font-weight:600;">24명 / 3 코치</div></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:10px;">훈련 장소</div>
+                        <div class="map-placeholder">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            강남구 스포츠센터 인조잔디구장
+                        </div>
+                        <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">서울 강남구 삼성로 512 · 지하철 2호선 삼성역 도보 8분</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 선수단 (카드형) -->
+        <div class="tab-content" id="tabSquad">
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">2024-25 선수단</div><span style="font-size:12px;color:var(--text-light);">24명</span></div>
+                <div style="display:flex;gap:6px;margin-bottom:16px;">
+                    <span class="value-chip" style="cursor:pointer;background:var(--navy);color:#fff;">전체</span>
+                    <span class="value-chip" style="cursor:pointer;">GK</span>
+                    <span class="value-chip" style="cursor:pointer;">DF</span>
+                    <span class="value-chip" style="cursor:pointer;">MF</span>
+                    <span class="value-chip" style="cursor:pointer;">FW</span>
+                </div>
+                <div class="squad-card-grid">
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-gk"><div class="sq-card-num">#1</div></div>
+                        <div class="sq-card-avatar">최</div>
+                        <div class="sq-card-name">최민수</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-gk">GK</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-df"><div class="sq-card-num">#3</div></div>
+                        <div class="sq-card-avatar">박</div>
+                        <div class="sq-card-name">박도현</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-df">DF</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-df"><div class="sq-card-num">#5</div></div>
+                        <div class="sq-card-avatar">이</div>
+                        <div class="sq-card-name">이서준</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-df">DF</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-mf"><div class="sq-card-num">#6</div></div>
+                        <div class="sq-card-avatar">장</div>
+                        <div class="sq-card-name">장우진</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-mf">MF</span></div>
+                        <div class="sq-card-meta">2012년생</div>
+                    </div>
+                    <div class="sq-card" style="border-color:var(--accent);">
+                        <div class="sq-card-top sq-card-mf"><div class="sq-card-num">#8</div></div>
+                        <div class="sq-card-avatar" style="background:var(--accent);">김</div>
+                        <div class="sq-card-name" style="color:var(--accent);">김준혁</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-mf">MF</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-mf"><div class="sq-card-num">#7</div></div>
+                        <div class="sq-card-avatar">신</div>
+                        <div class="sq-card-name">신유찬</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-mf">MF</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-fw"><div class="sq-card-num">#9</div></div>
+                        <div class="sq-card-avatar">한</div>
+                        <div class="sq-card-name">한재민</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-fw">FW</span></div>
+                        <div class="sq-card-meta">2013년생</div>
+                    </div>
+                    <div class="sq-card">
+                        <div class="sq-card-top sq-card-fw"><div class="sq-card-num">#10</div></div>
+                        <div class="sq-card-avatar">윤</div>
+                        <div class="sq-card-name">윤시우</div>
+                        <div class="sq-card-pos"><span class="sq-pos sq-pos-fw">FW</span></div>
+                        <div class="sq-card-meta">2012년생</div>
+                    </div>
+                </div>
+                <div style="margin-top:14px;text-align:center;font-size:12px;color:var(--text-light);">대표 선수 8명 표시 · <a class="panel-link">전체 선수단 보기 →</a></div>
+            </div>
+        </div>
+
+        <!-- TAB: 활동 기록 (성장 중심) -->
+        <div class="tab-content" id="tabActivity">
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">성장 지표</div><span style="font-size:11px;color:var(--text-light);">2024 시즌</span></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+                        <div style="text-align:center;padding:14px;background:var(--trust-subtle);border-radius:var(--radius-sm);">
+                            <div style="font-size:22px;font-weight:700;color:var(--trust);">92%</div>
+                            <div style="font-size:10px;color:var(--trust);font-weight:600;">평균 출전 참여율</div>
+                            <div style="font-size:10px;color:var(--text-light);margin-top:2px;">모든 선수 최소 1경기 출전</div>
+                        </div>
+                        <div style="text-align:center;padding:14px;background:var(--violet-subtle);border-radius:var(--radius-sm);">
+                            <div style="font-size:22px;font-weight:700;color:var(--violet);">27</div>
+                            <div style="font-size:10px;color:var(--violet);font-weight:600;">시즌 활동 경기</div>
+                            <div style="font-size:10px;color:var(--text-light);margin-top:2px;">리그 20 · 컵 5 · 친선 2</div>
+                        </div>
+                        <div style="text-align:center;padding:14px;background:var(--navy-subtle);border-radius:var(--radius-sm);">
+                            <div style="font-size:22px;font-weight:700;color:var(--navy);">3명</div>
+                            <div style="font-size:10px;color:var(--navy);font-weight:600;">연령별 대표 선발</div>
+                            <div style="font-size:10px;color:var(--text-light);margin-top:2px;">U-12 서울 대표</div>
+                        </div>
+                        <div style="text-align:center;padding:14px;background:var(--accent-subtle);border-radius:var(--radius-sm);">
+                            <div style="font-size:22px;font-weight:700;color:var(--accent);">94%</div>
+                            <div style="font-size:10px;color:var(--accent);font-weight:600;">훈련 출석률</div>
+                            <div style="font-size:10px;color:var(--text-light);margin-top:2px;">주 3회 정규 훈련 기준</div>
+                        </div>
+                    </div>
+                    <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);line-height:1.7;">
+                        💡 서울 FC 주니어는 <strong>균등 출전 정책</strong>을 시행합니다. 2024 시즌 전 선수가 최소 10경기 이상 출전했으며, 실력과 관계없이 모든 선수에게 성장 기회를 제공합니다.
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">최근 활동</div></div>
+                    <div class="match-card"><div class="mc-date">02.24</div><div class="mc-teams"><div class="mc-versus">vs 용산 유소년</div><div class="mc-comp">U12 리그 8R · 홈</div></div><div class="mc-score">3:1</div><span class="mc-result mc-win">승</span></div>
+                    <div class="match-card"><div class="mc-date">02.17</div><div class="mc-teams"><div class="mc-versus">vs 인천 시티</div><div class="mc-comp">U12 리그 7R · 원정</div></div><div class="mc-score">2:2</div><span class="mc-result mc-draw">무</span></div>
+                    <div class="match-card"><div class="mc-date">02.10</div><div class="mc-teams"><div class="mc-versus">vs 강남 킥스</div><div class="mc-comp">U12 리그 6R · 홈</div></div><div class="mc-score">4:0</div><span class="mc-result mc-win">승</span></div>
+                    <div class="match-card"><div class="mc-date">02.03</div><div class="mc-teams"><div class="mc-versus">vs 성남 FC</div><div class="mc-comp">U12 리그 5R · 원정</div></div><div class="mc-score">1:2</div><span class="mc-result mc-win">승</span></div>
+                    <div style="margin-top:10px;text-align:center;"><a class="panel-link">전체 활동 기록 보기 →</a></div>
+                </div>
+            </div>
+
+            <!-- 팀 역사 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">팀 성장 스토리</div></div>
+                <div style="display:flex;gap:24px;overflow-x:auto;padding:8px 0;">
+                    <div style="flex-shrink:0;text-align:center;padding:14px 20px;background:var(--bg);border-radius:var(--radius-sm);min-width:160px;">
+                        <div style="font-size:18px;font-weight:700;color:var(--navy);">2018</div>
+                        <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">창단</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">8명으로 시작</div>
+                    </div>
+                    <div style="flex-shrink:0;text-align:center;padding:14px 20px;background:var(--bg);border-radius:var(--radius-sm);min-width:160px;">
+                        <div style="font-size:18px;font-weight:700;color:var(--navy);">2020</div>
+                        <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">리그 첫 참가</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">서울 U10 리그</div>
+                    </div>
+                    <div style="flex-shrink:0;text-align:center;padding:14px 20px;background:var(--bg);border-radius:var(--radius-sm);min-width:160px;">
+                        <div style="font-size:18px;font-weight:700;color:var(--trust);">2023</div>
+                        <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">첫 대표 선수 배출</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">U-12 서울 대표 2명</div>
+                    </div>
+                    <div style="flex-shrink:0;text-align:center;padding:14px 20px;background:var(--bg);border-radius:var(--radius-sm);min-width:160px;">
+                        <div style="font-size:18px;font-weight:700;color:var(--accent);">2024</div>
+                        <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">서울컵 준우승</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">팀 규모 24명</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 모집 공고 -->
+        <div class="tab-content" id="tabRecruit">
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">모집 공고</div></div>
+                <div class="recruit-card">
+                    <div class="rc-header"><div class="rc-title">2025 상반기 U12 선수 모집</div><span class="rc-status rc-open">모집 중</span></div>
+                    <div class="rc-detail">2013~2014년생 대상, 미드필더·수비수 2~3명 모집. 성실한 훈련 태도와 팀워크를 중시합니다. 트라이아웃은 3월 15일(토) 오전 10시 강남 스포츠센터에서 진행됩니다.</div>
+                    <div class="rc-tags">
+                        <span class="rc-tag">U12</span><span class="rc-tag">MF 미드필더</span><span class="rc-tag">DF 수비수</span><span class="rc-tag">마감 3/10</span>
+                    </div>
+                </div>
+                <div class="recruit-card">
+                    <div class="rc-header"><div class="rc-title">2025 상반기 U12 골키퍼 모집</div><span class="rc-status rc-open">모집 중</span></div>
+                    <div class="rc-detail">2013~2014년생 골키퍼 1명 모집. 기본 포지셔닝과 반응 속도를 갖춘 선수 우대.</div>
+                    <div class="rc-tags">
+                        <span class="rc-tag">U12</span><span class="rc-tag">GK 골키퍼</span><span class="rc-tag">마감 3/10</span>
+                    </div>
+                </div>
+                <div class="recruit-card" style="opacity:.6;">
+                    <div class="rc-header"><div class="rc-title">2024 하반기 U11 선수 모집</div><span class="rc-status rc-closed">마감</span></div>
+                    <div class="rc-detail">모집 완료 · 3명 선발</div>
+                    <div class="rc-tags"><span class="rc-tag">U11</span><span class="rc-tag">FW</span><span class="rc-tag">MF</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 리뷰 (학부모 공개 / 팀은 익명 요약만) -->
+        <div class="tab-content" id="tabReviews">
+            <!-- 팀 관리자 뷰 안내 -->
+            <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#FEF3C7;border:1px solid #F59E0B;border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:#92400E;margin-bottom:16px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                리뷰 보호 정책 — 팀 관리자는 항목별 평균 점수만 확인할 수 있습니다. 개별 리뷰 내용과 작성자는 학부모·일반 사용자에게만 공개됩니다.
+            </div>
+
+            <div class="grid-2">
+                <!-- 항목별 평균 (팀도 볼 수 있음) -->
+                <div class="panel">
+                    <div style="text-align:center;padding:16px 0;">
+                        <div style="font-size:40px;font-weight:700;color:var(--navy);">4.6</div>
+                        <div style="color:#F59E0B;font-size:16px;letter-spacing:2px;margin:4px 0;">★★★★★</div>
+                        <div style="font-size:12px;color:var(--text-light);">32개 리뷰 · 본인인증 학부모</div>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:11px;width:50px;color:var(--text-light);">지도력</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:92%;height:100%;background:var(--navy);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:24px;text-align:right;">4.8</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:11px;width:50px;color:var(--text-light);">시설</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:80%;height:100%;background:var(--trust);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:24px;text-align:right;">4.2</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:11px;width:50px;color:var(--text-light);">소통</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:88%;height:100%;background:var(--accent);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:24px;text-align:right;">4.6</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;width:50px;color:var(--text-light);">만족도</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:90%;height:100%;background:var(--violet);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:24px;text-align:right;">4.7</span></div>
+                    </div>
+                    <div style="margin-top:14px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);font-size:11px;color:var(--text-light);text-align:center;">
+                        팀 관리자에게는 위 항목별 평균 점수만 표시됩니다
+                    </div>
+                </div>
+
+                <!-- 개별 리뷰 (학부모에게만 보임) -->
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">학부모 리뷰</div><span style="font-size:11px;color:var(--text-light);">학부모·일반 사용자에게만 표시</span></div>
+                    <div class="review-card">
+                        <div class="rv-header"><div class="rv-user">김** 학부모 <span class="badge badge-trust" style="margin-left:4px;">✓ 본인인증</span></div><div class="rv-stars">★★★★★</div></div>
+                        <div class="rv-body">아이가 축구를 정말 즐기게 되었습니다. 감독님이 개개인에게 관심을 가져주시고, 기술뿐만 아니라 인성 교육도 잘 해주세요.</div>
+                        <div class="rv-date">2025.02.15 · 재원 6개월</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="rv-header"><div class="rv-user">이** 학부모 <span class="badge badge-trust" style="margin-left:4px;">✓ 본인인증</span></div><div class="rv-stars">★★★★☆</div></div>
+                        <div class="rv-body">체계적인 훈련 프로그램과 좋은 분위기. 다만 실내 훈련 시설이 조금 아쉽습니다.</div>
+                        <div class="rv-date">2025.01.28 · 재원 1년</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="rv-header"><div class="rv-user">박** 학부모 <span class="badge badge-trust" style="margin-left:4px;">✓ 본인인증</span></div><div class="rv-stars">★★★★★</div></div>
+                        <div class="rv-body">타 팀에서 이적했는데, 여기서는 아이가 주눅들지 않고 자신감 있게 플레이합니다. 선수 한 명 한 명을 존중해주시는 게 느껴집니다.</div>
+                        <div class="rv-date">2025.01.10 · 재원 8개월</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ═══ ADMIN VIEW ═══ -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="view-content" id="viewAdmin">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#EFF6FF;border:1px solid #93C5FD;border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:#1E40AF;margin-bottom:20px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            관리자 모드 — 이 화면은 팀 관리자와 코칭 스태프에게만 표시됩니다.
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+            <div class="kpi"><div class="kpi-num">24</div><div class="kpi-label">등록 선수</div><div class="kpi-change kpi-up">+2 이번 달</div></div>
+            <div class="kpi"><div class="kpi-num">6</div><div class="kpi-label">이번 주 일정</div><div class="kpi-change" style="color:var(--text-light);">경기 2 · 훈련 3 · 미팅 1</div></div>
+            <div class="kpi"><div class="kpi-num" style="color:var(--trust);">68%</div><div class="kpi-label">시즌 승률</div><div class="kpi-change kpi-up">▲ 5% 전월 대비</div></div>
+            <div class="kpi"><div class="kpi-num" style="color:var(--accent);">8</div><div class="kpi-label">모집 지원자</div><div class="kpi-change kpi-up">+3 신규</div></div>
+        </div>
+
+        <div class="tabs" id="adminTabs">
+            <div class="tab active" onclick="switchTab('admSchedule','admin')">일정</div>
+            <div class="tab" onclick="switchTab('admSquad','admin')">선수 관리</div>
+            <div class="tab" onclick="switchTab('admRecruit','admin')">모집·지원</div>
+            <div class="tab" onclick="switchTab('admAttendance','admin')">출결·회비</div>
+        </div>
+
+        <!-- ADMIN: 일정 -->
+        <div class="tab-content active" id="tabAdmSchedule">
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">3월 캘린더</div></div>
+                    <div class="cal-grid">
+                        <div class="cal-head">월</div><div class="cal-head">화</div><div class="cal-head">수</div><div class="cal-head">목</div><div class="cal-head">금</div><div class="cal-head">토</div><div class="cal-head">일</div>
+                        <div class="cal-day empty">24</div><div class="cal-day empty">25</div><div class="cal-day empty">26</div><div class="cal-day empty">27</div><div class="cal-day empty">28</div>
+                        <div class="cal-day has-event">1</div><div class="cal-day">2</div>
+                        <div class="cal-day">3</div><div class="cal-day has-training">4</div><div class="cal-day">5</div><div class="cal-day has-training">6</div><div class="cal-day">7</div>
+                        <div class="cal-day has-event">8</div><div class="cal-day">9</div>
+                        <div class="cal-day">10</div><div class="cal-day has-training">11</div><div class="cal-day">12</div><div class="cal-day has-training">13</div><div class="cal-day">14</div>
+                        <div class="cal-day has-event">15</div><div class="cal-day">16</div>
+                        <div class="cal-day">17</div><div class="cal-day has-training">18</div><div class="cal-day">19</div><div class="cal-day has-training">20</div><div class="cal-day">21</div>
+                        <div class="cal-day has-event">22</div><div class="cal-day">23</div>
+                        <div class="cal-day">24</div><div class="cal-day has-training">25</div><div class="cal-day">26</div><div class="cal-day has-training">27</div><div class="cal-day">28</div>
+                        <div class="cal-day">29</div><div class="cal-day">30</div>
+                        <div class="cal-day">31</div>
+                    </div>
+                    <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--text-light);">
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);vertical-align:middle;margin-right:4px;"></span>경기</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--trust);vertical-align:middle;margin-right:4px;"></span>훈련</span>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">이번 주 일정</div><a class="panel-link">+ 일정 추가</a></div>
+                    <div class="match-card"><div class="mc-date" style="color:var(--accent);font-weight:700;">03.01<br><span style="font-size:9px;">토</span></div><div class="mc-teams"><div class="mc-versus" style="color:var(--accent);">vs 송파 유나이티드</div><div class="mc-comp">U12 리그 9R · 홈 · 10:00</div></div><span class="mc-result" style="background:var(--accent-subtle);color:var(--accent);">경기</span></div>
+                    <div class="match-card"><div class="mc-date" style="color:var(--trust);font-weight:700;">03.04<br><span style="font-size:9px;">화</span></div><div class="mc-teams"><div class="mc-versus">팀 훈련</div><div class="mc-comp">전술 훈련 · 강남 스포츠센터 · 17:00</div></div><span class="mc-result" style="background:var(--trust-subtle);color:var(--trust);">훈련</span></div>
+                    <div class="match-card"><div class="mc-date" style="color:var(--trust);font-weight:700;">03.06<br><span style="font-size:9px;">목</span></div><div class="mc-teams"><div class="mc-versus">팀 훈련</div><div class="mc-comp">체력 + 미니게임 · 강남 스포츠센터 · 17:00</div></div><span class="mc-result" style="background:var(--trust-subtle);color:var(--trust);">훈련</span></div>
+                    <div class="match-card"><div class="mc-date" style="color:var(--accent);font-weight:700;">03.08<br><span style="font-size:9px;">토</span></div><div class="mc-teams"><div class="mc-versus">vs 관악 FC</div><div class="mc-comp">U12 리그 10R · 원정 · 14:00</div></div><span class="mc-result" style="background:var(--accent-subtle);color:var(--accent);">경기</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN: 선수 관리 -->
+        <div class="tab-content" id="tabAdmSquad">
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">선수단 관리</div><a class="panel-link">+ 선수 추가</a></div>
+                <table class="squad-table">
+                    <thead><tr><th>#</th><th>이름</th><th>포지션</th><th>상태</th><th>출전</th><th>출결률</th><th></th></tr></thead>
+                    <tbody>
+                        <tr><td class="sq-num">1</td><td style="font-weight:600;">최민수</td><td><span class="sq-pos sq-pos-gk">GK</span></td><td><span style="font-size:11px;color:var(--success);font-weight:600;">정상</span></td><td>20</td><td>96%</td><td><a class="panel-link">관리</a></td></tr>
+                        <tr><td class="sq-num">5</td><td style="font-weight:600;">이서준</td><td><span class="sq-pos sq-pos-df">DF</span></td><td><span style="font-size:11px;color:var(--warning);font-weight:600;">부상</span></td><td>18</td><td>88%</td><td><a class="panel-link">관리</a></td></tr>
+                        <tr><td class="sq-num">8</td><td style="font-weight:600;">김준혁</td><td><span class="sq-pos sq-pos-mf">MF</span></td><td><span style="font-size:11px;color:var(--success);font-weight:600;">정상</span></td><td>28</td><td>94%</td><td><a class="panel-link">관리</a></td></tr>
+                        <tr><td class="sq-num">9</td><td style="font-weight:600;">한재민</td><td><span class="sq-pos sq-pos-fw">FW</span></td><td><span style="font-size:11px;color:var(--success);font-weight:600;">정상</span></td><td>25</td><td>92%</td><td><a class="panel-link">관리</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ADMIN: 모집·지원 -->
+        <div class="tab-content" id="tabAdmRecruit">
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">모집 현황</div></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+                        <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--navy);">8</div><div style="font-size:10px;color:var(--text-light);">총 지원자</div></div>
+                        <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--accent);">3</div><div style="font-size:10px;color:var(--text-light);">신규</div></div>
+                        <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--trust);">2</div><div style="font-size:10px;color:var(--text-light);">합격</div></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">최근 지원자</div></div>
+                    <div class="app-item"><div class="app-avatar">정</div><div class="app-info"><div class="app-name">정민호</div><div class="app-detail">MF · 2013년생 · 에이전트 추천</div></div><span class="app-status app-new">신규</span></div>
+                    <div class="app-item"><div class="app-avatar">오</div><div class="app-info"><div class="app-name">오진우</div><div class="app-detail">DF · 2014년생 · 직접 지원</div></div><span class="app-status app-new">신규</span></div>
+                    <div class="app-item"><div class="app-avatar">류</div><div class="app-info"><div class="app-name">류하준</div><div class="app-detail">GK · 2013년생 · 직접 지원</div></div><span class="app-status app-review">검토중</span></div>
+                    <div class="app-item"><div class="app-avatar">김</div><div class="app-info"><div class="app-name">김도윤</div><div class="app-detail">MF · 2013년생 · 직접 지원</div></div><span class="app-status app-pass">합격</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN: 출결·회비 -->
+        <div class="tab-content" id="tabAdmAttendance">
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">이번 달 출결 현황</div></div>
+                    <div style="margin-bottom:14px;">
+                        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:4px;"><span>전체 평균 출결률</span><span style="font-weight:700;color:var(--navy);">91%</span></div>
+                        <div class="att-bar"><div class="att-seg att-present" style="width:91%;"></div><div class="att-seg att-late" style="width:5%;"></div><div class="att-seg att-absent" style="width:4%;"></div></div>
+                        <div style="display:flex;gap:12px;font-size:10px;color:var(--text-light);margin-top:4px;">
+                            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--success);vertical-align:middle;margin-right:3px;"></span>출석 91%</span>
+                            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--warning);vertical-align:middle;margin-right:3px;"></span>지각 5%</span>
+                            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--error);vertical-align:middle;margin-right:3px;"></span>결석 4%</span>
+                        </div>
+                    </div>
+                    <div style="font-size:11px;color:var(--text-light);margin-bottom:6px;">선수별 출결률</div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:12px;width:56px;font-weight:600;">김준혁</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:94%;height:100%;background:var(--success);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:28px;text-align:right;">94%</span></div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:12px;width:56px;font-weight:600;">한재민</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:92%;height:100%;background:var(--success);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:28px;text-align:right;">92%</span></div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:12px;width:56px;font-weight:600;">이서준</span><div style="flex:1;height:6px;background:var(--border-light);border-radius:3px;"><div style="width:78%;height:100%;background:var(--warning);border-radius:3px;"></div></div><span style="font-size:11px;font-weight:600;width:28px;text-align:right;">78%</span></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">2월 회비 현황</div></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+                        <div style="text-align:center;padding:12px;background:#DCFCE7;border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--success);">20</div><div style="font-size:10px;color:var(--success);">납부</div></div>
+                        <div style="text-align:center;padding:12px;background:#FEE2E2;border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--error);">3</div><div style="font-size:10px;color:var(--error);">미납</div></div>
+                        <div style="text-align:center;padding:12px;background:var(--border-light);border-radius:var(--radius-sm);"><div style="font-size:20px;font-weight:700;color:var(--text-light);">1</div><div style="font-size:10px;color:var(--text-light);">면제</div></div>
+                    </div>
+                    <div style="font-size:11px;color:var(--text-light);margin-bottom:8px;">미납 선수</div>
+                    <div class="app-item"><div class="app-avatar" style="background:#FEE2E2;color:var(--error);">박</div><div class="app-info"><div class="app-name">박도현</div><div class="app-detail">15만원 · 2월분 미납</div></div><span class="app-status" style="background:#FEE2E2;color:var(--error);">미납</span></div>
+                    <div class="app-item"><div class="app-avatar" style="background:#FEE2E2;color:var(--error);">장</div><div class="app-info"><div class="app-name">장우진</div><div class="app-detail">15만원 · 2월분 미납</div></div><span class="app-status" style="background:#FEE2E2;color:var(--error);">미납</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function switchView(view) {
+    document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(view === 'public' ? 'viewPublic' : 'viewAdmin').classList.add('active');
+}
+function switchTab(tab, ctx) {
+    const container = ctx === 'admin' ? document.getElementById('viewAdmin') : document.getElementById('viewPublic');
+    const tabBar = ctx === 'admin' ? document.getElementById('adminTabs') : document.getElementById('publicTabs');
+    tabBar.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const map = {
+        info:'tabInfo',squad:'tabSquad',activity:'tabActivity',recruit:'tabRecruit',reviews:'tabReviews',
+        admSchedule:'tabAdmSchedule',admSquad:'tabAdmSquad',admRecruit:'tabAdmRecruit',admAttendance:'tabAdmAttendance'
+    };
+    document.getElementById(map[tab]).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

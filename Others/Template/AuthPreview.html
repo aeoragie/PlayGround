@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayGround — Auth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════
+           Design System: Trust + Clarity + Calm
+           Primary: Deep Navy #1E3A5F
+           Accent CTA: Warm Orange #FF6B35 (5-10%)
+           Background: Clean White #FAFAFA
+           ═══════════════════════════════════════ */
+
+        :root {
+            --navy: #1E3A5F;
+            --navy-light: #2A4A73;
+            --navy-dark: #152D4A;
+            --navy-subtle: #F0F4F8;
+            --slate: #475569;
+            --slate-light: #64748B;
+            --accent: #FF6B35;
+            --accent-hover: #E55A2B;
+            --accent-subtle: #FFF7F3;
+            --trust: #0D9488;
+            --trust-subtle: #F0FDFA;
+            --violet: #6D28D9;
+            --success: #16A34A;
+            --error: #DC2626;
+            --error-subtle: #FEF2F2;
+            --bg: #FAFAFA;
+            --surface: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-light: #9CA3AF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --shadow: rgba(0,0,0,0.07);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Pretendard', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── MAIN CONTAINER ─── */
+        .auth-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 640px;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 24px var(--shadow);
+            margin: 24px;
+        }
+
+        /* ─── LEFT PANEL — BRANDING ─── */
+        .auth-brand {
+            width: 420px;
+            background: linear-gradient(165deg, var(--navy) 0%, var(--navy-dark) 100%);
+            padding: 44px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .auth-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -40px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .brand-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        .brand-logo span { color: var(--accent); }
+
+        .brand-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        .brand-title em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .brand-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+
+        .brand-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .bf-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bf-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .bf-navy { background: rgba(96,165,250,0.15); }
+        .bf-navy svg { stroke: #60A5FA; }
+        .bf-teal { background: rgba(13,148,136,0.15); }
+        .bf-teal svg { stroke: #2DD4BF; }
+        .bf-orange { background: rgba(255,107,53,0.15); }
+        .bf-orange svg { stroke: #FF8F5E; }
+        .bf-violet { background: rgba(109,40,217,0.15); }
+        .bf-violet svg { stroke: #A78BFA; }
+
+        .brand-footer {
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── RIGHT PANEL — AUTH FORM ─── */
+        .auth-form {
+            flex: 1;
+            padding: 44px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .form-header { margin-bottom: 24px; }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .form-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ─── TABS ─── */
+        .auth-tabs {
+            display: flex;
+            background: var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            margin-bottom: 24px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.15s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--surface);
+            color: var(--navy);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .auth-tab:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        /* ─── MESSAGE BOX ─── */
+        .msg-box {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .msg-error {
+            background: var(--error-subtle);
+            color: var(--error);
+            border: 1px solid #FECACA;
+        }
+
+        /* ─── ROLE SELECTOR ─── */
+        .role-section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .role-card {
+            padding: 14px 10px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background: var(--surface);
+        }
+
+        .role-card:hover {
+            border-color: var(--navy);
+            background: var(--navy-subtle);
+        }
+
+        .role-card.selected {
+            border-color: var(--navy);
+            background: var(--navy-subtle);
+        }
+
+        .role-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-size: 14px;
+        }
+
+        .role-card .role-icon { background: var(--border-light); color: var(--text-light); }
+        .role-card.selected .role-icon { background: var(--navy); color: white; }
+        .role-card:hover:not(.selected) .role-icon { background: #DCE5EE; color: var(--navy); }
+
+        .role-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .role-card.selected .role-name { color: var(--navy); font-weight: 700; }
+
+        .role-desc {
+            font-size: 10px;
+            color: var(--text-light);
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+        .role-card.selected .role-desc { color: var(--slate-light); }
+
+        /* ─── SOCIAL BUTTONS ─── */
+        .social-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition: all 0.12s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--slate-light);
+            background: var(--bg);
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .si-google { background: #4285F4; color: white; }
+        .si-kakao { background: #FEE500; color: #3C1E1E; }
+        .si-apple { background: #000000; color: white; }
+        .si-line { background: #06C755; color: white; }
+
+        .social-row {
+            display: flex;
+            gap: 8px;
+        }
+        .social-row .social-btn { flex: 1; }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── FORM INPUTS ─── */
+        .form-group { margin-bottom: 14px; }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            background: var(--surface);
+            color: var(--text-primary);
+            transition: border-color 0.15s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+        }
+
+        .form-input::placeholder { color: var(--text-light); }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .form-check input { accent-color: var(--navy); }
+
+        .form-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--navy);
+            text-decoration: none;
+            transition: color 0.12s;
+        }
+
+        .form-link:hover {
+            color: var(--accent);
+        }
+
+        /* ─── SUBMIT BUTTON ─── */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            background: var(--accent);
+            color: white;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.2);
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ─── FOOTER ─── */
+        .form-footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .form-footer a {
+            color: var(--navy);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            color: var(--accent);
+        }
+
+        /* ─── TERMS ─── */
+        .terms-text {
+            font-size: 11px;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+        .terms-text a {
+            color: var(--slate-light);
+            text-decoration: underline;
+        }
+
+        /* ─── STEP INDICATOR (ONBOARDING) ─── */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .step-dot.active {
+            background: var(--navy);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .step-dot.done {
+            background: var(--trust);
+        }
+
+        /* ─── ONBOARDING FIELDS ─── */
+        .onboarding-section { display: none; }
+
+        .select-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            background: var(--surface);
+            color: var(--text-primary);
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+
+        .select-input:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .skip-link {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: color 0.12s;
+        }
+        .skip-link:hover { color: var(--text-secondary); }
+
+        /* ─── COMPLETION ─── */
+        .completion-section {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .completion-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--trust-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+
+        .completion-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .completion-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .btn-go-dashboard {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            background: var(--navy);
+            color: white;
+            transition: all 0.15s ease;
+        }
+
+        .btn-go-dashboard:hover {
+            background: var(--navy-light);
+            transform: translateY(-1px);
+        }
+
+        /* ─── BADGE ─── */
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+            background: var(--navy-subtle);
+            color: var(--navy);
+            margin-top: 6px;
+        }
+
+        /* ─── VIEW TOGGLE ─── */
+        .view-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 4px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 100;
+        }
+
+        .view-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-family: inherit;
+            transition: all 0.12s;
+        }
+
+        .view-btn.active {
+            background: var(--navy);
+            color: white;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 480px;
+                min-height: auto;
+            }
+            .auth-brand {
+                width: 100%;
+                padding: 28px 24px;
+            }
+            .brand-content { display: none; }
+            .auth-form { padding: 28px 24px; }
+            .role-grid { grid-template-columns: repeat(2, 1fr); }
+            .view-toggle { top: 8px; right: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- VIEW TOGGLE: switch between screens -->
+<div class="view-toggle">
+    <button class="view-btn active" onclick="showView('login')">로그인</button>
+    <button class="view-btn" onclick="showView('register')">회원가입</button>
+    <button class="view-btn" onclick="showView('onboarding')">온보딩</button>
+    <button class="view-btn" onclick="showView('complete')">완료</button>
+</div>
+
+<div class="auth-container">
+
+    <!-- ═══ LEFT: BRANDING PANEL ═══ -->
+    <div class="auth-brand">
+        <div class="brand-logo">Play<span>Ground</span></div>
+
+        <div class="brand-content">
+            <div class="brand-title">
+                신뢰할 수 있는 정보로<br>
+                <em>최적의 선택</em>을 돕습니다
+            </div>
+            <div class="brand-desc">
+                인증된 팀 정보, 검증된 리뷰, 선수 포트폴리오.<br>
+                데이터 기반으로 올바른 판단을 내릴 수 있는 공간.
+            </div>
+            <div class="brand-features">
+                <div class="brand-feature">
+                    <div class="bf-icon bf-navy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    인증된 팀 정보 · 투명한 운영 데이터
+                </div>
+                <div class="brand-feature">
+                    <div class="bf-icon bf-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                    실명 인증 리뷰 · 신뢰 기반 평가
+                </div>
+                <div class="brand-feature">
+                    <div class="bf-icon bf-orange"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                    선수 포트폴리오 · 성장 기록 관리
+                </div>
+                <div class="brand-feature">
+                    <div class="bf-icon bf-violet"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+                    검증된 에이전트 · 매칭 지원
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-footer">© 2025 PlayGround. All rights reserved.</div>
+    </div>
+
+    <!-- ═══ RIGHT: AUTH FORM ═══ -->
+    <div class="auth-form">
+
+        <!-- ──── LOGIN VIEW ──── -->
+        <div id="loginView">
+            <div class="form-header">
+                <div class="form-title">로그인</div>
+                <div class="form-sub">소셜 계정 또는 이메일로 시작하세요.</div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showView('login')">로그인</div>
+                <div class="auth-tab" onclick="showView('register')">회원가입</div>
+            </div>
+
+            <div class="social-group">
+                <button class="social-btn" onclick="socialLogin('google')">
+                    <span class="social-icon si-google">G</span> Google로 계속하기
+                </button>
+                <button class="social-btn" onclick="socialLogin('kakao')">
+                    <span class="social-icon si-kakao">K</span> 카카오로 계속하기
+                </button>
+                <button class="social-btn" onclick="socialLogin('apple')">
+                    <span class="social-icon si-apple">A</span> Apple로 계속하기
+                </button>
+                <button class="social-btn" onclick="socialLogin('line')">
+                    <span class="social-icon si-line">L</span> LINE으로 계속하기
+                </button>
+            </div>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">또는 이메일</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-input" placeholder="email@example.com" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">비밀번호</label>
+                <input type="password" class="form-input" placeholder="8자 이상" />
+            </div>
+
+            <div class="form-row">
+                <label class="form-check"><input type="checkbox" /> 로그인 상태 유지</label>
+                <a href="#" class="form-link">비밀번호 찾기</a>
+            </div>
+
+            <button class="btn-submit">로그인</button>
+
+            <div class="form-footer">
+                계정이 없으신가요? <a href="#" onclick="showView('register'); return false;">회원가입</a>
+            </div>
+        </div>
+
+        <!-- ──── REGISTER VIEW ──── -->
+        <div id="registerView" style="display: none;">
+            <div class="form-header">
+                <div class="form-title">회원가입</div>
+                <div class="form-sub">소셜 계정 또는 이메일로 가입하세요.</div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab" onclick="showView('login')">로그인</div>
+                <div class="auth-tab active" onclick="showView('register')">회원가입</div>
+            </div>
+
+            <!-- Role Selection -->
+            <div class="role-section-label">어떤 목적으로 사용하시나요?</div>
+            <div class="role-grid">
+                <div class="role-card selected" onclick="selectRole(this, 'parent')">
+                    <div class="role-icon">👤</div>
+                    <div class="role-name">학부모 / 선수</div>
+                    <div class="role-desc">팀 찾기 · 리뷰</div>
+                </div>
+                <div class="role-card" onclick="selectRole(this, 'team_admin')">
+                    <div class="role-icon">🏠</div>
+                    <div class="role-name">팀 관리자</div>
+                    <div class="role-desc">팀 운영 · 모집</div>
+                </div>
+                <div class="role-card" onclick="selectRole(this, 'agent')">
+                    <div class="role-icon">⇋</div>
+                    <div class="role-name">에이전트</div>
+                    <div class="role-desc">매칭 · 추천</div>
+                </div>
+            </div>
+
+            <div class="social-group">
+                <button class="social-btn" onclick="socialLogin('google')">
+                    <span class="social-icon si-google">G</span> Google로 가입하기
+                </button>
+                <button class="social-btn" onclick="socialLogin('kakao')">
+                    <span class="social-icon si-kakao">K</span> 카카오로 가입하기
+                </button>
+            </div>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">또는 이메일</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-input" placeholder="이름을 입력하세요" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-input" placeholder="email@example.com" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">비밀번호</label>
+                <input type="password" class="form-input" placeholder="8자 이상" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-input" placeholder="비밀번호를 다시 입력하세요" />
+            </div>
+
+            <button class="btn-submit" onclick="showView('onboarding')">가입하기</button>
+
+            <div class="terms-text">
+                가입 시 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다.
+            </div>
+
+            <div class="form-footer">
+                이미 계정이 있으신가요? <a href="#" onclick="showView('login'); return false;">로그인</a>
+            </div>
+        </div>
+
+        <!-- ──── ONBOARDING VIEW ──── -->
+        <div id="onboardingView" style="display: none;">
+            <div class="form-header">
+                <div class="form-title">프로필 설정</div>
+                <div class="form-sub">몇 가지 정보만 알려주시면 맞춤 경험을 준비합니다.</div>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-dot done"></div>
+                <div class="step-dot active" id="step2"></div>
+                <div class="step-dot" id="step3"></div>
+            </div>
+
+            <!-- Parent/Player Onboarding -->
+            <div id="onboardingParent">
+                <div class="form-group">
+                    <label class="form-label">자녀 이름 (닉네임)</label>
+                    <input type="text" class="form-input" placeholder="자녀의 이름 또는 닉네임" />
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">종목</label>
+                        <select class="select-input">
+                            <option value="">선택</option>
+                            <option value="soccer" selected>⚽ 축구</option>
+                            <option value="baseball">⚾ 야구</option>
+                            <option value="basketball">🏀 농구</option>
+                            <option value="volleyball">🏐 배구</option>
+                            <option value="tennis">🎾 테니스</option>
+                            <option value="swimming">🏊 수영</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">연령대</label>
+                        <select class="select-input">
+                            <option value="">선택</option>
+                            <option value="u10">U10 (초등 저학년)</option>
+                            <option value="u12" selected>U12 (초등 고학년)</option>
+                            <option value="u15">U15 (중학생)</option>
+                            <option value="u18">U18 (고등학생)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">활동 지역</label>
+                    <select class="select-input">
+                        <option value="">선택</option>
+                        <option value="seoul" selected>서울</option>
+                        <option value="gyeonggi">경기</option>
+                        <option value="incheon">인천</option>
+                        <option value="busan">부산</option>
+                        <option value="daegu">대구</option>
+                        <option value="daejeon">대전</option>
+                        <option value="gwangju">광주</option>
+                        <option value="ulsan">울산</option>
+                        <option value="sejong">세종</option>
+                        <option value="gangwon">강원</option>
+                        <option value="chungbuk">충북</option>
+                        <option value="chungnam">충남</option>
+                        <option value="jeonbuk">전북</option>
+                        <option value="jeonnam">전남</option>
+                        <option value="gyeongbuk">경북</option>
+                        <option value="gyeongnam">경남</option>
+                        <option value="jeju">제주</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">현재 소속 팀 (선택)</label>
+                    <input type="text" class="form-input" placeholder="팀 이름으로 검색" />
+                    <div class="info-badge" style="margin-top: 8px;">💡 나중에 설정에서 추가할 수 있습니다</div>
+                </div>
+
+                <button class="btn-submit" onclick="showView('complete')">프로필 완성하기</button>
+                <div class="skip-link" onclick="showView('complete')">나중에 입력할게요 →</div>
+            </div>
+        </div>
+
+        <!-- ──── COMPLETION VIEW ──── -->
+        <div id="completeView" style="display: none;">
+            <div class="completion-section" style="display: block;">
+                <div class="completion-icon">✓</div>
+                <div class="completion-title">가입이 완료되었습니다!</div>
+                <div class="completion-desc">
+                    선수 프로필이 자동 생성되었습니다.<br>
+                    지금 바로 팀을 찾아보거나 대시보드에서 시작하세요.
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-go-dashboard">
+                        대시보드로 이동
+                    </button>
+                    <button class="btn-go-dashboard" style="background: var(--accent);">
+                        팀 찾아보기 →
+                    </button>
+                </div>
+
+                <div class="info-badge" style="margin-top: 20px;">
+                    🔒 리뷰 작성은 본인 인증 후 가능합니다 · 설정에서 인증하기
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function showView(view) {
+        // Hide all views
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('registerView').style.display = 'none';
+        document.getElementById('onboardingView').style.display = 'none';
+        document.getElementById('completeView').style.display = 'none';
+
+        // Show selected view
+        document.getElementById(view + 'View').style.display = 'block';
+
+        // Update toggle buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const labels = { login: 0, register: 1, onboarding: 2, complete: 3 };
+        document.querySelectorAll('.view-btn')[labels[view]].classList.add('active');
+
+        // Update brand panel text per view
+        const brandTitle = document.querySelector('.brand-title');
+        const brandDesc = document.querySelector('.brand-desc');
+
+        if (view === 'login' || view === 'register') {
+            brandTitle.innerHTML = '신뢰할 수 있는 정보로<br><em>최적의 선택</em>을 돕습니다';
+            brandDesc.innerHTML = '인증된 팀 정보, 검증된 리뷰, 선수 포트폴리오.<br>데이터 기반으로 올바른 판단을 내릴 수 있는 공간.';
+        } else if (view === 'onboarding') {
+            brandTitle.innerHTML = '맞춤 경험을 위해<br><em>간단한 정보</em>를 알려주세요';
+            brandDesc.innerHTML = '입력하신 정보를 바탕으로 관련 팀을 추천하고,<br>맞춤형 대시보드를 준비합니다.';
+        } else if (view === 'complete') {
+            brandTitle.innerHTML = '모든 준비가<br><em>완료</em>되었습니다';
+            brandDesc.innerHTML = '지금부터 인증된 팀 정보를 탐색하고,<br>자녀에게 가장 적합한 환경을 찾아보세요.';
+        }
+    }
+
+    function selectRole(el, role) {
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function socialLogin(provider) {
+        const names = { google: 'Google', kakao: '카카오', apple: 'Apple', line: 'LINE' };
+        alert(`${names[provider]} 로그인으로 이동합니다.\n\n실제 구현 시 /api/auth/${provider} 로 리디렉션됩니다.`);
+    }
+</script>
+
+</body>
+</html>

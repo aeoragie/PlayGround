@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayGround — Player Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:#1E3A5F;--navy-light:#2A4A73;--navy-dark:#152D4A;--navy-subtle:#F0F4F8;
+            --slate:#475569;--slate-light:#64748B;--accent:#FF6B35;--accent-hover:#E55A2B;--accent-subtle:#FFF7F3;
+            --trust:#0D9488;--trust-subtle:#F0FDFA;--violet:#6D28D9;--violet-subtle:#F5F3FF;
+            --success:#16A34A;--warning:#D97706;--error:#DC2626;
+            --bg:#FAFAFA;--surface:#FFFFFF;--surface-alt:#F8FAFC;
+            --text-primary:#1F2937;--text-secondary:#6B7280;--text-light:#9CA3AF;
+            --border:#E5E7EB;--border-light:#F3F4F6;
+            --shadow:0 4px 16px rgba(0,0,0,0.07);--shadow-sm:0 1px 3px rgba(0,0,0,0.05);
+            --radius:12px;--radius-sm:8px;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Plus Jakarta Sans','Pretendard',-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;}
+
+        /* ─── NAV ─── */
+        .gnb{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+        .gnb-logo{font-size:17px;font-weight:700;color:var(--navy);text-decoration:none;}.gnb-logo span{color:var(--accent);}
+        .gnb-nav{display:flex;gap:24px;}
+        .gnb-link{font-size:13px;font-weight:600;color:var(--slate);text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:all .12s;}
+        .gnb-link:hover{color:var(--navy);}
+        .gnb-link.active{color:var(--navy);border-bottom-color:var(--navy);}
+        .gnb-right{display:flex;align-items:center;gap:10px;}
+        .btn-sm{padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--slate);cursor:pointer;font-family:inherit;transition:all .12s;}
+        .btn-sm:hover{border-color:var(--navy);color:var(--navy);}
+        .btn-sm-accent{background:var(--accent);border-color:var(--accent);color:#fff;}
+        .btn-sm-accent:hover{background:var(--accent-hover);}
+
+        .container{max-width:1080px;margin:0 auto;padding:24px 32px 60px;}
+
+        /* ─── PROFILE HERO ─── */
+        .profile-hero{display:flex;gap:24px;align-items:flex-start;margin-bottom:28px;}
+        .ph-avatar{width:112px;height:112px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(30,58,95,0.2);position:relative;cursor:pointer;overflow:hidden;transition:all .15s;}
+        .ph-avatar:hover{box-shadow:0 4px 16px rgba(30,58,95,0.35);}
+        .ph-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;opacity:0;transition:opacity .15s;border-radius:50%;}
+        .ph-avatar:hover .ph-avatar-overlay{opacity:1;}
+        .ph-avatar-overlay svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8;}
+        .ph-avatar-overlay span{font-size:10px;font-weight:600;color:#fff;}
+        .ph-info{flex:1;}
+        .ph-badges{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;}
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;}
+        .badge-navy{background:var(--navy-subtle);color:var(--navy);}
+        .badge-trust{background:var(--trust-subtle);color:var(--trust);}
+        .badge-accent{background:var(--accent-subtle);color:var(--accent);}
+        .badge-violet{background:var(--violet-subtle);color:var(--violet);}
+        .ph-name{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+        .ph-meta{font-size:13px;color:var(--text-secondary);margin-bottom:10px;}
+        .ph-bio{font-size:13px;color:var(--slate-light);line-height:1.7;max-width:560px;}
+        .ph-stats{display:flex;gap:6px;margin-top:14px;}
+        .ph-stat{padding:10px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center;}
+        .ph-stat-num{font-size:20px;font-weight:700;color:var(--navy);}
+        .ph-stat-label{font-size:10px;color:var(--text-light);font-weight:500;}
+        .ph-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+        .btn-action{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all .12s;text-align:center;}
+        .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:var(--accent-hover);}
+        .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--slate);}.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
+
+        /* ─── TABS ─── */
+        .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;}
+        .tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text-light);cursor:pointer;border-bottom:2px solid transparent;transition:all .12s;}
+        .tab:hover{color:var(--text-secondary);}
+        .tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+        /* ─── PANELS ─── */
+        .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+        .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;}
+        .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+        .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+        .panel-title{font-size:14px;font-weight:700;color:var(--navy);}
+        .panel-link{font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;text-decoration:none;}
+
+        /* ─── CAREER TIMELINE ─── */
+        .timeline{position:relative;padding-left:20px;}
+        .timeline::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:var(--border);}
+        .tl-item{position:relative;padding:0 0 16px 16px;}
+        .tl-item:last-child{padding-bottom:0;}
+        .tl-dot{position:absolute;left:-19px;top:6px;width:10px;height:10px;border-radius:50%;border:2px solid var(--navy);background:var(--surface);}
+        .tl-item.current .tl-dot{background:var(--navy);}
+        .tl-period{font-size:11px;color:var(--text-light);font-weight:500;margin-bottom:2px;}
+        .tl-team{font-size:14px;font-weight:700;color:var(--text-primary);}
+        .tl-detail{font-size:12px;color:var(--text-secondary);}
+
+        /* ─── STAT BAR ─── */
+        .stat-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+        .stat-row:last-child{margin-bottom:0;}
+        .stat-label{font-size:12px;font-weight:600;color:var(--slate);width:80px;flex-shrink:0;}
+        .stat-bar-bg{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;}
+        .stat-bar{height:100%;border-radius:4px;transition:width .5s ease;}
+        .stat-value{font-size:12px;font-weight:700;color:var(--text-primary);width:32px;text-align:right;flex-shrink:0;}
+
+        /* ─── MATCH CARD ─── */
+        .match-card{display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;}
+        .match-card:last-child{margin-bottom:0;}
+        .mc-date{font-size:11px;font-weight:600;color:var(--text-light);width:48px;flex-shrink:0;text-align:center;line-height:1.3;}
+        .mc-teams{flex:1;}
+        .mc-versus{font-size:13px;font-weight:600;color:var(--text-primary);}
+        .mc-comp{font-size:11px;color:var(--text-light);}
+        .mc-score{font-size:18px;font-weight:700;color:var(--navy);width:60px;text-align:center;}
+        .mc-perf{text-align:right;}
+        .mc-perf-main{font-size:13px;font-weight:700;color:var(--accent);}
+        .mc-perf-sub{font-size:10px;color:var(--text-light);}
+
+        /* ─── PORTFOLIO ─── */
+        .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+        .pf-card{border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--surface);}
+        .pf-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+        .pf-thumb{height:120px;background:var(--navy-subtle);display:flex;align-items:center;justify-content:center;position:relative;}
+        .pf-play{width:40px;height:40px;border-radius:50%;background:rgba(30,58,95,0.8);display:flex;align-items:center;justify-content:center;}
+        .pf-play svg{width:16px;height:16px;fill:#fff;margin-left:2px;}
+        .pf-tag{position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;background:rgba(0,0,0,0.5);color:#fff;}
+        .pf-info{padding:10px 12px;}
+        .pf-title{font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:2px;}
+        .pf-meta{font-size:10px;color:var(--text-light);}
+        .pf-featured{border-color:var(--accent);}.pf-featured .pf-thumb{background:var(--accent-subtle);}
+
+        /* ─── RADAR CHART (CSS only) ─── */
+        .radar-wrap{display:flex;align-items:center;justify-content:center;padding:16px 0;}
+        .radar-labels{display:flex;flex-direction:column;gap:8px;}
+        .rl-item{display:flex;align-items:center;gap:8px;}
+        .rl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+        .rl-name{font-size:12px;color:var(--slate);width:64px;}
+        .rl-bar{width:80px;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden;}
+        .rl-fill{height:100%;border-radius:3px;}
+        .rl-score{font-size:11px;font-weight:700;color:var(--text-primary);width:24px;text-align:right;}
+
+        /* ─── SEASON SELECTOR ─── */
+        .season-selector{display:flex;gap:6px;margin-bottom:16px;}
+        .season-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--text-light);cursor:pointer;transition:all .12s;}
+        .season-chip.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+        .season-chip:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+        /* ─── HONORS ─── */
+        .honor-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);}
+        .honor-item:last-child{border-bottom:none;}
+        .honor-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+        .honor-info{flex:1;}
+        .honor-title{font-size:13px;font-weight:600;color:var(--text-primary);}
+        .honor-detail{font-size:11px;color:var(--text-light);}
+
+        /* ─── TAB CONTENT ─── */
+        .tab-content{display:none;}.tab-content.active{display:block;}
+
+        /* ─── PRIVATE EVAL ─── */
+        .private-banner{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#FEF3C7;border:1px solid #F59E0B;border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:#92400E;margin-bottom:20px;}
+        .eval-writer{font-size:11px;color:var(--text-light);font-weight:500;}
+        .eval-date{font-size:11px;color:var(--text-light);margin-bottom:14px;}
+        .eval-overall{display:flex;gap:20px;align-items:flex-start;}
+        .eval-grade-wrap{text-align:center;flex-shrink:0;}
+        .eval-grade{width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+        .eval-grade-label{font-size:10px;color:var(--text-light);}
+        .eval-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-light);}
+        .eval-row:last-child{border-bottom:none;}
+        .eval-cat{font-size:12px;font-weight:600;color:var(--slate);}
+        .eval-stars{font-size:13px;color:#F59E0B;letter-spacing:1px;}
+        .eval-section{margin-bottom:14px;}
+        .eval-section:last-child{margin-bottom:0;}
+        .eval-section-title{font-size:12px;font-weight:700;margin-bottom:6px;}
+        .eval-section-body{font-size:13px;color:var(--text-secondary);line-height:1.8;padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--border);}
+        .eval-history-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light);}
+        .eval-history-item:last-child{border-bottom:none;}
+        .eval-h-date{font-size:11px;font-weight:600;color:var(--text-light);width:72px;flex-shrink:0;}
+        .eval-h-grade{width:32px;height:32px;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .eval-h-body{flex:1;}
+        .eval-h-writer{font-size:11px;color:var(--text-light);margin-bottom:2px;}
+        .eval-h-summary{font-size:13px;font-weight:500;color:var(--text-primary);}
+        .scout-rating-grid{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+        .scout-rating-item{display:flex;align-items:center;gap:10px;}
+        .scout-rating-label{font-size:12px;font-weight:600;color:var(--slate);width:72px;flex-shrink:0;}
+        .scout-rating-bar{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;}
+        .scout-rating-val{font-size:12px;font-weight:700;color:var(--text-primary);width:28px;text-align:right;}
+
+        @media(max-width:768px){
+            .container{padding:16px;}
+            .profile-hero{flex-direction:column;align-items:center;text-align:center;}
+            .ph-actions{flex-direction:row;}
+            .ph-stats{justify-content:center;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+            .portfolio-grid{grid-template-columns:1fr 1fr;}
+            .kpi-mini{grid-template-columns:repeat(2,1fr);}
+            .tabs{overflow-x:auto;flex-wrap:nowrap;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- GNB -->
+<nav class="gnb">
+    <a class="gnb-logo">Play<span>Ground</span></a>
+    <div class="gnb-nav">
+        <a class="gnb-link active">프로필</a>
+        <a class="gnb-link">팀 찾기</a>
+        <a class="gnb-link">기록실</a>
+        <a class="gnb-link">리뷰</a>
+    </div>
+    <div class="gnb-right">
+        <button class="btn-sm">메시지</button>
+        <button class="btn-sm btn-sm-accent">대시보드</button>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- ═══ PROFILE HERO ═══ -->
+    <div class="profile-hero">
+        <div class="ph-avatar" onclick="document.getElementById('avatarInput').click()">
+            준
+            <div class="ph-avatar-overlay">
+                <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span>사진 변경</span>
+            </div>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatar(this)">
+        </div>
+        <div class="ph-info">
+            <div class="ph-badges">
+                <span class="badge badge-navy">⚽ 축구</span>
+                <span class="badge badge-trust">✓ 소속팀 인증</span>
+                <span class="badge badge-accent">U12</span>
+                <span class="badge badge-violet">MF 미드필더</span>
+            </div>
+            <div class="ph-name">김준혁</div>
+            <div class="ph-meta">2013년생 · 서울 FC 주니어 소속 · 우측발 · 168cm / 52kg</div>
+            <div class="ph-bio">게임을 읽는 시야와 정확한 패스가 강점인 중앙 미드필더입니다. 공격과 수비 전환에서 팀의 중심 역할을 하며, 꾸준한 성장을 목표로 훈련하고 있습니다.</div>
+            <div class="ph-stats">
+                <div class="ph-stat"><div class="ph-stat-num">42</div><div class="ph-stat-label">출전 경기</div></div>
+                <div class="ph-stat"><div class="ph-stat-num">8</div><div class="ph-stat-label">골</div></div>
+                <div class="ph-stat"><div class="ph-stat-num">15</div><div class="ph-stat-label">어시스트</div></div>
+                <div class="ph-stat"><div class="ph-stat-num">3</div><div class="ph-stat-label">시즌</div></div>
+            </div>
+        </div>
+        <div class="ph-actions">
+            <button class="btn-action btn-primary">매칭 제안</button>
+            <button class="btn-action btn-outline">메시지 보내기</button>
+        </div>
+    </div>
+
+    <!-- ═══ TABS ═══ -->
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('overview')">개요</div>
+        <div class="tab" onclick="switchTab('career')">커리어</div>
+        <div class="tab" onclick="switchTab('stats')">통계</div>
+        <div class="tab" onclick="switchTab('portfolio')">포트폴리오</div>
+        <div class="tab" onclick="switchTab('physical')">피지컬 · 기술</div>
+        <div class="tab" onclick="switchTab('evalCoach')" style="position:relative;">지도자 평가 <svg style="width:12px;height:12px;vertical-align:-1px;margin-left:2px;" viewBox="0 0 24 24" fill="none" stroke="var(--text-light)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="tab" onclick="switchTab('evalScout')" style="position:relative;">스카우트 평가 <svg style="width:12px;height:12px;vertical-align:-1px;margin-left:2px;" viewBox="0 0 24 24" fill="none" stroke="var(--text-light)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+    </div>
+
+    <!-- ══ TAB: 개요 ══ -->
+    <div class="tab-content active" id="tabOverview">
+        <div class="grid-2">
+            <!-- 최근 경기 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">최근 경기</div><a class="panel-link">전체 보기 →</a></div>
+                <div class="match-card">
+                    <div class="mc-date">02.24<br><span style="font-size:10px;color:var(--text-light);">일</span></div>
+                    <div class="mc-teams"><div class="mc-versus">서울 FC vs 용산 유소년</div><div class="mc-comp">서울 U12 리그 8라운드</div></div>
+                    <div class="mc-score">3 : 1</div>
+                    <div class="mc-perf"><div class="mc-perf-main">1골 1도움</div><div class="mc-perf-sub">72분 출전</div></div>
+                </div>
+                <div class="match-card">
+                    <div class="mc-date">02.17<br><span style="font-size:10px;color:var(--text-light);">일</span></div>
+                    <div class="mc-teams"><div class="mc-versus">인천 시티 vs 서울 FC</div><div class="mc-comp">서울 U12 리그 7라운드</div></div>
+                    <div class="mc-score">2 : 2</div>
+                    <div class="mc-perf"><div class="mc-perf-main">1도움</div><div class="mc-perf-sub">80분 출전</div></div>
+                </div>
+                <div class="match-card">
+                    <div class="mc-date">02.10<br><span style="font-size:10px;color:var(--text-light);">일</span></div>
+                    <div class="mc-teams"><div class="mc-versus">서울 FC vs 강남 킥스</div><div class="mc-comp">서울 U12 리그 6라운드</div></div>
+                    <div class="mc-score">4 : 0</div>
+                    <div class="mc-perf"><div class="mc-perf-main">2도움</div><div class="mc-perf-sub">65분 출전</div></div>
+                </div>
+            </div>
+
+            <!-- 커리어 요약 + 수상 -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">커리어</div></div>
+                    <div class="timeline">
+                        <div class="tl-item current"><div class="tl-dot"></div><div class="tl-period">2024.03 ~ 현재</div><div class="tl-team">서울 FC 주니어</div><div class="tl-detail">U12 리그 · 중앙 미드필더</div></div>
+                        <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">2023.03 ~ 2024.02</div><div class="tl-team">강남 킥스 아카데미</div><div class="tl-detail">U11 리그 · 공격형 미드필더</div></div>
+                        <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">2022.05 ~ 2023.02</div><div class="tl-team">서초 축구 교실</div><div class="tl-detail">입문 · 기초 훈련</div></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">수상 이력</div></div>
+                    <div class="honor-item"><div class="honor-icon" style="background:#FFFBEB;">🏆</div><div class="honor-info"><div class="honor-title">서울 U12 리그 베스트 11</div><div class="honor-detail">2024 시즌 · 개인 수상</div></div></div>
+                    <div class="honor-item"><div class="honor-icon" style="background:#ECFDF5;">🥈</div><div class="honor-info"><div class="honor-title">서울컵 U12 준우승</div><div class="honor-detail">2024 서울컵 · 팀 수상</div></div></div>
+                    <div class="honor-item"><div class="honor-icon" style="background:var(--accent-subtle);">⚽</div><div class="honor-info"><div class="honor-title">U12 리그 어시스트 2위</div><div class="honor-detail">2024 시즌 · 15어시스트</div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시즌 통계 요약 + 기술 평가 -->
+        <div class="grid-2">
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">2024 시즌 통계</div></div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+                    <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:22px;font-weight:700;color:var(--navy);">28</div><div style="font-size:10px;color:var(--text-light);">출전</div></div>
+                    <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:22px;font-weight:700;color:var(--accent);">5</div><div style="font-size:10px;color:var(--text-light);">득점</div></div>
+                    <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:22px;font-weight:700;color:var(--trust);">15</div><div style="font-size:10px;color:var(--text-light);">도움</div></div>
+                    <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);"><div style="font-size:22px;font-weight:700;color:var(--slate);">72%</div><div style="font-size:10px;color:var(--text-light);">출전율</div></div>
+                </div>
+                <div class="stat-row"><div class="stat-label">패스 성공</div><div class="stat-bar-bg"><div class="stat-bar" style="width:82%;background:var(--navy);"></div></div><div class="stat-value">82%</div></div>
+                <div class="stat-row"><div class="stat-label">슈팅 정확</div><div class="stat-bar-bg"><div class="stat-bar" style="width:65%;background:var(--accent);"></div></div><div class="stat-value">65%</div></div>
+                <div class="stat-row"><div class="stat-label">태클 성공</div><div class="stat-bar-bg"><div class="stat-bar" style="width:58%;background:var(--trust);"></div></div><div class="stat-value">58%</div></div>
+                <div class="stat-row"><div class="stat-label">공중볼</div><div class="stat-bar-bg"><div class="stat-bar" style="width:45%;background:var(--violet);"></div></div><div class="stat-value">45%</div></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">기술 평가</div><span style="font-size:11px;color:var(--text-light);">코치 평가 기준</span></div>
+                <div class="radar-labels">
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--navy);"></div><div class="rl-name">볼 컨트롤</div><div class="rl-bar"><div class="rl-fill" style="width:85%;background:var(--navy);"></div></div><div class="rl-score">85</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--navy);"></div><div class="rl-name">패스</div><div class="rl-bar"><div class="rl-fill" style="width:90%;background:var(--navy);"></div></div><div class="rl-score">90</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--accent);"></div><div class="rl-name">드리블</div><div class="rl-bar"><div class="rl-fill" style="width:78%;background:var(--accent);"></div></div><div class="rl-score">78</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--accent);"></div><div class="rl-name">슈팅</div><div class="rl-bar"><div class="rl-fill" style="width:70%;background:var(--accent);"></div></div><div class="rl-score">70</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--trust);"></div><div class="rl-name">수비</div><div class="rl-bar"><div class="rl-fill" style="width:65%;background:var(--trust);"></div></div><div class="rl-score">65</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--trust);"></div><div class="rl-name">체력</div><div class="rl-bar"><div class="rl-fill" style="width:75%;background:var(--trust);"></div></div><div class="rl-score">75</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--violet);"></div><div class="rl-name">경기 지능</div><div class="rl-bar"><div class="rl-fill" style="width:88%;background:var(--violet);"></div></div><div class="rl-score">88</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--violet);"></div><div class="rl-name">리더십</div><div class="rl-bar"><div class="rl-fill" style="width:72%;background:var(--violet);"></div></div><div class="rl-score">72</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 포트폴리오 미리보기 -->
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">하이라이트 영상</div><a class="panel-link">포트폴리오 전체 →</a></div>
+            <div class="portfolio-grid">
+                <div class="pf-card pf-featured">
+                    <div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">⭐ 대표</div></div>
+                    <div class="pf-info"><div class="pf-title">2024 서울컵 결승 하이라이트</div><div class="pf-meta">2024.11.15 · 2:34 · #골 #어시스트</div></div>
+                </div>
+                <div class="pf-card">
+                    <div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">스킬</div></div>
+                    <div class="pf-info"><div class="pf-title">시즌 베스트 어시스트 모음</div><div class="pf-meta">2024.12.01 · 3:12 · #패스 #어시스트</div></div>
+                </div>
+                <div class="pf-card">
+                    <div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">경기</div></div>
+                    <div class="pf-info"><div class="pf-title">vs 용산 유소년 풀 하이라이트</div><div class="pf-meta">2025.02.24 · 4:08 · #골 #드리블</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 커리어 ══ -->
+    <div class="tab-content" id="tabCareer">
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">소속 이력</div></div>
+            <div class="timeline">
+                <div class="tl-item current"><div class="tl-dot"></div><div class="tl-period">2024.03 ~ 현재 (1년)</div><div class="tl-team">서울 FC 주니어 <span class="badge badge-trust" style="margin-left:6px;">현재 소속</span></div><div class="tl-detail">서울 U12 리그 · 중앙 미드필더 · 감독: 박성진</div><div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.6;">강남 킥스에서 이적 후 주전으로 활약. 리그 베스트 11 선정. 팀의 핵심 패스 연결고리 역할.</div></div>
+                <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">2023.03 ~ 2024.02 (1년)</div><div class="tl-team">강남 킥스 아카데미</div><div class="tl-detail">서울 U11 리그 · 공격형 미드필더 · 감독: 김영수</div><div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.6;">체계적인 기술 훈련을 받으며 볼 컨트롤과 패스 능력을 크게 향상.</div></div>
+                <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">2022.05 ~ 2023.02 (10개월)</div><div class="tl-team">서초 축구 교실</div><div class="tl-detail">입문 과정 · 기초 훈련</div><div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.6;">축구에 처음 입문. 기본기와 팀플레이의 기초를 배움.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 통계 ══ -->
+    <div class="tab-content" id="tabStats">
+        <div class="season-selector">
+            <div class="season-chip active">2024 시즌</div>
+            <div class="season-chip">2023 시즌</div>
+            <div class="season-chip">통산</div>
+        </div>
+        <div class="panel" style="margin-bottom:16px;">
+            <div class="panel-title" style="margin-bottom:14px;">시즌 기록</div>
+            <table style="width:100%;border-collapse:collapse;">
+                <thead><tr style="border-bottom:1px solid var(--border);">
+                    <th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:600;color:var(--text-light);">대회</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">출전</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">선발</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">득점</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">도움</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">경고</th>
+                    <th style="text-align:center;padding:8px 6px;font-size:11px;font-weight:600;color:var(--text-light);">평점</th>
+                </tr></thead>
+                <tbody>
+                    <tr style="border-bottom:1px solid var(--border-light);"><td style="padding:10px;font-size:13px;font-weight:600;">서울 U12 리그</td><td style="text-align:center;font-size:13px;">20</td><td style="text-align:center;font-size:13px;">18</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--accent);">3</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--trust);">11</td><td style="text-align:center;font-size:13px;">1</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--navy);">7.2</td></tr>
+                    <tr style="border-bottom:1px solid var(--border-light);"><td style="padding:10px;font-size:13px;font-weight:600;">서울컵 U12</td><td style="text-align:center;font-size:13px;">6</td><td style="text-align:center;font-size:13px;">6</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--accent);">2</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--trust);">3</td><td style="text-align:center;font-size:13px;">0</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--navy);">7.8</td></tr>
+                    <tr><td style="padding:10px;font-size:13px;font-weight:600;">친선 경기</td><td style="text-align:center;font-size:13px;">2</td><td style="text-align:center;font-size:13px;">1</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--accent);">0</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--trust);">1</td><td style="text-align:center;font-size:13px;">0</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--navy);">6.5</td></tr>
+                </tbody>
+                <tfoot><tr style="border-top:2px solid var(--border);background:var(--bg);"><td style="padding:10px;font-size:13px;font-weight:700;">합계</td><td style="text-align:center;font-size:13px;font-weight:700;">28</td><td style="text-align:center;font-size:13px;font-weight:700;">25</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--accent);">5</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--trust);">15</td><td style="text-align:center;font-size:13px;font-weight:700;">1</td><td style="text-align:center;font-size:13px;font-weight:700;color:var(--navy);">7.3</td></tr></tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 포트폴리오 ══ -->
+    <div class="tab-content" id="tabPortfolio">
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">영상 · 미디어</div><span style="font-size:12px;color:var(--text-light);">6개 항목</span></div>
+            <div class="portfolio-grid">
+                <div class="pf-card pf-featured"><div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">⭐ 대표</div></div><div class="pf-info"><div class="pf-title">2024 서울컵 결승 하이라이트</div><div class="pf-meta">2024.11.15 · 2:34</div></div></div>
+                <div class="pf-card"><div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">스킬</div></div><div class="pf-info"><div class="pf-title">시즌 베스트 어시스트 모음</div><div class="pf-meta">2024.12.01 · 3:12</div></div></div>
+                <div class="pf-card"><div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">경기</div></div><div class="pf-info"><div class="pf-title">vs 용산 유소년 풀 하이라이트</div><div class="pf-meta">2025.02.24 · 4:08</div></div></div>
+                <div class="pf-card"><div class="pf-thumb"><div class="pf-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="pf-tag">훈련</div></div><div class="pf-info"><div class="pf-title">개인 드리블 훈련 영상</div><div class="pf-meta">2025.01.20 · 1:45</div></div></div>
+                <div class="pf-card"><div class="pf-thumb" style="background:var(--navy-subtle);"><div style="font-size:20px;">📰</div></div><div class="pf-info"><div class="pf-title">서울컵 결승 인터뷰 기사</div><div class="pf-meta">스포츠서울 · 2024.11.16</div></div></div>
+                <div class="pf-card"><div class="pf-thumb" style="background:var(--navy-subtle);"><div style="font-size:20px;">📸</div></div><div class="pf-info"><div class="pf-title">시즌 베스트 11 시상식</div><div class="pf-meta">2024.12.20 · 사진 8장</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 피지컬 · 기술 ══ -->
+    <div class="tab-content" id="tabPhysical">
+        <div class="grid-2">
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">피지컬 기록</div><span style="font-size:11px;color:var(--text-light);">2025.01 측정</span></div>
+                <div class="stat-row"><div class="stat-label">10m 스프린트</div><div class="stat-bar-bg"><div class="stat-bar" style="width:78%;background:var(--navy);"></div></div><div class="stat-value">1.92s</div></div>
+                <div class="stat-row"><div class="stat-label">30m 스프린트</div><div class="stat-bar-bg"><div class="stat-bar" style="width:72%;background:var(--navy);"></div></div><div class="stat-value">4.85s</div></div>
+                <div class="stat-row"><div class="stat-label">점프력</div><div class="stat-bar-bg"><div class="stat-bar" style="width:65%;background:var(--accent);"></div></div><div class="stat-value">38cm</div></div>
+                <div class="stat-row"><div class="stat-label">민첩성(T)</div><div class="stat-bar-bg"><div class="stat-bar" style="width:82%;background:var(--trust);"></div></div><div class="stat-value">10.2s</div></div>
+                <div class="stat-row"><div class="stat-label">지구력(YY)</div><div class="stat-bar-bg"><div class="stat-bar" style="width:70%;background:var(--violet);"></div></div><div class="stat-value">Lv.5</div></div>
+                <div style="margin-top:14px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);font-size:11px;color:var(--text-light);">
+                    💡 동일 연령대(U12) 상위 <strong style="color:var(--trust);">28%</strong> · 민첩성 항목 최상위권
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">기술 능력 상세</div><span style="font-size:11px;color:var(--text-light);">코치 평가</span></div>
+                <div class="radar-labels">
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--navy);"></div><div class="rl-name">볼 컨트롤</div><div class="rl-bar"><div class="rl-fill" style="width:85%;background:var(--navy);"></div></div><div class="rl-score">85</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--navy);"></div><div class="rl-name">숏패스</div><div class="rl-bar"><div class="rl-fill" style="width:92%;background:var(--navy);"></div></div><div class="rl-score">92</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--navy);"></div><div class="rl-name">롱패스</div><div class="rl-bar"><div class="rl-fill" style="width:80%;background:var(--navy);"></div></div><div class="rl-score">80</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--accent);"></div><div class="rl-name">드리블</div><div class="rl-bar"><div class="rl-fill" style="width:78%;background:var(--accent);"></div></div><div class="rl-score">78</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--accent);"></div><div class="rl-name">슈팅</div><div class="rl-bar"><div class="rl-fill" style="width:70%;background:var(--accent);"></div></div><div class="rl-score">70</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--trust);"></div><div class="rl-name">태클</div><div class="rl-bar"><div class="rl-fill" style="width:60%;background:var(--trust);"></div></div><div class="rl-score">60</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--trust);"></div><div class="rl-name">위치 선정</div><div class="rl-bar"><div class="rl-fill" style="width:88%;background:var(--trust);"></div></div><div class="rl-score">88</div></div>
+                    <div class="rl-item"><div class="rl-dot" style="background:var(--violet);"></div><div class="rl-name">경기 지능</div><div class="rl-bar"><div class="rl-fill" style="width:88%;background:var(--violet);"></div></div><div class="rl-score">88</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 지도자 평가 (비공개) ══ -->
+    <div class="tab-content" id="tabEvalCoach">
+        <div class="private-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            비공개 영역 — 소속팀 지도자만 작성·열람할 수 있습니다. 선수 본인에게는 공개되지 않습니다.
+        </div>
+
+        <div class="grid-2">
+            <!-- 종합 평가 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">종합 평가</div>
+                    <span class="eval-writer">작성자: 박성진 감독</span>
+                </div>
+                <div class="eval-date">최근 평가일: 2025.02.20</div>
+                <div class="eval-overall">
+                    <div class="eval-grade-wrap">
+                        <div class="eval-grade">A</div>
+                        <div class="eval-grade-label">종합 등급</div>
+                    </div>
+                    <div style="flex:1;">
+                        <div class="eval-row"><span class="eval-cat">경기 이해력</span><div class="eval-stars">★★★★★</div></div>
+                        <div class="eval-row"><span class="eval-cat">훈련 태도</span><div class="eval-stars">★★★★☆</div></div>
+                        <div class="eval-row"><span class="eval-cat">팀워크</span><div class="eval-stars">★★★★★</div></div>
+                        <div class="eval-row"><span class="eval-cat">성장 가능성</span><div class="eval-stars">★★★★★</div></div>
+                        <div class="eval-row"><span class="eval-cat">멘탈·집중력</span><div class="eval-stars">★★★★☆</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 서술 평가 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">서술 평가</div></div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--trust);">강점</div>
+                    <div class="eval-section-body">공간을 읽는 시야가 또래 대비 뛰어남. 중거리 패스 정확도가 높고, 템포 조절 능력이 있어 팀 공격의 시작점 역할을 잘 수행. 팀원에 대한 배려가 있고 소통 능력도 양호.</div>
+                </div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--warning);">보완점</div>
+                    <div class="eval-section-body">피지컬 경합에서 밀리는 경향. 수비 가담 시 적극성이 다소 부족하며, 후반 체력 저하 시 집중력 떨어짐. 왼발 사용 빈도를 높일 필요 있음.</div>
+                </div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--navy);">성장 방향 제안</div>
+                    <div class="eval-section-body">체력 훈련 강화(주 2회 개인 피지컬 추가 권장). 수비 전환 시 압박 훈련 집중. U-15 이전까지 중앙 미드필더로서 볼 배급 능력을 핵심 무기로 완성시키는 것이 목표.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 평가 이력 -->
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">평가 이력</div><span style="font-size:11px;color:var(--text-light);">시즌별 아카이브</span></div>
+            <div class="eval-history-item">
+                <div class="eval-h-date">2025.02.20</div>
+                <div class="eval-h-grade" style="background:var(--trust-subtle);color:var(--trust);">A</div>
+                <div class="eval-h-body">
+                    <div class="eval-h-writer">박성진 감독 · 서울 FC 주니어</div>
+                    <div class="eval-h-summary">시야와 패스 능력 우수. 체력 보완 필요.</div>
+                </div>
+            </div>
+            <div class="eval-history-item">
+                <div class="eval-h-date">2024.08.15</div>
+                <div class="eval-h-grade" style="background:var(--navy-subtle);color:var(--navy);">B+</div>
+                <div class="eval-h-body">
+                    <div class="eval-h-writer">박성진 감독 · 서울 FC 주니어</div>
+                    <div class="eval-h-summary">팀 적응 완료. 중앙 패스 연결 역할 안정적. 대인 수비 개선 중.</div>
+                </div>
+            </div>
+            <div class="eval-history-item">
+                <div class="eval-h-date">2024.02.10</div>
+                <div class="eval-h-grade" style="background:var(--violet-subtle);color:var(--violet);">B</div>
+                <div class="eval-h-body">
+                    <div class="eval-h-writer">김영수 감독 · 강남 킥스</div>
+                    <div class="eval-h-summary">기술적 잠재력 높음. 경기 중 자신감 부족이 과제.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TAB: 스카우트 평가 (비공개) ══ -->
+    <div class="tab-content" id="tabEvalScout">
+        <div class="private-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            비공개 영역 — 에이전트·스카우터만 작성·열람할 수 있습니다. 선수 본인·지도자에게 공개되지 않습니다.
+        </div>
+
+        <div class="grid-2">
+            <!-- 스카우팅 리포트 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">스카우팅 리포트</div>
+                    <span class="eval-writer">작성자: 이현우 에이전트</span>
+                </div>
+                <div class="eval-date">관찰 경기: 서울 U12 리그 8R (2025.02.24)</div>
+                <div class="scout-rating-grid">
+                    <div class="scout-rating-item"><div class="scout-rating-label">기술</div><div class="scout-rating-bar"><div style="width:85%;background:var(--navy);height:100%;border-radius:3px;"></div></div><div class="scout-rating-val">85</div></div>
+                    <div class="scout-rating-item"><div class="scout-rating-label">전술 이해</div><div class="scout-rating-bar"><div style="width:90%;background:var(--navy);height:100%;border-radius:3px;"></div></div><div class="scout-rating-val">90</div></div>
+                    <div class="scout-rating-item"><div class="scout-rating-label">피지컬</div><div class="scout-rating-bar"><div style="width:60%;background:var(--warning);height:100%;border-radius:3px;"></div></div><div class="scout-rating-val">60</div></div>
+                    <div class="scout-rating-item"><div class="scout-rating-label">멘탈</div><div class="scout-rating-bar"><div style="width:75%;background:var(--trust);height:100%;border-radius:3px;"></div></div><div class="scout-rating-val">75</div></div>
+                    <div class="scout-rating-item"><div class="scout-rating-label">성장 잠재력</div><div class="scout-rating-bar"><div style="width:92%;background:var(--accent);height:100%;border-radius:3px;"></div></div><div class="scout-rating-val">92</div></div>
+                </div>
+                <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);display:flex;align-items:center;gap:10px;">
+                    <div style="font-size:28px;font-weight:700;color:var(--navy);">A-</div>
+                    <div><div style="font-size:12px;font-weight:600;color:var(--text-primary);">종합 스카우팅 등급</div><div style="font-size:11px;color:var(--text-light);">상위 15% 수준 (동일 연령대 기준)</div></div>
+                </div>
+            </div>
+
+            <!-- 관찰 메모 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">관찰 메모</div></div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--navy);">경기 관찰</div>
+                    <div class="eval-section-body">중앙에서 볼을 받아 양쪽 측면으로 전개하는 능력이 인상적. 전반 25분 스루패스로 선제골 어시스트 기록. 수비 전환 시 포지셔닝이 불안정한 순간이 2~3회 관찰됨.</div>
+                </div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--violet);">잠재력 평가</div>
+                    <div class="eval-section-body">게임 리딩 능력이 또래 대비 최상위권. 현재 체격이 작은 편이나 기술과 지능으로 충분히 보완 중. U-15급 이상 도약 시 중앙 미드필더 또는 공격형 미드필더로 성장 가능성 높음.</div>
+                </div>
+                <div class="eval-section">
+                    <div class="eval-section-title" style="color:var(--accent);">매칭 추천</div>
+                    <div class="eval-section-body">현재 소속팀에서 충분한 출전 기회 확보 중이므로 즉시 이적 필요성은 낮음. 다만 기술 중심 육성을 하는 상위 클럽(예: 수원 아카데미, 전북 유스)에서의 트라이아웃을 장기적으로 검토할 가치 있음.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 스카우트 메모 이력 -->
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">스카우트 메모 이력</div><span style="font-size:11px;color:var(--text-light);">내가 작성한 메모만 표시</span></div>
+            <div class="eval-history-item">
+                <div class="eval-h-date">2025.02.24</div>
+                <div class="eval-h-grade" style="background:var(--trust-subtle);color:var(--trust);">A-</div>
+                <div class="eval-h-body">
+                    <div class="eval-h-writer">이현우 에이전트 · 서울 U12 리그 8R 관찰</div>
+                    <div class="eval-h-summary">패스·시야 최상위. 피지컬 보완 시 상위 클럽 트라이아웃 추천.</div>
+                </div>
+            </div>
+            <div class="eval-history-item">
+                <div class="eval-h-date">2024.11.15</div>
+                <div class="eval-h-grade" style="background:var(--navy-subtle);color:var(--navy);">B+</div>
+                <div class="eval-h-body">
+                    <div class="eval-h-writer">이현우 에이전트 · 서울컵 U12 결승 관찰</div>
+                    <div class="eval-h-summary">결승전 압박 속에서도 안정적 볼 배급. 멘탈 강도 확인.</div>
+                </div>
+            </div>
+            <div style="margin-top:14px;text-align:center;">
+                <button class="btn-action btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:10px 28px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    새 스카우트 메모 작성
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const map = { overview:'tabOverview', career:'tabCareer', stats:'tabStats', portfolio:'tabPortfolio', physical:'tabPhysical', evalCoach:'tabEvalCoach', evalScout:'tabEvalScout' };
+    document.getElementById(map[tab]).classList.add('active');
+    event.target.classList.add('active');
+}
+document.querySelectorAll('.season-chip').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.season-chip').forEach(s => s.classList.remove('active'));
+    c.classList.add('active');
+}));
+function handleAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const av = document.querySelector('.ph-avatar');
+            av.style.backgroundImage = 'url(' + e.target.result + ')';
+            av.style.backgroundSize = 'cover';
+            av.style.backgroundPosition = 'center';
+            av.style.fontSize = '0';
+            av.style.borderRadius = '16px';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayGround — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1E3A5F; --navy-light: #2A4A73; --navy-dark: #152D4A;
+            --navy-subtle: #F0F4F8; --slate: #475569; --slate-light: #64748B;
+            --accent: #FF6B35; --accent-hover: #E55A2B; --accent-subtle: #FFF7F3;
+            --trust: #0D9488; --trust-subtle: #F0FDFA;
+            --violet: #6D28D9; --violet-subtle: #F5F3FF;
+            --success: #16A34A; --warning: #D97706; --error: #DC2626;
+            --bg: #FAFAFA; --surface: #FFFFFF; --surface-alt: #F8FAFC;
+            --text-primary: #1F2937; --text-secondary: #6B7280; --text-light: #9CA3AF;
+            --border: #E5E7EB; --border-light: #F3F4F6;
+            --shadow: 0 4px 16px rgba(0,0,0,0.07); --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --radius: 12px; --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans','Pretendard',-apple-system,sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.6; }
+
+        /* ─── SIDEBAR ─── */
+        .layout { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 240px; background: var(--navy-dark); padding: 20px 0; display: flex;
+            flex-direction: column; flex-shrink: 0; position: fixed; top: 0; bottom: 0; z-index: 50;
+        }
+        .sb-logo { padding: 0 20px 20px; font-size: 17px; font-weight: 700; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; }
+        .sb-logo span { color: var(--accent); }
+        .sb-section { padding: 0 12px; margin-bottom: 8px; }
+        .sb-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; padding: 8px 8px 4px; }
+        .sb-item {
+            display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; transition: all 0.12s;
+        }
+        .sb-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+        .sb-item.active { background: rgba(255,255,255,0.1); color: #fff; font-weight: 600; }
+        .sb-item svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .sb-badge { margin-left: auto; padding: 1px 7px; border-radius: 100px; font-size: 10px; font-weight: 700; background: var(--accent); color: #fff; }
+        .sb-footer { margin-top: auto; padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+        .sb-user { display: flex; align-items: center; gap: 10px; }
+        .sb-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+        .sb-user-info { flex: 1; }
+        .sb-user-name { font-size: 12px; font-weight: 600; color: #fff; }
+        .sb-user-role { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+        /* ─── MAIN ─── */
+        .main { flex: 1; margin-left: 240px; }
+
+        /* ─── TOPBAR ─── */
+    .topbar { display: none; }
+        .topbar-search {
+            display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--radius-sm);
+            background: var(--bg); border: 1px solid var(--border); width: 360px;
+        }
+        .topbar-search svg { width: 16px; height: 16px; stroke: var(--text-light); fill: none; stroke-width: 2; }
+        .topbar-search input {
+            border: none; background: transparent; font-size: 13px; font-family: inherit;
+            color: var(--text-primary); outline: none; width: 100%;
+        }
+        .topbar-search input::placeholder { color: var(--text-light); }
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .topbar-btn {
+            width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+            background: var(--surface); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; position: relative; transition: all 0.12s;
+        }
+        .topbar-btn:hover { border-color: var(--navy); }
+        .topbar-btn svg { width: 16px; height: 16px; stroke: var(--slate); fill: none; stroke-width: 2; }
+        .notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); }
+
+        /* ─── ROLE SWITCH ─── */
+        .role-switch {
+            position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 4px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 3px; box-shadow: var(--shadow);
+        }
+        .role-btn {
+            padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600;
+            cursor: pointer; border: none; background: transparent; color: var(--text-light);
+            font-family: inherit; transition: all 0.12s;
+        }
+        .role-btn.active { background: var(--navy); color: #fff; }
+
+        /* ─── CONTENT ─── */
+        .content { padding: 28px 32px; }
+        .page-header { margin-bottom: 24px; }
+        .page-greeting { font-size: 14px; color: var(--text-secondary); margin-bottom: 2px; }
+        .page-title { font-size: 22px; font-weight: 700; color: var(--navy); }
+
+        /* ─── KPI CARDS ─── */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+        .kpi-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 18px 20px; transition: all 0.12s;
+        }
+        .kpi-card:hover { box-shadow: var(--shadow-sm); }
+        .kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .kpi-icon {
+            width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex;
+            align-items: center; justify-content: center;
+        }
+        .kpi-icon svg { width: 18px; height: 18px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .kpi-change { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
+        .kpi-up { background: #ECFDF5; color: var(--success); }
+        .kpi-down { background: #FEF2F2; color: var(--error); }
+        .kpi-neutral { background: var(--border-light); color: var(--text-light); }
+        .kpi-value { font-size: 26px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+        .kpi-label { font-size: 12px; color: var(--text-light); }
+
+        /* ─── CARDS / PANELS ─── */
+        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .grid-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .panel {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px;
+        }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .panel-title { font-size: 14px; font-weight: 700; color: var(--navy); }
+        .panel-link { font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer; text-decoration: none; }
+        .panel-link:hover { text-decoration: underline; }
+
+        /* ─── QUICK ACTIONS ─── */
+        .quick-actions { display: flex; gap: 10px; margin-bottom: 24px; }
+        .qa-btn {
+            display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 600; border: 1.5px solid var(--border); background: var(--surface);
+            color: var(--slate); cursor: pointer; font-family: inherit; transition: all 0.12s;
+        }
+        .qa-btn:hover { border-color: var(--navy); color: var(--navy); }
+        .qa-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .qa-btn.primary:hover { background: var(--accent-hover); }
+        .qa-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* ─── TABLE ─── */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th {
+            text-align: left; font-size: 11px; font-weight: 600; color: var(--text-light);
+            padding: 8px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .data-table td {
+            padding: 10px 12px; font-size: 13px; color: var(--text-primary); border-bottom: 1px solid var(--border-light);
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--bg); }
+
+        /* ─── STATUS / BADGES ─── */
+        .status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+        .status-active { background: #ECFDF5; color: var(--success); }
+        .status-injury { background: #FEF2F2; color: var(--error); }
+        .status-pending { background: #FFFBEB; color: var(--warning); }
+        .status-verified { background: var(--trust-subtle); color: var(--trust); }
+
+        /* ─── SCHEDULE ITEM ─── */
+        .schedule-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+        .schedule-item:last-child { border-bottom: none; }
+        .sch-date {
+            width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--navy-subtle);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .sch-day { font-size: 16px; font-weight: 700; color: var(--navy); line-height: 1; }
+        .sch-month { font-size: 9px; font-weight: 600; color: var(--slate-light); }
+        .sch-info { flex: 1; }
+        .sch-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+        .sch-meta { font-size: 11px; color: var(--text-light); }
+        .sch-type { padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; }
+        .sch-match { background: var(--accent-subtle); color: var(--accent); }
+        .sch-train { background: var(--navy-subtle); color: var(--navy); }
+
+        /* ─── TEAM CARD (parent) ─── */
+        .team-rec { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-light); align-items: center; }
+        .team-rec:last-child { border-bottom: none; }
+        .tr-avatar { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .tr-info { flex: 1; }
+        .tr-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+        .tr-meta { font-size: 11px; color: var(--text-light); }
+        .tr-rating { font-size: 13px; font-weight: 700; color: var(--accent); }
+
+        /* ─── NOTIFICATION ITEM ─── */
+        .notif-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-dot-icon { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+        .notif-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+        .notif-text strong { color: var(--text-primary); }
+        .notif-time { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+
+        /* ─── REVIEW PREVIEW ─── */
+        .review-mini { padding: 12px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 8px; }
+        .review-mini:last-child { margin-bottom: 0; }
+        .rm-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .rm-team { font-size: 12px; font-weight: 600; color: var(--navy); }
+        .rm-stars { font-size: 11px; color: var(--accent); font-weight: 700; }
+        .rm-body { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* ─── AGENT CARDS ─── */
+        .agent-player { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+        .agent-player:last-child { border-bottom: none; }
+        .ap-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy-subtle); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--navy); }
+        .ap-info { flex: 1; }
+        .ap-name { font-size: 13px; font-weight: 600; }
+        .ap-meta { font-size: 11px; color: var(--text-light); }
+        .ap-status { font-size: 11px; font-weight: 600; }
+
+        /* ─── CHILD STATUS (Parent) ─── */
+        .child-card {
+            display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--navy-subtle);
+            border-radius: var(--radius); margin-bottom: 16px;
+        }
+        .child-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; }
+        .child-info { flex: 1; }
+        .child-name { font-size: 15px; font-weight: 700; color: var(--navy); }
+        .child-meta { font-size: 12px; color: var(--slate-light); }
+        .child-stats { display: flex; gap: 20px; }
+        .cs-item { text-align: center; }
+        .cs-num { font-size: 18px; font-weight: 700; color: var(--navy); }
+        .cs-label { font-size: 10px; color: var(--text-light); }
+
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+            .kpi-grid { grid-template-columns: repeat(2,1fr); }
+            .grid-2, .grid-equal { grid-template-columns: 1fr; }
+            .content { padding: 20px 16px; }
+            .topbar { padding: 12px 16px; }
+            .topbar-search { width: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ROLE SWITCH -->
+<div class="role-switch">
+    <button class="role-btn active" onclick="switchRole('parent')">학부모</button>
+    <button class="role-btn" onclick="switchRole('team')">팀 관리자</button>
+    <button class="role-btn" onclick="switchRole('agent')">에이전트</button>
+</div>
+
+<div class="layout">
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar" id="sidebar">
+    <div class="sb-logo">Play<span>Ground</span></div>
+
+    <!-- Parent sidebar -->
+    <div id="sidebarParent">
+        <div class="sb-section">
+            <div class="sb-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>대시보드</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>팀 찾기</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>포트폴리오</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>리뷰 작성<span class="sb-badge">New</span></div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">기록</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>경기 기록</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>통계</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">설정</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>알림<span class="sb-badge">3</span></div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>설정</div>
+        </div>
+    </div>
+
+    <!-- Team sidebar -->
+    <div id="sidebarTeam" style="display:none;">
+        <div class="sb-section">
+            <div class="sb-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>대시보드</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>선수단 관리</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>모집 공고<span class="sb-badge">5</span></div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>경기 일정</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">운영</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>메시지<span class="sb-badge">2</span></div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>통계</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>설정</div>
+        </div>
+    </div>
+
+    <!-- Agent sidebar -->
+    <div id="sidebarAgent" style="display:none;">
+        <div class="sb-section">
+            <div class="sb-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>대시보드</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>선수 검색</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>담당 선수</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>매칭 관리<span class="sb-badge">3</span></div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">소통</div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>메시지<span class="sb-badge">4</span></div>
+            <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg>설정</div>
+        </div>
+    </div>
+
+    <div class="sb-footer">
+        <div class="sb-user">
+            <div class="sb-avatar" id="sbAvatar">김</div>
+            <div class="sb-user-info">
+                <div class="sb-user-name" id="sbName">김민수</div>
+                <div class="sb-user-role" id="sbRole">학부모</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ MAIN AREA ═══ -->
+<div class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div></div>
+        <div class="topbar-actions">
+            <div class="topbar-btn">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <div class="notif-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ PARENT DASHBOARD ══ -->
+    <div class="content" id="dashParent">
+        <div class="page-header">
+            <div class="page-greeting">좋은 아침이에요 👋</div>
+            <div class="page-title">김민수님의 대시보드</div>
+        </div>
+
+        <!-- Child Status -->
+        <div class="child-card">
+            <div class="child-avatar">준</div>
+            <div class="child-info">
+                <div class="child-name">김준혁</div>
+                <div class="child-meta">⚽ 축구 · U12 · 서울 FC 주니어 소속</div>
+            </div>
+            <div class="child-stats">
+                <div class="cs-item"><div class="cs-num">12</div><div class="cs-label">출전 경기</div></div>
+                <div class="cs-item"><div class="cs-num">3</div><div class="cs-label">골</div></div>
+                <div class="cs-item"><div class="cs-num">5</div><div class="cs-label">어시스트</div></div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="qa-btn primary"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>팀 찾기</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>리뷰 작성</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>포트폴리오 수정</button>
+        </div>
+
+        <div class="grid-2">
+            <!-- 추천 팀 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">추천 팀</div><a class="panel-link">전체 보기 →</a></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--trust);">YS</div><div class="tr-info"><div class="tr-name">용산 유소년 축구단 <span class="status status-verified" style="font-size:10px;">✓ 인증</span></div><div class="tr-meta">서울 용산구 · U12 · 선수 18명</div></div><div class="tr-rating">★ 4.6</div></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--violet);">IC</div><div class="tr-info"><div class="tr-name">인천 시티 유스 <span class="status status-verified" style="font-size:10px;">✓ 인증</span></div><div class="tr-meta">인천 남동구 · U12 · 선수 30명</div></div><div class="tr-rating">★ 4.7</div></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--slate);">GN</div><div class="tr-info"><div class="tr-name">강남 킥스 아카데미</div><div class="tr-meta">서울 강남구 · U12 · 선수 32명</div></div><div class="tr-rating">★ 4.3</div></div>
+            </div>
+            <!-- 알림 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">최근 알림</div><a class="panel-link">모두 보기</a></div>
+                <div class="notif-item"><div class="notif-dot-icon" style="background:var(--accent);"></div><div><div class="notif-text"><strong>서울 FC 주니어</strong>에 새 리뷰가 등록되었습니다.</div><div class="notif-time">2시간 전</div></div></div>
+                <div class="notif-item"><div class="notif-dot-icon" style="background:var(--trust);"></div><div><div class="notif-text"><strong>준혁</strong>의 주간 훈련 리포트가 도착했습니다.</div><div class="notif-time">5시간 전</div></div></div>
+                <div class="notif-item"><div class="notif-dot-icon" style="background:var(--navy);"></div><div><div class="notif-text"><strong>용산 유소년 축구단</strong>이 U12 모집 공고를 게시했습니다.</div><div class="notif-time">1일 전</div></div></div>
+            </div>
+        </div>
+
+        <!-- 최근 리뷰 -->
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">관심 팀 최근 리뷰</div><a class="panel-link">리뷰 더보기 →</a></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="review-mini"><div class="rm-header"><div class="rm-team">서울 FC 주니어</div><div class="rm-stars">★★★★★ 5.0</div></div><div class="rm-body">체계적인 훈련과 아이 개개인에 맞는 지도가 인상적이었습니다. 아이가 정말 좋아해요.</div></div>
+                <div class="review-mini"><div class="rm-header"><div class="rm-team">용산 유소년 축구단</div><div class="rm-stars">★★★★☆ 4.0</div></div><div class="rm-body">코치님들의 열정이 느껴지고, 시설도 깔끔합니다. 주차가 조금 불편한 점이 아쉬워요.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TEAM ADMIN DASHBOARD ══ -->
+    <div class="content" id="dashTeam" style="display:none;">
+        <div class="page-header">
+            <div class="page-greeting">안녕하세요 👋</div>
+            <div class="page-title">서울 FC 주니어 대시보드</div>
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--navy-subtle);"><svg viewBox="0 0 24 24" stroke="var(--navy)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-change kpi-up">+2</div></div>
+                <div class="kpi-value">24</div><div class="kpi-label">등록 선수</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--accent-subtle);"><svg viewBox="0 0 24 24" stroke="var(--accent)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="kpi-change kpi-neutral">이번 달</div></div>
+                <div class="kpi-value">6</div><div class="kpi-label">경기 일정</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:#ECFDF5;"><svg viewBox="0 0 24 24" stroke="var(--success)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="kpi-change kpi-up">+8%</div></div>
+                <div class="kpi-value">68%</div><div class="kpi-label">시즌 승률</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--trust-subtle);"><svg viewBox="0 0 24 24" stroke="var(--trust)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="kpi-change kpi-up">+0.2</div></div>
+                <div class="kpi-value">4.8</div><div class="kpi-label">리뷰 평점</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="qa-btn primary"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>모집 공고 작성</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/></svg>경기 결과 입력</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>메시지</button>
+        </div>
+
+        <div class="grid-2">
+            <!-- 선수단 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">선수단 현황</div><a class="panel-link">전체 보기 →</a></div>
+                <table class="data-table">
+                    <thead><tr><th>선수</th><th>포지션</th><th>연령</th><th>상태</th><th>최근 활동</th></tr></thead>
+                    <tbody>
+                        <tr><td style="font-weight:600;">김준혁</td><td>MF</td><td>U12</td><td><span class="status status-active">정상</span></td><td style="color:var(--text-light);font-size:12px;">2일 전 경기 출전</td></tr>
+                        <tr><td style="font-weight:600;">이서준</td><td>FW</td><td>U12</td><td><span class="status status-active">정상</span></td><td style="color:var(--text-light);font-size:12px;">3일 전 훈련 참여</td></tr>
+                        <tr><td style="font-weight:600;">박도윤</td><td>DF</td><td>U12</td><td><span class="status status-injury">부상</span></td><td style="color:var(--text-light);font-size:12px;">1주 전 부상 등록</td></tr>
+                        <tr><td style="font-weight:600;">최시우</td><td>GK</td><td>U12</td><td><span class="status status-active">정상</span></td><td style="color:var(--text-light);font-size:12px;">2일 전 경기 출전</td></tr>
+                        <tr><td style="font-weight:600;">정예준</td><td>MF</td><td>U12</td><td><span class="status status-pending">대기</span></td><td style="color:var(--text-light);font-size:12px;">신규 등록</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 일정 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">이번 주 일정</div><a class="panel-link">캘린더 →</a></div>
+                <div class="schedule-item"><div class="sch-date"><div class="sch-day">27</div><div class="sch-month">FEB</div></div><div class="sch-info"><div class="sch-title">vs 용산 유소년 <span class="sch-type sch-match">경기</span></div><div class="sch-meta">14:00 · 서울종합운동장 보조구장</div></div></div>
+                <div class="schedule-item"><div class="sch-date"><div class="sch-day">28</div><div class="sch-month">FEB</div></div><div class="sch-info"><div class="sch-title">오전 훈련 <span class="sch-type sch-train">훈련</span></div><div class="sch-meta">09:00 · 강남 축구센터</div></div></div>
+                <div class="schedule-item"><div class="sch-date"><div class="sch-day">01</div><div class="sch-month">MAR</div></div><div class="sch-info"><div class="sch-title">vs 인천 시티 유스 <span class="sch-type sch-match">경기</span></div><div class="sch-meta">10:00 · 인천 남동체육관</div></div></div>
+                <div class="schedule-item"><div class="sch-date"><div class="sch-day">02</div><div class="sch-month">MAR</div></div><div class="sch-info"><div class="sch-title">오후 훈련 <span class="sch-type sch-train">훈련</span></div><div class="sch-meta">15:00 · 강남 축구센터</div></div></div>
+            </div>
+        </div>
+
+        <!-- 모집 현황 -->
+        <div class="panel">
+            <div class="panel-header"><div class="panel-title">모집 현황</div><a class="panel-link">관리하기 →</a></div>
+            <table class="data-table">
+                <thead><tr><th>공고</th><th>포지션</th><th>지원자</th><th>새 문의</th><th>상태</th><th>마감일</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600;">2025 상반기 U12 신입 모집</td><td>MF, FW</td><td><strong>12</strong>명</td><td><span class="sb-badge" style="font-size:11px;">3</span></td><td><span class="status status-active">모집중</span></td><td style="color:var(--text-light);">2025.03.15</td></tr>
+                    <tr><td style="font-weight:600;">GK 특별 모집</td><td>GK</td><td><strong>4</strong>명</td><td>—</td><td><span class="status status-pending">심사중</span></td><td style="color:var(--text-light);">2025.03.01</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══ AGENT DASHBOARD ══ -->
+    <div class="content" id="dashAgent" style="display:none;">
+        <div class="page-header">
+            <div class="page-greeting">안녕하세요 👋</div>
+            <div class="page-title">에이전트 대시보드</div>
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--violet-subtle);"><svg viewBox="0 0 24 24" stroke="var(--violet)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="kpi-change kpi-up">+1</div></div>
+                <div class="kpi-value">8</div><div class="kpi-label">담당 선수</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--accent-subtle);"><svg viewBox="0 0 24 24" stroke="var(--accent)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg></div><div class="kpi-change kpi-neutral">진행중</div></div>
+                <div class="kpi-value">3</div><div class="kpi-label">매칭 진행</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:#ECFDF5;"><svg viewBox="0 0 24 24" stroke="var(--success)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="kpi-change kpi-up">+2</div></div>
+                <div class="kpi-value">12</div><div class="kpi-label">매칭 성사</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-top"><div class="kpi-icon" style="background:var(--navy-subtle);"><svg viewBox="0 0 24 24" stroke="var(--navy)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="kpi-change kpi-neutral">4 안읽음</div></div>
+                <div class="kpi-value">28</div><div class="kpi-label">메시지</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="qa-btn primary"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>선수 검색</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>매칭 제안</button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>메시지</button>
+        </div>
+
+        <div class="grid-equal">
+            <!-- 담당 선수 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">담당 선수 현황</div><a class="panel-link">전체 보기 →</a></div>
+                <div class="agent-player"><div class="ap-avatar">김</div><div class="ap-info"><div class="ap-name">김준혁</div><div class="ap-meta">⚽ U12 MF · 서울 FC 주니어</div></div><div class="ap-status" style="color:var(--trust);">매칭 완료</div></div>
+                <div class="agent-player"><div class="ap-avatar">이</div><div class="ap-info"><div class="ap-name">이하린</div><div class="ap-meta">⚽ U15 FW · 무소속</div></div><div class="ap-status" style="color:var(--accent);">매칭 진행중</div></div>
+                <div class="agent-player"><div class="ap-avatar">박</div><div class="ap-info"><div class="ap-name">박서연</div><div class="ap-meta">⚽ U12 DF · 무소속</div></div><div class="ap-status" style="color:var(--warning);">후보 탐색</div></div>
+                <div class="agent-player"><div class="ap-avatar">최</div><div class="ap-info"><div class="ap-name">최도현</div><div class="ap-meta">⚾ U15 투수 · 부산 스타즈</div></div><div class="ap-status" style="color:var(--trust);">매칭 완료</div></div>
+            </div>
+            <!-- 추천 후보 -->
+            <div class="panel">
+                <div class="panel-header"><div class="panel-title">추천 후보</div><a class="panel-link">더 보기 →</a></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--trust);">YS</div><div class="tr-info"><div class="tr-name">용산 유소년 축구단</div><div class="tr-meta">U12 MF 모집중 · 이하린 추천 적합도 92%</div></div><div class="tr-rating">★ 4.6</div></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--navy);">FC</div><div class="tr-info"><div class="tr-name">성남 FC 유스</div><div class="tr-meta">U12 DF 모집중 · 박서연 추천 적합도 87%</div></div><div class="tr-rating">★ 4.5</div></div>
+                <div class="team-rec"><div class="tr-avatar" style="background:var(--violet);">IC</div><div class="tr-info"><div class="tr-name">인천 시티 유스</div><div class="tr-meta">U15 FW 모집중 · 이하린 추천 적합도 85%</div></div><div class="tr-rating">★ 4.7</div></div>
+
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-light);">
+                    <div class="panel-title" style="font-size:13px; margin-bottom: 10px;">최근 메시지</div>
+                    <div class="notif-item"><div class="notif-dot-icon" style="background:var(--accent);"></div><div><div class="notif-text"><strong>용산 유소년</strong> 코치가 이하린 선수 정보를 요청했습니다.</div><div class="notif-time">30분 전</div></div></div>
+                    <div class="notif-item"><div class="notif-dot-icon" style="background:var(--navy);"></div><div><div class="notif-text"><strong>박서연</strong> 학부모가 팀 추천을 요청했습니다.</div><div class="notif-time">2시간 전</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+function switchRole(role) {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Hide all dashboards & sidebars
+    ['dashParent','dashTeam','dashAgent'].forEach(id => document.getElementById(id).style.display = 'none');
+    ['sidebarParent','sidebarTeam','sidebarAgent'].forEach(id => document.getElementById(id).style.display = 'none');
+
+    const map = {
+        parent: { dash: 'dashParent', sb: 'sidebarParent', avatar: '김', name: '김민수', role: '학부모' },
+        team: { dash: 'dashTeam', sb: 'sidebarTeam', avatar: 'FC', name: '서울 FC 주니어', role: '팀 관리자' },
+        agent: { dash: 'dashAgent', sb: 'sidebarAgent', avatar: '이', name: '이정훈', role: '에이전트' }
+    };
+
+    const c = map[role];
+    document.getElementById(c.dash).style.display = 'block';
+    document.getElementById(c.sb).style.display = 'block';
+    document.getElementById('sbAvatar').textContent = c.avatar;
+    document.getElementById('sbName').textContent = c.name;
+    document.getElementById('sbRole').textContent = c.role;
+}
+</script>
+</body>
+</html>

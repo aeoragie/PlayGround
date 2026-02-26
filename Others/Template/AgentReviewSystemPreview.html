@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayGround — 2.12 에이전트 평가 시스템</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --navy-light: #2A3F6A;
+    --navy-dark: #111D35;
+    --orange: #F57C20;
+    --orange-light: #FF9A4A;
+    --violet: #7C5CFC;
+    --violet-light: #9B80FF;
+    --bg: #F5F6FA;
+    --card: #FFFFFF;
+    --border: #E2E5EE;
+    --text: #2C3345;
+    --text-muted: #6B7280;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(27,42,74,0.06), 0 4px 16px rgba(27,42,74,0.04);
+    --shadow-lg: 0 4px 24px rgba(27,42,74,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #fff;
+    padding: 48px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(245,124,32,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(124,92,252,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow);
+  }
+  .toc-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toc-title::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 16px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .toc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .toc-item:hover { background: var(--bg); }
+  .toc-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .toc-letter.a { background: #EEF2FF; color: var(--navy); }
+  .toc-letter.b { background: #FFF7ED; color: #C2410C; }
+  .toc-letter.c { background: #F5F3FF; color: var(--violet); }
+  .toc-letter.d { background: #F0FDF4; color: #15803D; }
+  .toc-letter.e { background: #FEF2F2; color: #DC2626; }
+  .toc-letter.f { background: #F0F9FF; color: #0369A1; }
+  .toc-name { font-size: 14px; font-weight: 500; }
+  .toc-desc { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  /* Section */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 24px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-icon.policy { background: #EEF2FF; }
+  .section-icon.scout { background: #FFF7ED; }
+  .section-icon.tournament { background: #F5F3FF; }
+  .section-icon.score { background: #F0FDF4; }
+  .section-icon.reply { background: #FEF2F2; }
+  .section-icon.data { background: #F0F9FF; }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .section-header .tag {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.3px;
+  }
+  .tag-p0 { background: #FEE2E2; color: #991B1B; }
+  .section-body { padding: 24px 32px 28px; }
+  .section-body > p {
+    font-size: 14.5px;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
+  /* Tables */
+  .spec-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13.5px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .spec-table thead {
+    background: var(--bg);
+  }
+  .spec-table th {
+    text-align: left;
+    padding: 11px 16px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F1F3F8;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table .field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .spec-table .field-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--violet);
+    background: #F5F3FF;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  .spec-table .item-name {
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .weight-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .weight-bar .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--orange);
+    opacity: 0.7;
+  }
+  .weight-bar span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--orange);
+  }
+
+  /* Formula */
+  .formula {
+    background: var(--navy-dark);
+    color: #E2E8F0;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    margin: 16px 0;
+    border-left: 3px solid var(--orange);
+  }
+  .formula-label {
+    font-size: 11px;
+    color: var(--orange-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .note {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #92400E;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+  .note::before { content: '💡 '; }
+
+  /* Evaluator tag */
+  .eval-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .eval-tag.parent { background: #DBEAFE; color: #1E40AF; }
+  .eval-tag.player { background: #D1FAE5; color: #065F46; }
+  .eval-tag.team { background: #FCE7F3; color: #9D174D; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 720px) {
+    .toc-grid { grid-template-columns: 1fr; }
+    .container { padding: 16px; }
+    .section-body, .section-header { padding-left: 20px; padding-right: 20px; }
+    .header-inner { padding: 0 20px; }
+    .spec-table { font-size: 12.5px; }
+    .spec-table th, .spec-table td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">⚽ PlayGround · 기능 기획서 · 06. Agent</div>
+    <h1>2.12 에이전트 평가 시스템</h1>
+    <p>에이전트의 서비스 품질과 신뢰도를 객관적으로 검증하는 플랫폼 핵심 장치. 실거래 기반의 공개 평가로 운영하며, 평가자의 익명성을 보장한다.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#policy">
+        <div class="toc-letter a">A</div>
+        <div><div class="toc-name">평가 운영 정책</div><div class="toc-desc">공개 원칙, 작성 자격, 악성 리뷰 관리</div></div>
+      </a>
+      <a class="toc-item" href="#scout">
+        <div class="toc-letter b">B</div>
+        <div><div class="toc-name">스카우팅 에이전트 평가 항목</div><div class="toc-desc">5개 항목, 가중치 배분</div></div>
+      </a>
+      <a class="toc-item" href="#tournament">
+        <div class="toc-letter c">C</div>
+        <div><div class="toc-name">대회 운영 에이전트 평가 항목</div><div class="toc-desc">5개 항목, 가중치 배분</div></div>
+      </a>
+      <a class="toc-item" href="#score">
+        <div class="toc-letter d">D</div>
+        <div><div class="toc-name">평점 산출 및 표시 규칙</div><div class="toc-desc">시간 가중, 최소 리뷰 수, 표시 방식</div></div>
+      </a>
+      <a class="toc-item" href="#reply">
+        <div class="toc-letter e">E</div>
+        <div><div class="toc-name">에이전트 답변 및 이의 제기</div><div class="toc-desc">답변권, 이의 제기 절차</div></div>
+      </a>
+      <a class="toc-item" href="#data">
+        <div class="toc-letter f">F</div>
+        <div><div class="toc-name">데이터 모델</div><div class="toc-desc">테이블 설계 및 필드 정의</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- A: 평가 운영 정책 -->
+  <div class="section" id="policy">
+    <div class="section-header">
+      <div class="section-icon policy">📋</div>
+      <h2>A. 평가 운영 정책</h2>
+      <span class="tag tag-p0">P0 · MVP</span>
+    </div>
+    <div class="section-body">
+      <p>에이전트 평가 시스템은 플랫폼 신뢰의 근간이다. 실거래가 없는 사용자의 악의적 평가를 방지하면서도, 정당한 피드백이 투명하게 공개되도록 설계한다.</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:160px">정책</th><th>상세 내용</th></tr></thead>
+        <tbody>
+          <tr><td class="item-name">공개 원칙</td><td>평가 점수와 리뷰 내용은 에이전트 프로필에 공개한다. 비공개 전환은 운영팀 검토 후에만 가능하다.</td></tr>
+          <tr><td class="item-name">작성자 보호</td><td>작성자 이름은 마스킹 처리한다. 예: "김○○ 학부모", "서울 FC 관계자". 에이전트가 작성자를 역추적할 수 없도록 한다.</td></tr>
+          <tr><td class="item-name">작성 자격 (스카우팅)</td><td>해당 에이전트를 통해 매칭을 받은 선수 또는 보호자만 작성 가능. <code>recommendations</code> 테이블에 <code>status = completed</code> 이력 필요.</td></tr>
+          <tr><td class="item-name">작성 자격 (대회)</td><td>해당 에이전트가 주최한 대회에 실제 참가한 팀 관계자만 작성 가능. <code>tournament_teams</code> 테이블에 <code>status = participated</code> 이력 필요.</td></tr>
+          <tr><td class="item-name">중복 방지</td><td>동일 거래(<code>transaction_id</code>)에 대해 1인 1회만 작성 가능. 수정은 작성 후 72시간 이내에만 허용.</td></tr>
+          <tr><td class="item-name">악성 리뷰 관리</td><td>에이전트 또는 제3자가 신고 가능. 운영팀 검토 후 비공개 전환 또는 삭제. 허위 신고 시 신고자에게 경고 부여.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- B: 스카우팅 에이전트 평가 항목 -->
+  <div class="section" id="scout">
+    <div class="section-header">
+      <div class="section-icon scout">🔍</div>
+      <h2>B. 스카우팅 에이전트 평가 항목</h2>
+    </div>
+    <div class="section-body">
+      <p>스카우팅 에이전트는 선수 발굴부터 팀 매칭, 계약까지의 전 과정에서 평가받는다. 평가자는 매칭을 받은 선수 본인 또는 보호자이며, 각 항목은 5점 척도(1~5)로 평가한다.</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:140px">항목</th><th>설명</th><th style="width:100px">평가자</th><th style="width:80px">가중치</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="item-name">선수 이해도</td>
+            <td>선수의 성향, 실력 수준, 목표를 정확히 파악했는가. 단순 스펙 매칭이 아닌 선수 개인에 대한 이해를 평가.</td>
+            <td><span class="eval-tag parent">학부모</span> <span class="eval-tag player">선수</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:50px"></div><span>25%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">추천 적합성</td>
+            <td>추천한 팀이 선수의 수준과 목표에 부합했는가. 무리한 상향 추천이나 맞지 않는 팀 추천은 감점 요인.</td>
+            <td><span class="eval-tag parent">학부모</span> <span class="eval-tag player">선수</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:50px"></div><span>25%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">소통·피드백</td>
+            <td>매칭 진행 과정에서 충분하고 적시에 소통했는가. 진행 상황 공유, 질문 대응 속도 포함.</td>
+            <td><span class="eval-tag parent">학부모</span> <span class="eval-tag player">선수</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:40px"></div><span>20%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">보호자 존중</td>
+            <td>미성년 선수의 보호자 의견을 존중하고 사전 동의를 구했는가.</td>
+            <td><span class="eval-tag parent">학부모</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:30px"></div><span>15%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">계약 투명성</td>
+            <td>수수료율, 계약 조건, 비용 구조 등을 투명하게 안내했는가.</td>
+            <td><span class="eval-tag parent">학부모</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:30px"></div><span>15%</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="formula">
+        <div class="formula-label">가중 평균 산출식</div>
+        종합 점수 = Σ(항목 점수 × 가중치)
+      </div>
+      <div class="note">선수가 평가할 경우 "보호자 존중"과 "계약 투명성" 항목은 제외하고 나머지 3개 항목을 균등 가중(각 33.3%)으로 산출한다.</div>
+    </div>
+  </div>
+
+  <!-- C: 대회 운영 에이전트 평가 항목 -->
+  <div class="section" id="tournament">
+    <div class="section-header">
+      <div class="section-icon tournament">🏆</div>
+      <h2>C. 대회 운영 에이전트 평가 항목</h2>
+    </div>
+    <div class="section-body">
+      <p>대회 운영 에이전트는 대회 기획부터 진행, 사후 관리까지의 전 과정에서 평가받는다. 평가자는 대회에 참가한 팀 관계자 또는 학부모이며, 각 항목은 5점 척도(1~5)로 평가한다.</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:140px">항목</th><th>설명</th><th style="width:120px">평가자</th><th style="width:80px">가중치</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="item-name">대회 운영 수준</td>
+            <td>전반적 대회 진행 퀄리티. 개·폐회식, 경기 운영, 심판 배정 등 전문성 종합 평가.</td>
+            <td><span class="eval-tag team">팀 관계자</span> <span class="eval-tag parent">학부모</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:50px; background: var(--violet)"></div><span style="color:var(--violet)">25%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">일정·규정 준수</td>
+            <td>공지된 일정과 규정이 정확히 지켜졌는가. 갑작스러운 변경이나 규정 미준수 여부.</td>
+            <td><span class="eval-tag team">팀 관계자</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:40px; background: var(--violet)"></div><span style="color:var(--violet)">20%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">시설·안전</td>
+            <td>경기장 시설 상태, 선수 안전 관리 수준. 의료진 배치, 안전 장비, 경기장 컨디션.</td>
+            <td><span class="eval-tag team">팀 관계자</span> <span class="eval-tag parent">학부모</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:40px; background: var(--violet)"></div><span style="color:var(--violet)">20%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">참가팀 소통</td>
+            <td>참가 신청부터 대회 종료까지 소통이 원활했는가. 안내 메시지, 변경 사항 공지, 문의 대응.</td>
+            <td><span class="eval-tag team">팀 관계자</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:40px; background: var(--violet)"></div><span style="color:var(--violet)">20%</span></div></td>
+          </tr>
+          <tr>
+            <td class="item-name">가성비</td>
+            <td>참가비 대비 대회가 제공한 전체적인 가치. 시설 수준, 운영 퀄리티, 부가 혜택 종합.</td>
+            <td><span class="eval-tag team">팀 관계자</span> <span class="eval-tag parent">학부모</span></td>
+            <td><div class="weight-bar"><div class="bar" style="width:30px; background: var(--violet)"></div><span style="color:var(--violet)">15%</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="formula">
+        <div class="formula-label">가중 평균 산출식</div>
+        종합 점수 = Σ(항목 점수 × 가중치)
+      </div>
+      <div class="note">학부모가 평가할 경우 "일정·규정 준수"와 "참가팀 소통" 항목은 제외하고 나머지 3개 항목을 균등 가중(각 33.3%)으로 산출한다.</div>
+    </div>
+  </div>
+
+  <!-- D: 평점 산출 및 표시 규칙 -->
+  <div class="section" id="score">
+    <div class="section-header">
+      <div class="section-icon score">📊</div>
+      <h2>D. 평점 산출 및 표시 규칙</h2>
+    </div>
+    <div class="section-body">
+      <p>평가 점수는 단순 산술 평균이 아닌, 신뢰도 보정을 거쳐 산출한다. 리뷰가 적은 초기에는 보수적으로 표시하고, 리뷰가 누적될수록 실제 평균에 수렴한다.</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:160px">규칙</th><th>상세 내용</th></tr></thead>
+        <tbody>
+          <tr><td class="item-name">최소 리뷰 수</td><td>3건 미만일 경우 평점을 숫자로 표시하지 않고 "리뷰 수집 중"으로 안내. 리뷰 내용은 개별 열람 가능.</td></tr>
+          <tr><td class="item-name">표시 점수</td><td>소수점 첫째 자리까지 표시. 예: 4.3 / 5.0. 별점 아이콘(★)과 숫자를 병행 표시.</td></tr>
+          <tr><td class="item-name">시간 가중</td><td>최근 6개월 이내 리뷰 → <strong>1.2배</strong>, 6~12개월 → <strong>1.0배</strong>, 12개월 초과 → <strong>0.8배</strong> 적용.</td></tr>
+          <tr><td class="item-name">프로필 표시</td><td>에이전트 프로필 상단에 유형별 종합 점수(스카우팅 / 대회)를 분리 표시. 겸업 에이전트는 두 점수를 나란히 표시.</td></tr>
+          <tr><td class="item-name">리뷰 미리보기</td><td>최근 리뷰 3건을 프로필에 미리보기로 노출. "전체 리뷰 보기" 클릭 시 전체 목록 이동.</td></tr>
+          <tr><td class="item-name">에이전트 답변 태그</td><td>에이전트가 답변한 리뷰에는 "에이전트 답변 포함" 태그를 표시하여 양방향 소통을 보여준다.</td></tr>
+          <tr><td class="item-name">겸업 에이전트</td><td>스카우팅 리뷰와 대회 리뷰를 탭으로 분리 표시. 종합 점수도 각각 별도 산출.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- E: 에이전트 답변 및 이의 제기 -->
+  <div class="section" id="reply">
+    <div class="section-header">
+      <div class="section-icon reply">💬</div>
+      <h2>E. 에이전트 답변 및 이의 제기</h2>
+    </div>
+    <div class="section-body">
+      <p>에이전트는 자신에 대한 리뷰에 공개적으로 답변할 권리를 가진다. 부당한 리뷰에 대해서는 이의를 제기할 수 있으며, 운영팀의 중립적인 검토를 거친다.</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:140px">절차</th><th>상세 내용</th><th style="width:110px">기한</th></tr></thead>
+        <tbody>
+          <tr><td class="item-name">공개 답변</td><td>개별 리뷰에 1회 공개 답변 가능. 수정 불가. 감사 인사, 해명, 개선 약속 등 건설적 내용 권장.</td><td>게시 후 30일 이내</td></tr>
+          <tr><td class="item-name">이의 제기</td><td>사실과 다른 내용, 비방·욕설, 거래 무관 내용 등을 사유로 신고. 구체적 증거(채팅 기록, 계약서) 첨부 필요.</td><td>게시 후 90일 이내</td></tr>
+          <tr><td class="item-name">운영팀 검토</td><td>접수 후 영업일 기준 5일 이내 검토 완료. 양측에 통보. 비공개 전환 / 삭제 / 기각 중 결정.</td><td>접수 후 5영업일</td></tr>
+          <tr><td class="item-name">허위 신고 제재</td><td>정당한 리뷰 반복 신고 시 경고 부여. 3회 누적 시 신고 기능 30일간 제한.</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- F: 데이터 모델 -->
+  <div class="section" id="data">
+    <div class="section-header">
+      <div class="section-icon data">🗄️</div>
+      <h2>F. 데이터 모델</h2>
+    </div>
+    <div class="section-body">
+      <p style="font-weight:600; margin-bottom:12px; color:var(--navy)">agent_reviews</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:160px">필드</th><th style="width:130px">타입</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">id</td><td><span class="field-type">UUID, PK</span></td><td>리뷰 고유 식별자</td></tr>
+          <tr><td class="field-name">agent_id</td><td><span class="field-type">UUID, FK</span></td><td>평가 대상 에이전트</td></tr>
+          <tr><td class="field-name">reviewer_id</td><td><span class="field-type">UUID, FK</span></td><td>평가 작성자 (선수/보호자/팀 관계자)</td></tr>
+          <tr><td class="field-name">reviewer_role</td><td><span class="field-type">ENUM</span></td><td>'player', 'guardian', 'team_manager'</td></tr>
+          <tr><td class="field-name">agent_type_reviewed</td><td><span class="field-type">ENUM</span></td><td>'scout', 'organizer'</td></tr>
+          <tr><td class="field-name">transaction_id</td><td><span class="field-type">UUID, FK</span></td><td>거래 근거 (recommendation_id 또는 tournament_team_id)</td></tr>
+          <tr><td class="field-name">scores</td><td><span class="field-type">JSONB</span></td><td>항목별 점수. 예: {"player_understanding": 5, ...}</td></tr>
+          <tr><td class="field-name">weighted_score</td><td><span class="field-type">DECIMAL(3,2)</span></td><td>가중 평균 종합 점수</td></tr>
+          <tr><td class="field-name">comment</td><td><span class="field-type">TEXT</span></td><td>서술형 리뷰 (20~500자)</td></tr>
+          <tr><td class="field-name">agent_reply</td><td><span class="field-type">TEXT, NULL</span></td><td>에이전트 공개 답변 (최대 500자)</td></tr>
+          <tr><td class="field-name">agent_replied_at</td><td><span class="field-type">TIMESTAMP</span></td><td>답변 작성 시각</td></tr>
+          <tr><td class="field-name">status</td><td><span class="field-type">ENUM</span></td><td>'published', 'hidden', 'reported', 'deleted'</td></tr>
+          <tr><td class="field-name">reported_reason</td><td><span class="field-type">TEXT, NULL</span></td><td>신고 사유</td></tr>
+          <tr><td class="field-name">created_at</td><td><span class="field-type">TIMESTAMP</span></td><td>리뷰 작성 시각</td></tr>
+          <tr><td class="field-name">updated_at</td><td><span class="field-type">TIMESTAMP</span></td><td>최종 수정 시각</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-weight:600; margin-bottom:12px; margin-top:28px; color:var(--navy)">agent_review_reports (이의 제기)</p>
+      <table class="spec-table">
+        <thead><tr><th style="width:160px">필드</th><th style="width:130px">타입</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">id</td><td><span class="field-type">UUID, PK</span></td><td>신고 고유 식별자</td></tr>
+          <tr><td class="field-name">review_id</td><td><span class="field-type">UUID, FK</span></td><td>신고 대상 리뷰</td></tr>
+          <tr><td class="field-name">reporter_id</td><td><span class="field-type">UUID, FK</span></td><td>신고자</td></tr>
+          <tr><td class="field-name">reason</td><td><span class="field-type">ENUM</span></td><td>'false_info', 'abuse', 'irrelevant', 'spam', 'other'</td></tr>
+          <tr><td class="field-name">evidence</td><td><span class="field-type">TEXT, NULL</span></td><td>증거 자료 설명 및 첨부 링크</td></tr>
+          <tr><td class="field-name">admin_decision</td><td><span class="field-type">ENUM, NULL</span></td><td>'hide', 'delete', 'dismiss'</td></tr>
+          <tr><td class="field-name">admin_note</td><td><span class="field-type">TEXT, NULL</span></td><td>운영팀 검토 메모</td></tr>
+          <tr><td class="field-name">resolved_at</td><td><span class="field-type">TIMESTAMP</span></td><td>처리 완료 시각</td></tr>
+          <tr><td class="field-name">created_at</td><td><span class="field-type">TIMESTAMP</span></td><td>신고 접수 시각</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    PlayGround · Agent Review System Spec v1.0 · 2026-02-26
+  </div>
+</div>
+
+</body>
+</html>
