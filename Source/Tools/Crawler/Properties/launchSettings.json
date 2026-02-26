@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Crawler": {
+      "commandName": "Project",
+      "commandLineArgs": "--user aeoragie --secret ipLqY1ulxU --jsessionid D657A76FE1724EA14908D374EC8D6A1E"
+    }
+  }
+}

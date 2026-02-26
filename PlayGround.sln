@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions", "Solutions", "{
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.KFA", "Source\Tools\Crawler.KFA\Crawler.KFA.csproj", "{327FAB73-D7C8-4431-B1BF-21F60F2A9361}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler", "Source\Tools\Crawler\Crawler.csproj", "{327FAB73-D7C8-4431-B1BF-21F60F2A9361}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

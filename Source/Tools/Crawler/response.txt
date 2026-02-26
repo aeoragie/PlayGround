@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="string">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">조회&#32;성공&#32;메세지</Parameter>
+	</Parameters>
+	<Dataset id="dsAwayOwnGoalInfo">
+		<ColumnInfo>
+		</ColumnInfo>
+		<Rows>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomeCoachRedInfo">
+		<ColumnInfo>
+		</ColumnInfo>
+		<Rows>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsCommonInfo">
+		<ColumnInfo>
+			<Column id="TH_HELP_CNT" type="string" size="255"/>
+			<Column id="HOME_WOUND" type="string" size="255"/>
+			<Column id="TA_SCORE_FH" type="bigdecimal" size="16"/>
+			<Column id="NURSE" type="string" size="255"/>
+			<Column id="LEAGUE_AREA" type="string" size="255"/>
+			<Column id="REFEREE_SUB1" type="string" size="255"/>
+			<Column id="MATCH_NUMBER" type="string" size="255"/>
+			<Column id="REFEREE_SUB2" type="string" size="255"/>
+			<Column id="AREA" type="string" size="255"/>
+			<Column id="GROUND_TYPE" type="string" size="255"/>
+			<Column id="FINISH_YN" type="string" size="255"/>
+			<Column id="MANAGER" type="string" size="255"/>
+			<Column id="TH_SCORE_PK" type="string" size="255"/>
+			<Column id="TA_SCORE_SH" type="bigdecimal" size="16"/>
+			<Column id="EXTIME_SH" type="string" size="255"/>
+			<Column id="SUPERVISOR" type="string" size="255"/>
+			<Column id="STADIUM_CONDITION" type="string" size="255"/>
+			<Column id="TH_SCORE_FINAL" type="bigdecimal" size="16"/>
+			<Column id="FILE_PATH_AWAY" type="string" size="255"/>
+			<Column id="TA_SCORE_PK" type="string" size="255"/>
+			<Column id="AMBULANCE" type="string" size="255"/>
+			<Column id="FILE_PATH_HOME_S" type="string" size="255"/>
+			<Column id="VICTORYTYPE" type="string" size="255"/>
+			<Column id="CONFIRM_YN" type="string" size="255"/>
+			<Column id="EXTIME_FH" type="string" size="255"/>
+			<Column id="INTIME_FH" type="bigdecimal" size="16"/>
+			<Column id="MATCH_AREA" type="string" size="255"/>
+			<Column id="TA_SCORE_EX_SH" type="string" size="255"/>
+			<Column id="TH_SCORE_EX_FH" type="string" size="255"/>
+			<Column id="TH_SCORE_EX_SH" type="string" size="255"/>
+			<Column id="REFEREE_MAIN" type="string" size="255"/>
+			<Column id="AWAY_WOUND" type="string" size="255"/>
+			<Column id="TEAM_AWAY" type="string" size="255"/>
+			<Column id="TEAM_AWAY_EMBLEM" type="string" size="255"/>
+			<Column id="REFEREE_STANDBY" type="string" size="255"/>
+			<Column id="TA_SCORE_FINAL" type="bigdecimal" size="16"/>
+			<Column id="TOTALTIME" type="string" size="255"/>
+			<Column id="FILE_PATH_HOME" type="string" size="255"/>
+			<Column id="MATCH_AREA_IDX" type="string" size="255"/>
+			<Column id="TH_SCORE_FH" type="bigdecimal" size="16"/>
+			<Column id="INTIME_SH" type="bigdecimal" size="16"/>
+			<Column id="TA_RED_CNT" type="string" size="255"/>
+			<Column id="TA_SCORE_EX_FH" type="string" size="255"/>
+			<Column id="COMMITTEE2" type="string" size="255"/>
+			<Column id="TEAM_HOME" type="string" size="255"/>
+			<Column id="MATCH_CHECK_TIME" type="string" size="255"/>
+			<Column id="COMMITTEE1" type="string" size="255"/>
+			<Column id="FLYING_YN" type="string" size="255"/>
+			<Column id="COMMITTEE4" type="string" size="255"/>
+			<Column id="VIEWERS" type="string" size="255"/>
+			<Column id="COMMITTEE3" type="string" size="255"/>
+			<Column id="TH_SCORE_SH" type="bigdecimal" size="16"/>
+			<Column id="PLAYING_TIME" type="string" size="255"/>
+			<Column id="TA_HELP_CNT" type="string" size="255"/>
+			<Column id="MANAGEMENT" type="string" size="255"/>
+			<Column id="WEATHER" type="string" size="255"/>
+			<Column id="WRITER" type="string" size="255"/>
+			<Column id="COACH_AWAY" type="string" size="255"/>
+			<Column id="FILE_PATH_AWAY_S" type="string" size="255"/>
+			<Column id="TEAM_HOME_EMBLEM" type="string" size="255"/>
+			<Column id="TH_YELLOW_CNT" type="string" size="255"/>
+			<Column id="EMBLEM_HOME" type="string" size="255"/>
+			<Column id="TEAMID_AWAY" type="string" size="255"/>
+			<Column id="ETC" type="string" size="255"/>
+			<Column id="EMBLEM_AWAY" type="string" size="255"/>
+			<Column id="TA_YELLOW_CNT" type="string" size="255"/>
+			<Column id="TITLE" type="string" size="255"/>
+			<Column id="COACH_HOME" type="string" size="255"/>
+			<Column id="TEAMID_HOME" type="string" size="255"/>
+			<Column id="MATCH_GRADEOPT" type="string" size="255"/>
+			<Column id="TH_RED_CNT" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="TH_HELP_CNT">0</Col>
+				<Col id="HOME_WOUND"></Col>
+				<Col id="TA_SCORE_FH">0</Col>
+				<Col id="NURSE"></Col>
+				<Col id="LEAGUE_AREA">KB</Col>
+				<Col id="REFEREE_SUB1">남창우,&#32;임경희</Col>
+				<Col id="MATCH_NUMBER">1</Col>
+				<Col id="REFEREE_SUB2">임경희</Col>
+				<Col id="AREA">경북</Col>
+				<Col id="GROUND_TYPE">2</Col>
+				<Col id="FINISH_YN">Y</Col>
+				<Col id="MANAGER">원석</Col>
+				<Col id="TH_SCORE_PK"></Col>
+				<Col id="TA_SCORE_SH">2</Col>
+				<Col id="EXTIME_SH"></Col>
+				<Col id="SUPERVISOR">임길강</Col>
+				<Col id="STADIUM_CONDITION">1</Col>
+				<Col id="TH_SCORE_FINAL">1</Col>
+				<Col id="FILE_PATH_AWAY">TEAM/2025/PHOTO</Col>
+				<Col id="TA_SCORE_PK"></Col>
+				<Col id="AMBULANCE"></Col>
+				<Col id="FILE_PATH_HOME_S">TEAM/2020/PHOTO/S</Col>
+				<Col id="VICTORYTYPE">1</Col>
+				<Col id="CONFIRM_YN">Y</Col>
+				<Col id="EXTIME_FH"></Col>
+				<Col id="INTIME_FH">1</Col>
+				<Col id="MATCH_AREA">강구대게A</Col>
+				<Col id="TA_SCORE_EX_SH"></Col>
+				<Col id="TH_SCORE_EX_FH"></Col>
+				<Col id="TH_SCORE_EX_SH"></Col>
+				<Col id="REFEREE_MAIN">양윤석</Col>
+				<Col id="AWAY_WOUND"></Col>
+				<Col id="TEAM_AWAY">인천인천남FCU15</Col>
+				<Col id="TEAM_AWAY_EMBLEM"></Col>
+				<Col id="REFEREE_STANDBY">류현성</Col>
+				<Col id="TA_SCORE_FINAL">2</Col>
+				<Col id="TOTALTIME">64분&#32;&#32;&#32;&#32;/&#32;전후반&#32;(30분+30분)&#32;추가&#32;(1분+3분)</Col>
+				<Col id="FILE_PATH_HOME">TEAM/2020/PHOTO</Col>
+				<Col id="MATCH_AREA_IDX"></Col>
+				<Col id="TH_SCORE_FH">0</Col>
+				<Col id="INTIME_SH">3</Col>
+				<Col id="TA_RED_CNT">0</Col>
+				<Col id="TA_SCORE_EX_FH"></Col>
+				<Col id="COMMITTEE2"></Col>
+				<Col id="TEAM_HOME">경남김해중FC</Col>
+				<Col id="MATCH_CHECK_TIME">2026-01-29&#32;(목)&#32;12:40</Col>
+				<Col id="COMMITTEE1"></Col>
+				<Col id="FLYING_YN">N</Col>
+				<Col id="COMMITTEE4"></Col>
+				<Col id="VIEWERS">22&#32;명</Col>
+				<Col id="COMMITTEE3"></Col>
+				<Col id="TH_SCORE_SH">1</Col>
+				<Col id="PLAYING_TIME">60</Col>
+				<Col id="TA_HELP_CNT">0</Col>
+				<Col id="MANAGEMENT">경상북도축구협회,&#32;영덕군축구협회,&#32;영덕군체육회</Col>
+				<Col id="WEATHER">맑음</Col>
+				<Col id="WRITER"></Col>
+				<Col id="COACH_AWAY"></Col>
+				<Col id="FILE_PATH_AWAY_S">TEAM/2025/PHOTO/S</Col>
+				<Col id="TEAM_HOME_EMBLEM"></Col>
+				<Col id="TH_YELLOW_CNT">1</Col>
+				<Col id="EMBLEM_HOME">앰블럼_20200105182334.jpg</Col>
+				<Col id="TEAMID_AWAY"></Col>
+				<Col id="ETC"></Col>
+				<Col id="EMBLEM_AWAY">앰블럼_2025011216275025443.jpg</Col>
+				<Col id="TA_YELLOW_CNT">0</Col>
+				<Col id="TITLE">[U14]&#32;(백호그룹)&#32;2026&#32;STAY&#32;영덕&#32;춘계&#32;중등U14&#32;유스컵</Col>
+				<Col id="COACH_HOME">이효용(감독)</Col>
+				<Col id="TEAMID_HOME"></Col>
+				<Col id="MATCH_GRADEOPT"></Col>
+				<Col id="TH_RED_CNT">0</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayCoachRedInfo">
+		<ColumnInfo>
+		</ColumnInfo>
+		<Rows>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsTimelineInfo">
+		<ColumnInfo>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="FLAG_NM" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="FLAG" type="string" size="255"/>
+			<Column id="FILE_PATH" type="string" size="255"/>
+			<Column id="TIME_FH" type="bigdecimal" size="16"/>
+			<Column id="PKYN" type="string" size="255"/>
+			<Column id="APLAYER_IDX" type="string" size="255"/>
+			<Column id="OPT2" type="string" size="255"/>
+			<Column id="PHOTO" type="string" size="255"/>
+			<Column id="TIME_SH" type="bigdecimal" size="16"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="GUBUN" type="string" size="255"/>
+			<Column id="TIMESTR" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="HNAME">김장원</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">16</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102272</Col>
+				<Col id="PHOTO">선수사진_2025032807441589605.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">22</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">16</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김태후</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">16</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102272</Col>
+				<Col id="PHOTO">사진_202503110831513287.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">20</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">16</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">박인성</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102336</Col>
+				<Col id="PHOTO">선수사진_2025031813123455112.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">9</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김장원</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102336</Col>
+				<Col id="PHOTO">선수사진_2025032807441589605.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">22</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">정경목</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2026/01/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102338</Col>
+				<Col id="PHOTO">사진_2026010910474064444.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">28</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">정재혼</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102338</Col>
+				<Col id="PHOTO">사진_2025031808022947694.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">12</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">하정우</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102340</Col>
+				<Col id="PHOTO">사진_2025031312595793452.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">14</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김도윤1</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">31</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102340</Col>
+				<Col id="PHOTO">사진_2025031108103895636.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">18</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">31</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김준우</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">45</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2025/02/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102392</Col>
+				<Col id="PHOTO">사진_20250213233434.jpeg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">5</Col>
+				<Col id="GUBUN">A</Col>
+				<Col id="TIMESTR">45</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">윤동건</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">45</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2026/01/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102392</Col>
+				<Col id="PHOTO">사진_2026010513433421518.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">88</Col>
+				<Col id="GUBUN">A</Col>
+				<Col id="TIMESTR">45</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">신성민</Col>
+				<Col id="FLAG_NM">경고</Col>
+				<Col id="TIME">50</Col>
+				<Col id="FLAG">31</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2"></Col>
+				<Col id="PHOTO">사진_2025031121330750812.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">29</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">50</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김지후</Col>
+				<Col id="FLAG_NM">득점</Col>
+				<Col id="TIME">51</Col>
+				<Col id="FLAG">11</Col>
+				<Col id="FILE_PATH">PLY/2025/02/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102409</Col>
+				<Col id="PHOTO">사진_2025021322215734323.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">9</Col>
+				<Col id="GUBUN">A</Col>
+				<Col id="TIMESTR">51</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">차이카&#32;디미트로</Col>
+				<Col id="FLAG_NM">득점</Col>
+				<Col id="TIME">52</Col>
+				<Col id="FLAG">11</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102411</Col>
+				<Col id="PHOTO">선수사진_2025031813140645512.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">5</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">52</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">김민재</Col>
+				<Col id="FLAG_NM">교체IN</Col>
+				<Col id="TIME">55</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102442</Col>
+				<Col id="PHOTO">사진_2025031820145266556.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">27</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">55</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">신성민</Col>
+				<Col id="FLAG_NM">교체OUT</Col>
+				<Col id="TIME">55</Col>
+				<Col id="FLAG">52</Col>
+				<Col id="FILE_PATH">PLY/2025/03/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102442</Col>
+				<Col id="PHOTO">사진_2025031121330750812.jpg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">29</Col>
+				<Col id="GUBUN">H</Col>
+				<Col id="TIMESTR">55</Col>
+			</Row>
+			<Row>
+				<Col id="HNAME">임정태</Col>
+				<Col id="FLAG_NM">득점</Col>
+				<Col id="TIME">59</Col>
+				<Col id="FLAG">11</Col>
+				<Col id="FILE_PATH">PLY/2025/04/PHOTO/S</Col>
+				<Col id="TIME_FH">31</Col>
+				<Col id="PKYN"></Col>
+				<Col id="APLAYER_IDX"></Col>
+				<Col id="OPT2">2102446</Col>
+				<Col id="PHOTO">사진_20250411093917.jpeg</Col>
+				<Col id="TIME_SH">63</Col>
+				<Col id="ENTRYNO">2</Col>
+				<Col id="GUBUN">A</Col>
+				<Col id="TIMESTR">59</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomePlayerInfo2">
+		<ColumnInfo>
+			<Column id="RED_TIME" type="string" size="255"/>
+			<Column id="C_CHECK" type="string" size="255"/>
+			<Column id="YELLOW_TIME" type="string" size="255"/>
+			<Column id="HELP_TIME" type="string" size="255"/>
+			<Column id="GOAL_TIME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="STATUS" type="string" size="255"/>
+			<Column id="PSO_YN" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="APLAYER_HOME_IDX" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="FLYING_YN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">정현빈</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">GK</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">31</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">박도진</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">24</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">하정우</Col>
+				<Col id="TIME">33</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">14</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김민재</Col>
+				<Col id="TIME">9</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">27</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">정경목</Col>
+				<Col id="TIME">33</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">28</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">최강</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">34</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">박인성</Col>
+				<Col id="TIME">33</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">9</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김장원</Col>
+				<Col id="TIME">15</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">22</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">윤성민</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">26</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">최진호</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">33</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">이도진</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">35</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomePlayerInfo1">
+		<ColumnInfo>
+			<Column id="RED_TIME" type="string" size="255"/>
+			<Column id="C_CHECK" type="string" size="255"/>
+			<Column id="YELLOW_TIME" type="string" size="255"/>
+			<Column id="HELP_TIME" type="string" size="255"/>
+			<Column id="GOAL_TIME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="STATUS" type="string" size="255"/>
+			<Column id="PSO_YN" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="APLAYER_HOME_IDX" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="FLYING_YN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">신휘</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">GK</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">21</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">정재혼</Col>
+				<Col id="TIME">31</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">12</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">송광민</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">23</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">손선우</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">25</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME">50</Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">신성민</Col>
+				<Col id="TIME">55</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">29</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">서유승</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">16</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">윤재찬</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">17</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김도윤1</Col>
+				<Col id="TIME">31</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">18</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">Y</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME">52</Col>
+				<Col id="HNAME">차이카&#32;디미트로&#32;(주장)</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">5</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김영훈</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">19</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김태후</Col>
+				<Col id="TIME">16</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">20</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayPlayerInfo2">
+		<ColumnInfo>
+			<Column id="RED_TIME" type="string" size="255"/>
+			<Column id="C_CHECK" type="string" size="255"/>
+			<Column id="YELLOW_TIME" type="string" size="255"/>
+			<Column id="HELP_TIME" type="string" size="255"/>
+			<Column id="GOAL_TIME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="STATUS" type="string" size="255"/>
+			<Column id="PSO_YN" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="APLAYER_HOME_IDX" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="FLYING_YN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김준우</Col>
+				<Col id="TIME">19</Col>
+				<Col id="POSITION">GK</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">5</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김준</Col>
+				<Col id="TIME">0</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">R</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">17</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayPlayerInfo1">
+		<ColumnInfo>
+			<Column id="RED_TIME" type="string" size="255"/>
+			<Column id="C_CHECK" type="string" size="255"/>
+			<Column id="YELLOW_TIME" type="string" size="255"/>
+			<Column id="HELP_TIME" type="string" size="255"/>
+			<Column id="GOAL_TIME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="STATUS" type="string" size="255"/>
+			<Column id="PSO_YN" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="APLAYER_HOME_IDX" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="FLYING_YN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">김하현</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">GK</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">21</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME">59</Col>
+				<Col id="HNAME">임정태</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">2</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">진서준</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">DF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">12</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">JIN&#32;XUANZHOU</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">3</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">박서준</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">13</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">유하준</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">15</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">명현준</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">44</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">윤동건</Col>
+				<Col id="TIME">45</Col>
+				<Col id="POSITION">MF</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">88</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">Y</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME">51</Col>
+				<Col id="HNAME">김지후&#32;(주장)</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">9</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">전성준</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">14</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+			<Row>
+				<Col id="RED_TIME"></Col>
+				<Col id="C_CHECK">N</Col>
+				<Col id="YELLOW_TIME"></Col>
+				<Col id="HELP_TIME"></Col>
+				<Col id="GOAL_TIME"></Col>
+				<Col id="HNAME">이진수</Col>
+				<Col id="TIME">64</Col>
+				<Col id="POSITION">FW</Col>
+				<Col id="STATUS">S</Col>
+				<Col id="PSO_YN"></Col>
+				<Col id="TEAMNAME"></Col>
+				<Col id="APLAYER_HOME_IDX"></Col>
+				<Col id="ENTRYNO">16</Col>
+				<Col id="FLYING_YN"></Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomeUniform">
+		<ColumnInfo>
+			<Column id="UNIFORM3_CODE" type="string" size="255"/>
+			<Column id="UNIFORM6_CODE" type="string" size="255"/>
+			<Column id="UNIFORM3" type="string" size="255"/>
+			<Column id="UNIFORM2" type="string" size="255"/>
+			<Column id="UNIFORM1" type="string" size="255"/>
+			<Column id="REGDATE" type="string" size="255"/>
+			<Column id="MATCH_IDX" type="string" size="255"/>
+			<Column id="REGID" type="string" size="255"/>
+			<Column id="UNIFORM1_CODE" type="string" size="255"/>
+			<Column id="UNIFORM4_CODE" type="string" size="255"/>
+			<Column id="LASTDATE" type="string" size="255"/>
+			<Column id="SINGLE_IDX" type="string" size="255"/>
+			<Column id="UNIFORM2_CODE" type="string" size="255"/>
+			<Column id="UNIFORM6" type="string" size="255"/>
+			<Column id="TEAMID" type="string" size="255"/>
+			<Column id="LASTID" type="string" size="255"/>
+			<Column id="UNIFORM5" type="string" size="255"/>
+			<Column id="UNIFORM4" type="string" size="255"/>
+			<Column id="IDX" type="string" size="255"/>
+			<Column id="UNIFORM5_CODE" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="UNIFORM3_CODE">1</Col>
+				<Col id="UNIFORM6_CODE">1</Col>
+				<Col id="UNIFORM3">검정//</Col>
+				<Col id="UNIFORM2">검정//</Col>
+				<Col id="UNIFORM1">밝은빨강/검정/세로</Col>
+				<Col id="REGDATE">2026-01-29&#32;11:31:19.0</Col>
+				<Col id="MATCH_IDX">57531</Col>
+				<Col id="REGID">mc2020015</Col>
+				<Col id="UNIFORM1_CODE">1</Col>
+				<Col id="UNIFORM4_CODE">1</Col>
+				<Col id="LASTDATE">2026-01-29&#32;11:31:19.0</Col>
+				<Col id="SINGLE_IDX">508735</Col>
+				<Col id="UNIFORM2_CODE">1</Col>
+				<Col id="UNIFORM6">노랑//</Col>
+				<Col id="TEAMID">m14m150</Col>
+				<Col id="LASTID"></Col>
+				<Col id="UNIFORM5">노랑//</Col>
+				<Col id="UNIFORM4">노랑//</Col>
+				<Col id="IDX">438610</Col>
+				<Col id="UNIFORM5_CODE">1</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomeChangeInfo">
+		<ColumnInfo>
+			<Column id="OUT_HNAME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="OUT_ENTRYNO" type="string" size="255"/>
+			<Column id="FLAG" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="GUBUN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="OUT_HNAME">김태후</Col>
+				<Col id="HNAME">김장원</Col>
+				<Col id="TIME">16</Col>
+				<Col id="OUT_ENTRYNO">20</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">22</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+			<Row>
+				<Col id="OUT_HNAME">김도윤1</Col>
+				<Col id="HNAME">하정우</Col>
+				<Col id="TIME">31</Col>
+				<Col id="OUT_ENTRYNO">18</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">14</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+			<Row>
+				<Col id="OUT_HNAME">정재혼</Col>
+				<Col id="HNAME">정경목</Col>
+				<Col id="TIME">31</Col>
+				<Col id="OUT_ENTRYNO">12</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">28</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+			<Row>
+				<Col id="OUT_HNAME">김장원</Col>
+				<Col id="HNAME">박인성</Col>
+				<Col id="TIME">31</Col>
+				<Col id="OUT_ENTRYNO">22</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">9</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+			<Row>
+				<Col id="OUT_HNAME">신성민</Col>
+				<Col id="HNAME">김민재</Col>
+				<Col id="TIME">55</Col>
+				<Col id="OUT_ENTRYNO">29</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">27</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsWoundInfo">
+		<ColumnInfo>
+		</ColumnInfo>
+		<Rows>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomeOwnGoalInfo">
+		<ColumnInfo>
+		</ColumnInfo>
+		<Rows>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayUniform">
+		<ColumnInfo>
+			<Column id="UNIFORM3_CODE" type="string" size="255"/>
+			<Column id="UNIFORM6_CODE" type="string" size="255"/>
+			<Column id="UNIFORM3" type="string" size="255"/>
+			<Column id="UNIFORM2" type="string" size="255"/>
+			<Column id="UNIFORM1" type="string" size="255"/>
+			<Column id="REGDATE" type="string" size="255"/>
+			<Column id="MATCH_IDX" type="string" size="255"/>
+			<Column id="REGID" type="string" size="255"/>
+			<Column id="UNIFORM1_CODE" type="string" size="255"/>
+			<Column id="UNIFORM4_CODE" type="string" size="255"/>
+			<Column id="LASTDATE" type="string" size="255"/>
+			<Column id="SINGLE_IDX" type="string" size="255"/>
+			<Column id="UNIFORM2_CODE" type="string" size="255"/>
+			<Column id="UNIFORM6" type="string" size="255"/>
+			<Column id="TEAMID" type="string" size="255"/>
+			<Column id="LASTID" type="string" size="255"/>
+			<Column id="UNIFORM5" type="string" size="255"/>
+			<Column id="UNIFORM4" type="string" size="255"/>
+			<Column id="IDX" type="string" size="255"/>
+			<Column id="UNIFORM5_CODE" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="UNIFORM3_CODE">2</Col>
+				<Col id="UNIFORM6_CODE">2</Col>
+				<Col id="UNIFORM3">흰색//</Col>
+				<Col id="UNIFORM2">흰색//</Col>
+				<Col id="UNIFORM1">흰색//</Col>
+				<Col id="REGDATE">2026-01-29&#32;11:31:19.0</Col>
+				<Col id="MATCH_IDX">57531</Col>
+				<Col id="REGID">mc2020015</Col>
+				<Col id="UNIFORM1_CODE">2</Col>
+				<Col id="UNIFORM4_CODE">2</Col>
+				<Col id="LASTDATE">2026-01-29&#32;11:31:19.0</Col>
+				<Col id="SINGLE_IDX">508735</Col>
+				<Col id="UNIFORM2_CODE">2</Col>
+				<Col id="UNIFORM6">노랑//</Col>
+				<Col id="TEAMID">c04c4454</Col>
+				<Col id="LASTID"></Col>
+				<Col id="UNIFORM5">노랑//</Col>
+				<Col id="UNIFORM4">노랑//</Col>
+				<Col id="IDX">438611</Col>
+				<Col id="UNIFORM5_CODE">2</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsHomeTeamInfo">
+		<ColumnInfo>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TEAMID" type="string" size="255"/>
+			<Column id="PCODE" type="string" size="255"/>
+			<Column id="GUBUN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="POSITION">감독</Col>
+				<Col id="TEAMNAME">경남김해중FC</Col>
+				<Col id="HNAME">이효용</Col>
+				<Col id="TEAMID"></Col>
+				<Col id="PCODE">C</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+			<Row>
+				<Col id="POSITION">코치</Col>
+				<Col id="TEAMNAME">경남김해중FC</Col>
+				<Col id="HNAME">김동영</Col>
+				<Col id="TEAMID"></Col>
+				<Col id="PCODE">C</Col>
+				<Col id="GUBUN">H</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayChangeInfo">
+		<ColumnInfo>
+			<Column id="OUT_HNAME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TIME" type="string" size="255"/>
+			<Column id="OUT_ENTRYNO" type="string" size="255"/>
+			<Column id="FLAG" type="string" size="255"/>
+			<Column id="ENTRYNO" type="string" size="255"/>
+			<Column id="GUBUN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="OUT_HNAME">윤동건</Col>
+				<Col id="HNAME">김준우</Col>
+				<Col id="TIME">45</Col>
+				<Col id="OUT_ENTRYNO">88</Col>
+				<Col id="FLAG">51</Col>
+				<Col id="ENTRYNO">5</Col>
+				<Col id="GUBUN">A</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="dsAwayTeamInfo">
+		<ColumnInfo>
+			<Column id="POSITION" type="string" size="255"/>
+			<Column id="TEAMNAME" type="string" size="255"/>
+			<Column id="HNAME" type="string" size="255"/>
+			<Column id="TEAMID" type="string" size="255"/>
+			<Column id="PCODE" type="string" size="255"/>
+			<Column id="GUBUN" type="string" size="255"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="POSITION">코치</Col>
+				<Col id="TEAMNAME">인천인천남FCU15</Col>
+				<Col id="HNAME">김우형</Col>
+				<Col id="TEAMID"></Col>
+				<Col id="PCODE">C</Col>
+				<Col id="GUBUN">A</Col>
+			</Row>
+			<Row>
+				<Col id="POSITION">코치</Col>
+				<Col id="TEAMNAME">인천인천남FCU15</Col>
+				<Col id="HNAME">오재석</Col>
+				<Col id="TEAMID"></Col>
+				<Col id="PCODE">C</Col>
+				<Col id="GUBUN">A</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

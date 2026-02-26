@@ -151,7 +151,7 @@ namespace Crawler.KFA.Services
             await SaveJsonAsync(Path.Combine(outputDir, $"Match_Results_{yearTag}.json"), allMatchResults);
             if (allMatchDetails.Count > 0)
             {
-                await SaveJsonAsync(Path.Combine(outputDir, $"Match_details_{yearTag}.json"), allMatchDetails);
+                await SaveJsonAsync(Path.Combine(outputDir, $"Match_Details_{yearTag}.json"), allMatchDetails);
             }
             await SaveJsonAsync(Path.Combine(outputDir, $"Teams_{yearTag}.json"), uniqueTeams);
             await SaveJsonAsync(Path.Combine(outputDir, $"Players_{yearTag}.json"), uniquePlayers);

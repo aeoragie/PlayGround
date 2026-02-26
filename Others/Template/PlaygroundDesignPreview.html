@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayGround — Design System Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           DESIGN TOKENS — Trust + Clarity + Calm
+           ============================================ */
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2A4A72;
+            --primary-dark: #152D4A;
+            --primary-subtle: #EFF4F9;
+            --secondary: #475569;
+            --secondary-light: #64748B;
+            --secondary-subtle: #F1F5F9;
+            --accent: #FF6B35;
+            --accent-light: #FF8F5E;
+            --accent-dark: #E55A2B;
+            --accent-soft: #FFF4ED;
+            --trust: #0D9488;
+            --trust-light: #2DD4BF;
+            --trust-subtle: #F0FDF4;
+            --trust-text: #15803D;
+            --warning: #D97706;
+            --warning-subtle: #FFFBEB;
+            --error: #DC2626;
+            --error-subtle: #FEF2F2;
+            --violet: #6D28D9;
+            --violet-subtle: #F5F3FF;
+            --star: #F59E0B;
+            --bg: #FAFAFA;
+            --bg-muted: #F1F5F9;
+            --surface: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --shadow-subtle: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.07);
+            --shadow-btn: 0 2px 6px rgba(30,58,95,0.15);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --nav-bg: #FFFFFF;
+            --nav-border: #E5E7EB;
+            --dash-sidebar: #FFFFFF;
+            --dash-main: #F8F9FA;
+            --kpi-bg: #FFFFFF;
+            --table-hover: rgba(0,0,0,0.015);
+            --review-bg: #F8F9FA;
+            --review-tag-bg: #FFFFFF;
+        }
+
+        [data-theme="dark"] {
+            --primary: #60A5FA;
+            --primary-light: #93C5FD;
+            --primary-dark: #3B82F6;
+            --primary-subtle: rgba(96,165,250,0.1);
+            --secondary: #94A3B8;
+            --secondary-light: #CBD5E1;
+            --secondary-subtle: rgba(148,163,184,0.1);
+            --accent: #FF6B35;
+            --accent-light: #FF8F5E;
+            --accent-dark: #E55A2B;
+            --accent-soft: rgba(255,107,53,0.12);
+            --trust: #2DD4BF;
+            --trust-light: #5EEAD4;
+            --trust-subtle: rgba(45,212,191,0.1);
+            --trust-text: #34D399;
+            --warning: #FBBF24;
+            --warning-subtle: rgba(251,191,36,0.1);
+            --error: #F87171;
+            --error-subtle: rgba(248,113,113,0.1);
+            --violet: #A78BFA;
+            --violet-subtle: rgba(167,139,250,0.1);
+            --star: #FBBF24;
+            --bg: #0F172A;
+            --bg-muted: #1E293B;
+            --surface: #1E293B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border: #334155;
+            --border-light: #1E293B;
+            --shadow-subtle: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-btn: 0 2px 6px rgba(0,0,0,0.3);
+            --nav-bg: #1E293B;
+            --nav-border: #334155;
+            --dash-sidebar: #1E293B;
+            --dash-main: #0F172A;
+            --kpi-bg: #1E293B;
+            --table-hover: rgba(255,255,255,0.02);
+            --review-bg: #1E293B;
+            --review-tag-bg: #0F172A;
+        }
+
+        /* ============================================
+           BASE
+           ============================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ============================================
+           THEME TOGGLE
+           ============================================ */
+        .theme-toggle {
+            position: relative;
+            width: 52px; height: 28px;
+            background: var(--bg-muted);
+            border-radius: 100px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .theme-toggle-knob {
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 20px; height: 20px;
+            background: var(--surface);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px;
+        }
+        [data-theme="dark"] .theme-toggle-knob { transform: translateX(24px); background: #F1F5F9; }
+        .theme-toggle-knob::after { content: '☀'; }
+        [data-theme="dark"] .theme-toggle-knob::after { content: '☾'; }
+
+        /* ============================================
+           TOP NAV
+           ============================================ */
+        .topnav {
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--nav-border);
+            padding: 0 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 56px;
+            position: sticky; top: 0; z-index: 100;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .topnav-logo {
+            font-size: 17px; font-weight: 700;
+            text-decoration: none; color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+        .topnav-logo span { color: var(--primary); }
+        .topnav-links { display: flex; gap: 4px; list-style: none; }
+        .topnav-links a {
+            text-decoration: none; font-size: 13px; font-weight: 600;
+            color: var(--text-secondary); padding: 8px 14px;
+            border-radius: var(--radius-md);
+            transition: all 0.15s;
+        }
+        .topnav-links a:hover { color: var(--text-primary); background: var(--bg-muted); }
+        .topnav-links a.active { color: var(--primary); background: var(--primary-subtle); }
+        .topnav-right { display: flex; gap: 8px; align-items: center; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: var(--radius-md);
+            font-size: 13px; font-weight: 600;
+            border: none; cursor: pointer; font-family: inherit;
+            transition: all 0.15s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-btn); }
+        [data-theme="dark"] .btn-primary { background: #3B82F6; }
+        [data-theme="dark"] .btn-primary:hover { background: #2563EB; }
+        .btn-cta { background: var(--accent); color: white; }
+        .btn-cta:hover { background: var(--accent-dark); box-shadow: 0 2px 8px rgba(255,107,53,0.3); }
+        .btn-secondary { background: var(--secondary-subtle); color: var(--secondary); }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero {
+            max-width: 1140px; margin: 0 auto;
+            padding: 72px 40px 48px; text-align: center;
+        }
+        .hero-label {
+            display: inline-flex; padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 12px; font-weight: 600;
+            background: var(--primary-subtle); color: var(--primary);
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        [data-theme="dark"] .hero-label { border-color: var(--border); }
+        .hero h1 {
+            font-size: 38px; font-weight: 700;
+            line-height: 1.35; margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        .hero h1 em { font-style: normal; color: var(--accent); }
+        .hero p {
+            font-size: 15px; color: var(--text-secondary);
+            max-width: 480px; margin: 0 auto 32px;
+            line-height: 1.75;
+        }
+        .hero-actions { display: flex; gap: 10px; justify-content: center; }
+        .hero-actions .btn { padding: 11px 24px; font-size: 14px; border-radius: var(--radius-lg); }
+
+        /* ============================================
+           SPORT BAR
+           ============================================ */
+        .sport-bar {
+            max-width: 1140px; margin: 0 auto;
+            padding: 0 40px 36px;
+            display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+        }
+        .sport-chip {
+            padding: 7px 16px; border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            background: var(--surface); color: var(--text-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.15s;
+        }
+        .sport-chip:hover { border-color: var(--primary); color: var(--primary); }
+        .sport-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        [data-theme="dark"] .sport-chip.active { background: #3B82F6; border-color: #3B82F6; }
+
+        /* ============================================
+           SEARCH
+           ============================================ */
+        .search-wrap { position: relative; max-width: 640px; margin: 0 auto; }
+        .search-icon {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            font-size: 15px; color: var(--text-muted);
+        }
+        .search-input {
+            width: 100%; padding: 13px 16px 13px 44px;
+            border-radius: var(--radius-lg); border: 1px solid var(--border);
+            font-size: 14px; font-family: inherit;
+            color: var(--text-primary); background: var(--surface);
+            outline: none; transition: all 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-subtle); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        /* ============================================
+           SECTIONS
+           ============================================ */
+        .section { max-width: 1140px; margin: 0 auto; padding: 40px 40px 48px; }
+        .section-label {
+            font-size: 11px; font-weight: 700;
+            color: var(--primary); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 6px;
+        }
+        .section-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+        .section-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+
+        /* ============================================
+           TEAM CARDS
+           ============================================ */
+        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg); border: 1px solid var(--border);
+            overflow: hidden; transition: all 0.2s;
+        }
+        .card:hover { box-shadow: var(--shadow-card); transform: translateY(-1px); }
+        .card-cover {
+            height: 80px; display: flex; align-items: center; justify-content: center;
+        }
+        .card-cover-label { font-size: 16px; font-weight: 700; opacity: 0.15; color: var(--text-primary); }
+        .card-body { padding: 18px; }
+        .team-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .team-avatar {
+            width: 36px; height: 36px; border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: white; font-weight: 700; flex-shrink: 0;
+        }
+        .team-name { font-size: 14px; font-weight: 700; }
+        .team-meta { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+        .badge {
+            display: inline-flex; align-items: center; padding: 3px 8px;
+            border-radius: var(--radius-sm); font-size: 11px; font-weight: 600;
+        }
+        .badge-trust { background: var(--trust-subtle); color: var(--trust-text); }
+        .badge-sport { background: var(--secondary-subtle); color: var(--secondary); }
+        .badge-star { background: var(--warning-subtle); color: var(--warning); }
+        .badge-violet { background: var(--violet-subtle); color: var(--violet); }
+        [data-theme="dark"] .badge-trust { background: rgba(45,212,191,0.12); color: #34D399; }
+        [data-theme="dark"] .badge-sport { background: rgba(148,163,184,0.12); color: #94A3B8; }
+        [data-theme="dark"] .badge-star { background: rgba(251,191,36,0.12); color: #FBBF24; }
+        .team-stats {
+            display: flex; justify-content: space-around;
+            margin-top: 14px; padding-top: 14px;
+            border-top: 1px solid var(--border-light);
+        }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 17px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+        /* ============================================
+           REVIEWS
+           ============================================ */
+        .review-section {
+            background: var(--surface);
+            padding: 48px calc((100% - 1140px) / 2 + 40px);
+            transition: background 0.3s ease;
+        }
+        .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 1140px; }
+        .review-card {
+            background: var(--review-bg);
+            border-radius: var(--radius-lg); padding: 22px;
+            border: 1px solid var(--border-light);
+        }
+        .review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .review-user { display: flex; align-items: center; gap: 10px; }
+        .review-avatar {
+            width: 36px; height: 36px; border-radius: var(--radius-md);
+            background: var(--bg-muted);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: var(--text-secondary);
+        }
+        .review-name { font-size: 13px; font-weight: 600; }
+        .review-date { font-size: 11px; color: var(--text-muted); }
+        .review-stars { color: var(--star); font-size: 13px; letter-spacing: 1px; }
+        .review-text { font-size: 13px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 14px; }
+        .review-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .review-tag {
+            padding: 3px 10px; border-radius: var(--radius-sm);
+            font-size: 11px; font-weight: 600;
+            background: var(--review-tag-bg); color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+        }
+
+        /* ============================================
+           MODE DIVIDER
+           ============================================ */
+        .mode-divider {
+            max-width: 1140px; margin: 0 auto;
+            padding: 32px 40px 0;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .mode-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .mode-divider-label {
+            font-size: 10px; font-weight: 700;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 2px; white-space: nowrap;
+        }
+
+        /* ============================================
+           DASHBOARD — Professional Mode
+           ============================================ */
+        .dash-container {
+            display: flex; border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden; background: var(--surface);
+            min-height: 480px;
+        }
+        .dash-sidebar {
+            width: 200px; background: var(--dash-sidebar);
+            border-right: 1px solid var(--border);
+            padding: 20px 12px; flex-shrink: 0;
+        }
+        .dash-team-info { display: flex; align-items: center; gap: 8px; padding: 0 10px; margin-bottom: 20px; }
+        .dash-team-avatar {
+            width: 32px; height: 32px; border-radius: var(--radius-md);
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: white; font-weight: 700;
+        }
+        [data-theme="dark"] .dash-team-avatar { background: #3B82F6; }
+        .dash-team-name { font-size: 12px; font-weight: 700; }
+        .dash-team-sub { font-size: 10px; color: var(--text-muted); }
+        .dash-nav-label {
+            font-size: 10px; font-weight: 700;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 1.2px; padding: 0 10px; margin: 14px 0 6px;
+        }
+        .dash-nav-item {
+            padding: 7px 10px; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 600;
+            color: var(--text-secondary); cursor: pointer; margin-bottom: 1px;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.1s;
+        }
+        .dash-nav-item:hover { background: var(--bg-muted); }
+        .dash-nav-item.active { background: var(--primary); color: white; }
+        [data-theme="dark"] .dash-nav-item.active { background: #3B82F6; }
+        .dash-nav-icon { width: 16px; text-align: center; font-size: 11px; opacity: 0.6; }
+        .dash-nav-item.active .dash-nav-icon { opacity: 1; }
+        .dash-main { flex: 1; padding: 20px 24px; background: var(--dash-main); }
+        .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .dash-title { font-size: 16px; font-weight: 700; }
+        .dash-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .kpi-card {
+            background: var(--kpi-bg); border-radius: var(--radius-md);
+            border: 1px solid var(--border); padding: 14px 16px;
+        }
+        .kpi-label {
+            font-size: 10px; font-weight: 600;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 4px;
+        }
+        .kpi-value { font-size: 22px; font-weight: 700; }
+        .kpi-change { font-size: 10px; font-weight: 600; margin-top: 2px; }
+        .kpi-up { color: var(--trust); }
+
+        /* Player Table */
+        .player-table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            background: var(--surface); border-radius: var(--radius-md);
+        }
+        .player-table th {
+            text-align: left; padding: 8px 12px;
+            font-size: 10px; font-weight: 700;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 0.8px; border-bottom: 1px solid var(--border);
+        }
+        .player-table td {
+            padding: 10px 12px; font-size: 13px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+        .player-table tr:last-child td { border-bottom: none; }
+        .player-table tr:hover td { background: var(--table-hover); }
+        .player-info { display: flex; align-items: center; gap: 8px; }
+        .player-avatar {
+            width: 28px; height: 28px; border-radius: var(--radius-sm);
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: white; font-weight: 700;
+        }
+        [data-theme="dark"] .player-avatar { background: #3B82F6; }
+        .pos-badge {
+            display: inline-flex; padding: 2px 6px;
+            border-radius: var(--radius-sm); font-size: 11px; font-weight: 700;
+        }
+        .pos-mf { background: var(--primary-subtle); color: var(--primary); }
+        .pos-fw { background: var(--accent-soft); color: var(--accent); }
+        .pos-df { background: var(--warning-subtle); color: var(--warning); }
+        .pos-gk { background: var(--trust-subtle); color: var(--trust); }
+        .sd { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+        .sd-ok { background: var(--trust); }
+        .sd-inj { background: var(--warning); }
+
+        /* ============================================
+           DESIGN SYSTEM SHOWCASE
+           ============================================ */
+        .palette-section {
+            background: var(--surface);
+            padding: 48px calc((100% - 1140px) / 2 + 40px);
+            border-top: 1px solid var(--border);
+            transition: background 0.3s ease;
+        }
+        .palette-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr);
+            gap: 10px; margin-bottom: 24px; max-width: 1140px;
+        }
+        .palette-chip {
+            padding: 20px 14px 14px;
+            border-radius: var(--radius-md);
+            font-size: 11px; font-weight: 600;
+        }
+        .palette-chip-name { margin-bottom: 4px; }
+        .palette-chip-code { opacity: 0.7; font-size: 10px; }
+        .btn-showcase { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+        .badge-showcase { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 36px; text-align: center;
+            transition: background 0.3s ease;
+        }
+        .footer-logo { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .footer-logo span { color: var(--primary); }
+        .footer-text { font-size: 12px; color: var(--text-muted); }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .team-grid { grid-template-columns: 1fr 1fr; }
+            .review-grid { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .dash-sidebar { display: none; }
+            .palette-grid { grid-template-columns: repeat(3, 1fr); }
+            .hero h1 { font-size: 28px; }
+            .topnav { padding: 0 20px; }
+            .section, .hero { padding-left: 20px; padding-right: 20px; }
+        }
+        @media (max-width: 640px) {
+            .team-grid { grid-template-columns: 1fr; }
+            .palette-grid { grid-template-columns: repeat(2, 1fr); }
+            .topnav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+    <a href="#" class="topnav-logo">Play<span>Ground</span></a>
+    <ul class="topnav-links">
+        <a href="#" class="active">홈</a>
+        <a href="#">팀 찾기</a>
+        <a href="#">대회</a>
+        <a href="#">리뷰</a>
+        <a href="#">커뮤니티</a>
+    </ul>
+    <div class="topnav-right">
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <div class="theme-toggle-knob"></div>
+        </div>
+        <button class="btn btn-ghost">로그인</button>
+        <button class="btn btn-cta">시작하기</button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-label">유소년 스포츠 정보 플랫폼</div>
+    <h1>신뢰할 수 있는 정보로<br><em>최적의 선택</em>을 돕습니다</h1>
+    <p>검증된 팀 정보, 실명 리뷰, 선수 포트폴리오.<br>데이터 기반으로 우리 아이에게 맞는 팀을 찾아보세요.</p>
+    <div class="hero-actions">
+        <button class="btn btn-cta">팀 찾아보기 →</button>
+        <button class="btn btn-ghost">플랫폼 소개</button>
+    </div>
+</section>
+
+<!-- SPORT SELECTOR -->
+<div class="sport-bar">
+    <div class="sport-chip active">⚽ 축구</div>
+    <div class="sport-chip">🏀 농구</div>
+    <div class="sport-chip">⚾ 야구</div>
+    <div class="sport-chip">🏊 수영</div>
+    <div class="sport-chip">🎾 테니스</div>
+    <div class="sport-chip">🤸 체조</div>
+    <div class="sport-chip">⛳ 골프</div>
+    <div class="sport-chip">🥋 태권도</div>
+    <div class="sport-chip">🏓 탁구</div>
+</div>
+
+<!-- SEARCH -->
+<section class="section" style="padding-top: 0; padding-bottom: 24px;">
+    <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" placeholder="팀 이름, 지역, 종목으로 검색하세요..." />
+    </div>
+</section>
+
+<!-- TEAM CARDS -->
+<section class="section" style="padding-top: 0;">
+    <div class="section-label">Teams</div>
+    <div class="section-title">인증된 팀 둘러보기</div>
+    <div class="section-desc">투명하게 운영되고, 학부모가 검증한 팀들을 만나보세요.</div>
+    <div class="team-grid">
+        <div class="card">
+            <div class="card-cover" style="background: var(--bg-muted);"><span class="card-cover-label">FC</span></div>
+            <div class="card-body">
+                <div class="team-header">
+                    <div class="team-avatar" style="background: var(--primary);">FC</div>
+                    <div><div class="team-name">성남 드림 FC</div><div class="team-meta">U15 · 경기 성남 · 클럽팀</div></div>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <span class="badge badge-trust">✓ 인증팀</span>
+                    <span class="badge badge-sport">⚽ 축구</span>
+                    <span class="badge badge-star">★ 4.8</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-item"><div class="stat-value">24</div><div class="stat-label">선수</div></div>
+                    <div class="stat-item"><div class="stat-value">12</div><div class="stat-label">리뷰</div></div>
+                    <div class="stat-item"><div class="stat-value">3위</div><div class="stat-label">리그</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-cover" style="background: var(--bg-muted);"><span class="card-cover-label">YS</span></div>
+            <div class="card-body">
+                <div class="team-header">
+                    <div class="team-avatar" style="background: var(--trust);">YS</div>
+                    <div><div class="team-name">용인 스타즈</div><div class="team-meta">U12 · 경기 용인 · 학교팀</div></div>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <span class="badge badge-trust">✓ 인증팀</span>
+                    <span class="badge badge-sport">🏀 농구</span>
+                    <span class="badge badge-star">★ 4.6</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-item"><div class="stat-value">18</div><div class="stat-label">선수</div></div>
+                    <div class="stat-item"><div class="stat-value">8</div><div class="stat-label">리뷰</div></div>
+                    <div class="stat-item"><div class="stat-value">1위</div><div class="stat-label">리그</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-cover" style="background: var(--bg-muted);"><span class="card-cover-label">EJ</span></div>
+            <div class="card-body">
+                <div class="team-header">
+                    <div class="team-avatar" style="background: var(--secondary);">EJ</div>
+                    <div><div class="team-name">서울 이글스 Jr.</div><div class="team-meta">U18 · 서울 송파 · 클럽팀</div></div>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <span class="badge badge-trust">✓ 인증팀</span>
+                    <span class="badge badge-sport">⚾ 야구</span>
+                    <span class="badge badge-star">★ 4.9</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-item"><div class="stat-value">30</div><div class="stat-label">선수</div></div>
+                    <div class="stat-item"><div class="stat-value">21</div><div class="stat-label">리뷰</div></div>
+                    <div class="stat-item"><div class="stat-value">2위</div><div class="stat-label">리그</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="review-section">
+    <div style="max-width: 1140px; margin: 0 auto;">
+        <div class="section-label">Reviews</div>
+        <div class="section-title">학부모 검증 리뷰</div>
+        <div class="section-desc">실명 인증된 학부모만 작성할 수 있는 신뢰 기반 리뷰입니다.</div>
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="review-avatar">김</div>
+                        <div><div class="review-name">김○○ 학부모</div><div class="review-date">2025.07.02</div></div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                </div>
+                <div class="review-text">코치님이 아이 한 명 한 명의 성장에 진심으로 관심을 가져주십니다. 단순히 실력만 보는 것이 아니라 인성 교육도 중요시하는 팀이라 안심하고 맡기고 있습니다.</div>
+                <div class="review-tags">
+                    <span class="review-tag">기술 지도</span>
+                    <span class="review-tag">소통 방식</span>
+                    <span class="review-tag">인성 교육</span>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="review-avatar">이</div>
+                        <div><div class="review-name">이○○ 학부모</div><div class="review-date">2025.06.28</div></div>
+                    </div>
+                    <div class="review-stars">★★★★☆</div>
+                </div>
+                <div class="review-text">체계적인 훈련 프로그램이 인상적이었습니다. 다만 주말 원정 경기가 많아 가족 시간 조절이 필요합니다. 전반적으로 만족하며 아이도 즐겁게 다니고 있습니다.</div>
+                <div class="review-tags">
+                    <span class="review-tag">훈련 체계</span>
+                    <span class="review-tag">시간 관리</span>
+                    <span class="review-tag">학업 지원</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODE DIVIDER -->
+<div class="mode-divider">
+    <div class="mode-divider-line"></div>
+    <div class="mode-divider-label">Professional Mode — Dashboard</div>
+    <div class="mode-divider-line"></div>
+</div>
+
+<!-- DASHBOARD -->
+<section class="section">
+    <div class="section-label">Dashboard</div>
+    <div class="section-title">팀 관리 대시보드</div>
+    <div class="section-desc">팀 운영자를 위한 통합 관리 도구 프리뷰입니다.</div>
+    <div class="dash-container">
+        <div class="dash-sidebar">
+            <div class="dash-team-info">
+                <div class="dash-team-avatar">FC</div>
+                <div><div class="dash-team-name">성남 드림 FC</div><div class="dash-team-sub">U15 클럽팀</div></div>
+            </div>
+            <div class="dash-nav-label">운영</div>
+            <div class="dash-nav-item active"><span class="dash-nav-icon">◻</span> 대시보드</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">⊞</span> 선수단</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">▦</span> 일정</div>
+            <div class="dash-nav-label">관리</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">≡</span> 훈련 기록</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">▸</span> 경기 결과</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">◎</span> 모집 공고</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">◇</span> 리뷰 관리</div>
+            <div class="dash-nav-item"><span class="dash-nav-icon">⚙</span> 설정</div>
+        </div>
+        <div class="dash-main">
+            <div class="dash-header">
+                <div><div class="dash-title">대시보드</div><div class="dash-sub">2025 시즌 현황</div></div>
+                <button class="btn btn-primary" style="font-size: 12px; padding: 7px 14px;">+ 모집 공고</button>
+            </div>
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="kpi-label">등록 선수</div><div class="kpi-value" style="color: var(--primary);">24</div><div class="kpi-change kpi-up">↑ 3명</div></div>
+                <div class="kpi-card"><div class="kpi-label">이번 달 경기</div><div class="kpi-value" style="color: var(--secondary);">6</div><div class="kpi-change" style="color: var(--text-muted);">예정 2 · 완료 4</div></div>
+                <div class="kpi-card"><div class="kpi-label">시즌 승률</div><div class="kpi-value" style="color: var(--trust);">68%</div><div class="kpi-change kpi-up">↑ 5%p</div></div>
+                <div class="kpi-card"><div class="kpi-label">리뷰 평점</div><div class="kpi-value" style="color: var(--star);">4.8</div><div class="kpi-change" style="color: var(--text-muted);">12건</div></div>
+            </div>
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light);">선수단 현황</div>
+            <table class="player-table">
+                <thead><tr><th>선수</th><th>포지션</th><th>#</th><th>연령</th><th>출전</th><th>상태</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><div class="player-info"><div class="player-avatar">JH</div><div style="font-weight: 600; font-size: 12px;">박준혁</div></div></td>
+                        <td><span class="pos-badge pos-mf">MF</span></td><td style="font-size: 12px;">10</td><td style="font-size: 12px;">U15</td><td style="font-size: 12px;">14</td><td><span class="sd sd-ok"></span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="player-info"><div class="player-avatar">SM</div><div style="font-weight: 600; font-size: 12px;">이서민</div></div></td>
+                        <td><span class="pos-badge pos-fw">FW</span></td><td style="font-size: 12px;">7</td><td style="font-size: 12px;">U15</td><td style="font-size: 12px;">12</td><td><span class="sd sd-ok"></span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="player-info"><div class="player-avatar">YJ</div><div style="font-weight: 600; font-size: 12px;">김윤재</div></div></td>
+                        <td><span class="pos-badge pos-df">DF</span></td><td style="font-size: 12px;">3</td><td style="font-size: 12px;">U14</td><td style="font-size: 12px;">10</td><td><span class="sd sd-inj"></span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="player-info"><div class="player-avatar">HC</div><div style="font-weight: 600; font-size: 12px;">최현성</div></div></td>
+                        <td><span class="pos-badge pos-gk">GK</span></td><td style="font-size: 12px;">1</td><td style="font-size: 12px;">U15</td><td style="font-size: 12px;">14</td><td><span class="sd sd-ok"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DESIGN SYSTEM SHOWCASE -->
+<section class="palette-section">
+    <div style="max-width: 1140px; margin: 0 auto;">
+        <div class="section-label">Design System</div>
+        <div class="section-title">색상 팔레트</div>
+        <div class="section-desc">Trust + Clarity + Calm 기반의 색상 체계입니다.</div>
+        <div class="palette-grid">
+            <div class="palette-chip" style="background: #1E3A5F; color: white;"><div class="palette-chip-name">Primary</div><div class="palette-chip-code">Deep Navy #1E3A5F</div></div>
+            <div class="palette-chip" style="background: #475569; color: white;"><div class="palette-chip-name">Secondary</div><div class="palette-chip-code">Slate Blue #475569</div></div>
+            <div class="palette-chip" style="background: #FF6B35; color: white;"><div class="palette-chip-name">Accent CTA</div><div class="palette-chip-code">Warm Orange #FF6B35</div></div>
+            <div class="palette-chip" style="background: #0D9488; color: white;"><div class="palette-chip-name">Trust</div><div class="palette-chip-code">Teal #0D9488</div></div>
+            <div class="palette-chip" style="background: #6D28D9; color: white;"><div class="palette-chip-name">Agent</div><div class="palette-chip-code">Violet #6D28D9</div></div>
+            <div class="palette-chip" style="background: #FAFAFA; color: #1F2937; border: 1px solid #E5E7EB;"><div class="palette-chip-name">Background</div><div class="palette-chip-code">Clean White #FAFAFA</div></div>
+        </div>
+        <div class="section-title" style="font-size: 16px; margin-bottom: 16px;">버튼</div>
+        <div class="btn-showcase">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-cta">CTA</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-ghost">Ghost</button>
+        </div>
+        <div class="section-title" style="font-size: 16px; margin-bottom: 16px;">뱃지</div>
+        <div class="badge-showcase">
+            <span class="badge badge-trust">✓ 인증팀</span>
+            <span class="badge badge-sport">⚽ 축구</span>
+            <span class="badge badge-star">★ 4.8</span>
+            <span class="badge badge-violet">에이전트</span>
+            <span class="badge" style="background: var(--warning-subtle); color: var(--warning);">⏳ 대기</span>
+            <span class="badge" style="background: var(--error-subtle); color: var(--error);">✕ 만료</span>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-logo">Play<span>Ground</span></div>
+    <div class="footer-text">© 2025 PlayGround. 신뢰할 수 있는 유소년 스포츠 정보 플랫폼.</div>
+</footer>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+}
+</script>
+
+</body>
+</html>
