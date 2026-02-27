@@ -59,6 +59,8 @@ Thumbs.db
 *.pfx
 *.publishsettings
 appsettings.*.local.json
+appsettings.Development.json
+Source/Tools/Agent/appsettings.json
 
 ## Test results
 TestResults/
