@@ -3,14 +3,29 @@
 @tailwind utilities;
 
 @layer components {
+
+  /* ── 공통 버튼 ── */
   .btn-primary {
     @apply bg-primary text-white font-bold text-xs px-4 py-2 rounded-btn
            hover:bg-primary-dark transition-colors;
   }
   .btn-ghost {
-    @apply bg-transparent text-text-secondary border border-border
-           font-bold text-xs px-4 py-2 rounded-btn hover:bg-bg;
+    @apply bg-transparent text-text-secondary border-[1.5px] border-border
+           font-bold text-xs px-4 py-2 rounded-btn
+           hover:border-navy hover:text-navy transition-all;
   }
+  .btn-sm {
+    @apply px-4 py-[7px] rounded-btn text-xs font-semibold
+           border border-border bg-surface text-text-secondary
+           hover:border-navy hover:text-navy transition-all cursor-pointer;
+  }
+  .btn-sm-accent {
+    @apply px-4 py-[7px] rounded-btn text-xs font-semibold
+           border-none bg-primary text-white
+           hover:bg-primary-dark transition-colors cursor-pointer;
+  }
+
+  /* ── 카드 / 패널 ── */
   .panel {
     @apply bg-surface rounded-card border border-border p-5;
   }
@@ -18,25 +33,24 @@
     @apply bg-surface rounded-xl border border-border px-5 py-4;
   }
 
-  /* Auth 페이지 */
+  /* ── Auth 페이지 ── */
   .auth-input {
     @apply w-full px-3.5 py-2.5 rounded-btn border-[1.5px] border-border
            text-[13px] outline-none bg-surface text-text-primary
-           focus:border-navy focus:shadow-[0_0_0_3px_rgba(30,58,95,0.08)]
+           focus:border-navy focus:shadow-focus
            placeholder:text-text-light transition-colors;
   }
   .auth-select {
     @apply w-full px-3.5 py-2.5 rounded-btn border-[1.5px] border-border
            text-[13px] outline-none bg-surface text-text-primary
-           focus:border-navy focus:shadow-[0_0_0_3px_rgba(30,58,95,0.08)]
+           focus:border-navy focus:shadow-focus
            transition-colors appearance-none cursor-pointer;
   }
   .btn-auth-submit {
     @apply w-full py-3 rounded-btn text-sm font-bold border-none
            bg-primary text-white cursor-pointer
            hover:bg-primary-dark hover:-translate-y-px
-           shadow-[0_2px_8px_rgba(255,107,53,0.2)]
-           hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)]
+           shadow-accent hover:shadow-accent-hover
            transition-all disabled:opacity-60 disabled:cursor-not-allowed
            disabled:hover:translate-y-0;
   }
@@ -44,5 +58,63 @@
     @apply inline-flex items-center gap-2 px-7 py-3 rounded-btn
            text-sm font-bold border-none bg-navy text-white cursor-pointer
            hover:bg-navy-light hover:-translate-y-px transition-all;
+  }
+
+  /* ── Landing 페이지 ── */
+  .btn-hero-primary {
+    @apply inline-flex items-center gap-2 px-8 py-3.5 rounded-btn
+           text-sm font-bold border-none bg-primary text-white cursor-pointer
+           hover:bg-primary-dark hover:-translate-y-px
+           shadow-[0_4px_16px_rgba(255,107,53,0.25)]
+           hover:shadow-[0_6px_20px_rgba(255,107,53,0.3)]
+           transition-all;
+  }
+  .btn-hero-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-3.5 rounded-btn
+           text-sm font-bold border-[1.5px] border-navy bg-transparent
+           text-navy cursor-pointer hover:bg-navy hover:text-white
+           hover:-translate-y-px transition-all;
+  }
+  .btn-final {
+    @apply inline-flex items-center gap-2 px-10 py-3.5 rounded-btn
+           text-sm font-bold border-none bg-primary text-white cursor-pointer
+           hover:bg-primary-dark hover:-translate-y-px
+           shadow-[0_4px_16px_rgba(255,107,53,0.3)]
+           transition-all;
+  }
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-[1px] text-trust mb-3;
+  }
+  .section-title {
+    @apply text-[28px] font-bold text-navy leading-tight mb-3;
+  }
+  .section-desc {
+    @apply text-[15px] text-text-secondary leading-relaxed max-w-[560px];
+  }
+
+  /* ── 뱃지 ── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-[3px]
+           rounded-full text-[10px] font-semibold;
+  }
+  .badge-navy {
+    @apply badge bg-navy-subtle text-navy;
+  }
+  .badge-trust {
+    @apply badge bg-trust-subtle text-trust;
+  }
+  .badge-accent {
+    @apply badge bg-primary-subtle text-primary;
+  }
+  .badge-violet {
+    @apply badge bg-violet-subtle text-violet;
+  }
+
+  /* ── 스탯 바 ── */
+  .stat-bar-bg {
+    @apply h-2 rounded-full bg-border-light flex-1;
+  }
+  .stat-bar {
+    @apply h-full rounded-full transition-all duration-500 ease-out;
   }
 }
