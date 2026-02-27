@@ -55,6 +55,12 @@ Source/Presentation/Client/wwwroot/css/app.css
 .DS_Store
 Thumbs.db
 
+## Windows reserved device names
+nul
+
+## Claude Code worktrees
+.claude/worktrees/
+
 ## Secrets
 *.pfx
 *.publishsettings
