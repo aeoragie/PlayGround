@@ -16,6 +16,19 @@
     <ProjectReference Include="..\..\Core\Shared\Core.Shared.csproj" />
   </ItemGroup>
 
+  <!-- WasmAppHost 실행을 위한 runtimeconfig.json 생성 (Blazor WASM SDK가 기본 생성하지 않음) -->
+  <Target Name="GenerateWasmRuntimeConfig" AfterTargets="Build">
+    <PropertyGroup>
+      <_WasmRuntimeConfigFile>$(OutputPath)$(AssemblyName).runtimeconfig.json</_WasmRuntimeConfigFile>
+      <_WasmRuntimeConfigJson>{"runtimeOptions":{"tfm":"$(TargetFramework)","rollForward":"LatestMinor","frameworks":[{"name":"Microsoft.NETCore.App","version":"9.0.0"},{"name":"Microsoft.AspNetCore.App","version":"9.0.0"}],"wasmHostProperties":{"perHostConfig":[{"name":"browser","host":"browser"}]}}}</_WasmRuntimeConfigJson>
+    </PropertyGroup>
+    <WriteLinesToFile
+      File="$(_WasmRuntimeConfigFile)"
+      Lines="$(_WasmRuntimeConfigJson)"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true" />
+  </Target>
+
   <!-- Tailwind CSS 빌드 시 자동 컴파일 -->
   <Target Name="Tailwind" BeforeTargets="Build">
     <Exec Command="npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css --minify" Condition="Exists('node_modules')" />

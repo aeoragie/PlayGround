@@ -2,10 +2,10 @@ using System.Diagnostics;
 using Microsoft.Extensions.Options;
 using Main.Entities;
 using Main.Procedures;
-using PlayGround.Application.Interfaces;
-using PlayGround.Domain.SubDomains.Auth;
 using PlayGround.Infrastructure.Database;
 using PlayGround.Infrastructure.Database.Base;
+using PlayGround.Domain.SubDomains.Auth;
+using PlayGround.Application.Interfaces;
 
 namespace PlayGround.Persistence.Repositories
 {
@@ -27,7 +27,7 @@ namespace PlayGround.Persistence.Repositories
             var procedure = new UspGetUserByEmail(this) { Email = email };
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value!) : null;
         }
 
         public async Task<UserModel?> GetUserByIdAsync(Guid userId)
@@ -37,7 +37,7 @@ namespace PlayGround.Persistence.Repositories
             var procedure = new UspGetUser(this) { UserId = userId };
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value!) : null;
         }
 
         public async Task<UserModel?> CreateUserByEmailAsync(string email, string passwordHash, string fullName, string userRole)
@@ -55,7 +55,7 @@ namespace PlayGround.Persistence.Repositories
 
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value!) : null;
         }
 
         public async Task<UserModel?> CreateUserWithSocialAccountAsync(
@@ -79,7 +79,7 @@ namespace PlayGround.Persistence.Repositories
 
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value!) : null;
         }
 
         public async Task<UserModel?> GetUserWithSocialAccountAsync(string provider, string providerUserId)
@@ -95,7 +95,7 @@ namespace PlayGround.Persistence.Repositories
 
             var result = await procedure.SingleAsync<UsersEntity>();
 
-            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value) : null;
+            return result.IsSuccess && result.HasValue ? ToUserModel(result.Value!) : null;
         }
 
         public async Task<RefreshTokenResult?> CreateRefreshTokenAsync(

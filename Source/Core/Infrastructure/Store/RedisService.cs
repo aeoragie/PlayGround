@@ -35,7 +35,7 @@ namespace PlayGround.Infrastructure.Store
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IConfiguration Configuration;
-        private readonly ConcurrentDictionary<string, RedisConnectionEntry> mConnections = new();
+        private readonly ConcurrentDictionary<string, RedisConnectionEntry> Connections = new();
 
         public RedisService(IConfiguration configuration)
         {
@@ -65,7 +65,7 @@ namespace PlayGround.Infrastructure.Store
                     var multiplexer = await ConnectionMultiplexer.ConnectAsync(options);
 
                     var entry = new RedisConnectionEntry(multiplexer, connConfig.DatabaseId);
-                    if (!mConnections.TryAdd(connConfig.Name, entry))
+                    if (!Connections.TryAdd(connConfig.Name, entry))
                     {
                         Logger.Warn("Redis connection '{Name}' already exists", connConfig.Name);
                         await multiplexer.DisposeAsync();
@@ -91,7 +91,7 @@ namespace PlayGround.Infrastructure.Store
         /// </summary>
         public IRedisSession? CreateSession(string connectionName)
         {
-            if (!mConnections.TryGetValue(connectionName, out var entry))
+            if (!Connections.TryGetValue(connectionName, out var entry))
             {
                 Logger.Warn("Redis connection '{Name}' not found", connectionName);
                 return null;
@@ -122,13 +122,13 @@ namespace PlayGround.Infrastructure.Store
         /// </summary>
         public bool IsConnected(string connectionName)
         {
-            return mConnections.TryGetValue(connectionName, out var entry)
+            return Connections.TryGetValue(connectionName, out var entry)
                 && entry.Multiplexer.IsConnected;
         }
 
         public async ValueTask DisposeAsync()
         {
-            foreach (var entry in mConnections.Values)
+            foreach (var entry in Connections.Values)
             {
                 try
                 {
@@ -140,7 +140,7 @@ namespace PlayGround.Infrastructure.Store
                 }
             }
 
-            mConnections.Clear();
+            Connections.Clear();
             Logger.Info("All Redis connections disposed");
         }
 

@@ -8,7 +8,7 @@
 Source/
 ├── Core/                              (재사용 가능한 범용 레이어 - PlayGround 비종속)
 │   ├── Shared/                        범용 .NET 유틸리티 (도메인 무관, 의존성 없음) → Core.Shared.csproj
-│   │   ├── DTOs/                      ApiResponse<T>, PagedList<T>
+│   │   ├── Http/                      Envelope<T>, PagedData<T>
 │   │   ├── Result/                    Result<T> 모나드 패턴
 │   │   │   └── Codes/                 범용 DetailCode, ErrorCode, SuccessCode 등
 │   │   ├── Extensions/               문자열, Enum, 변환 확장 메서드
@@ -97,7 +97,7 @@ Clean Architecture 기반, Core(재사용)와 PlayGround(프로젝트 전용)로
 
 **Core 레이어** (PlayGround 비종속, 다른 프로젝트에서도 재사용 가능):
 - **Core.Shared**: 범용 .NET 유틸리티 라이브러리 (의존성 없음, 도메인 무관)
-  - 어떤 프로젝트에서든 재사용 가능한 코드: Result<T>, ApiResponse<T>, Extensions
+  - 어떤 프로젝트에서든 재사용 가능한 코드: Result<T>, Envelope<T>, Extensions
   - 도메인 특화 코드 포함 금지
 - **Core.Infrastructure**: 외부 라이브러리 래핑 + DB 기반 라이브러리 (Core.Shared만 참조)
   - DB 기반 클래스: RepositoryBase, CommandBase, ProcedureBase, QueryBase 등
@@ -134,7 +134,7 @@ PlayGround.Server (모든 레이어 참조)
 
 ### 데이터 흐름 패턴
 - **내부 로직**: `Result<T>` 모나드 패턴으로 함수형 에러 처리
-- **API 응답**: `ApiResponse<T>` + `PagedList<T>` 래퍼
+- **API 응답**: `Envelope<T>` + `PagedData<T>` 래퍼
 
 ### 빌드 구성
 - `Directory.Build.props`: 빌드 출력 경로 중앙 관리 (Binary/, Intermediate/)
@@ -163,6 +163,41 @@ PlayGround.Server (모든 레이어 참조)
 - **using 문**: 파일 상단에 배치
 - **네임스페이스**: block_scoped (`namespace Foo { }`)
 - **LINQ 체이닝**: 메서드 체이닝 시 각 메서드는 새 줄에 작성, 들여쓰기는 첫 번째 메서드와 동일한 레벨 유지
+
+### using 지시문 순서 규칙
+
+그룹 순서: **System → Microsoft → 3rd Party → Core → PlayGround**
+- 그룹 간 빈 줄 없음
+- 같은 그룹 내: 알파벳순 정렬
+- Core/PlayGround 그룹 내: 의존성 낮은 순 (같은 뎁스는 알파벳순)
+
+```csharp
+// 1. System (알파벳순)
+using System.Diagnostics;
+using System.Security.Claims;
+using System.Text;
+
+// 2. Microsoft (알파벳순)
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+
+// 3. 3rd Party (알파벳순)
+using Dapper;
+using NLog;
+
+// 4. Core (의존성 낮은 순, 같은 뎁스는 알파벳순)
+//    Core.Shared → Core.Infrastructure 순
+using PlayGround.Shared.Http;
+using PlayGround.Shared.Result;
+using PlayGround.Infrastructure.Database;
+
+// 5. PlayGround (의존성 낮은 순, 같은 뎁스는 알파벳순)
+//    Domain → Application → Persistence → Server 순
+using PlayGround.Application.Interfaces;
+using PlayGround.Domain.Enums.Soccer;
+using PlayGround.Server.Services;
+```
 
 ### 예외 처리 스타일
 

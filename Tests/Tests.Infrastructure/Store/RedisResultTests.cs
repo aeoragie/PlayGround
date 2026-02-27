@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Xunit;
 using PlayGround.Infrastructure.Store;
 
 namespace PlayGround.Tests.Infrastructure.Store;
@@ -17,7 +18,7 @@ public class RedisResultTests
         result.IsSuccess.Should().BeTrue();
         result.HasValue.Should().BeTrue();
         result.Value.Should().Be("hello");
-        result.Error.Should().BeNull();
+        result.Message.Should().BeNull();
     }
 
     [Fact]
@@ -58,7 +59,7 @@ public class RedisResultTests
         result.IsSuccess.Should().BeTrue();
         result.HasValue.Should().BeFalse();
         result.Value.Should().BeNull();
-        result.Error.Should().BeNull();
+        result.Message.Should().BeNull();
     }
 
     [Fact]
@@ -86,7 +87,7 @@ public class RedisResultTests
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.HasValue.Should().BeFalse();
-        result.Error.Should().BeNull();
+        result.Message.Should().BeNull();
     }
 
     [Fact]
@@ -101,8 +102,8 @@ public class RedisResultTests
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.HasValue.Should().BeFalse();
-        result.Error.Should().BeSameAs(exception);
-        result.Error!.Message.Should().Be("connection lost");
+        result.Message.Should().BeSameAs(exception.Message);
+        result.Message.Should().Be("connection lost");
     }
 
     #endregion

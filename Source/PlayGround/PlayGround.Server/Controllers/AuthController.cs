@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlayGround.Shared.Http;
+using PlayGround.Shared.Result;
 using PlayGround.Application.Auth.Commands;
 using PlayGround.Application.Auth.Queries;
 using PlayGround.Application.Interfaces;
 using PlayGround.Server.Services;
-using PlayGround.Shared.DTOs;
-using PlayGround.Shared.Result;
 
 namespace PlayGround.Server.Controllers
 {
@@ -38,13 +38,13 @@ namespace PlayGround.Server.Controllers
         /// 이메일 회원가입
         /// </summary>
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
             var command = new RegisterByEmailCommand(Repository, TokenService);
             var result = await command.ExecuteAsync(request);
 
             return result.Match<IActionResult>(
-                onSuccess: data => StatusCode(201, ApiResponse<RegisterResult>.Success(data)),
+                onSuccess: data => StatusCode(201, Envelope<RegisterResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -52,7 +52,7 @@ namespace PlayGround.Server.Controllers
         /// 이메일 로그인
         /// </summary>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
             var userAgent = Request.Headers.UserAgent.ToString();
@@ -65,7 +65,7 @@ namespace PlayGround.Server.Controllers
                 {
                     SetRefreshTokenCookie(data.RefreshToken);
 
-                    return Ok(ApiResponse<object>.Success(new
+                    return Ok(Envelope<object>.Success(new
                     {
                         data.AccessToken,
                         data.ExpiresIn,
@@ -83,12 +83,12 @@ namespace PlayGround.Server.Controllers
         /// Access Token 재발급
         /// </summary>
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh()
+        public async Task<IActionResult> RefreshAsync()
         {
             var refreshToken = Request.Cookies[RefreshTokenCookieName];
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
-                return Unauthorized(ApiResponse<object>.Fail("Refresh token not found"));
+                return Unauthorized(Envelope<object>.Fail("Refresh token not found"));
             }
 
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -102,7 +102,7 @@ namespace PlayGround.Server.Controllers
                 {
                     SetRefreshTokenCookie(data.RefreshToken);
 
-                    return Ok(ApiResponse<object>.Success(new
+                    return Ok(Envelope<object>.Success(new
                     {
                         data.AccessToken,
                         data.ExpiresIn
@@ -116,7 +116,7 @@ namespace PlayGround.Server.Controllers
         /// </summary>
         [Authorize]
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
             var refreshToken = Request.Cookies[RefreshTokenCookieName];
             if (!string.IsNullOrWhiteSpace(refreshToken))
@@ -127,7 +127,7 @@ namespace PlayGround.Server.Controllers
 
             DeleteRefreshTokenCookie();
 
-            return Ok(ApiResponse<object>.Success(new { Message = "Logged out successfully" }));
+            return Ok(Envelope<object>.Success(new { Message = "Logged out successfully" }));
         }
 
         /// <summary>
@@ -135,21 +135,21 @@ namespace PlayGround.Server.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("me")]
-        public async Task<IActionResult> GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUserAsync()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                               ?? User.FindFirst("sub")?.Value;
 
             if (string.IsNullOrWhiteSpace(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
             {
-                return Unauthorized(ApiResponse<object>.Fail("Invalid token"));
+                return Unauthorized(Envelope<object>.Fail("Invalid token"));
             }
 
             var query = new GetCurrentUserQuery(Repository);
             var result = await query.ExecuteAsync(userId);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<CurrentUserResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<CurrentUserResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -158,21 +158,21 @@ namespace PlayGround.Server.Controllers
         /// </summary>
         [Authorize]
         [HttpPost("onboarding")]
-        public async Task<IActionResult> SaveOnboarding([FromBody] SaveOnboardingRequest request)
+        public async Task<IActionResult> SaveOnboardingAsync([FromBody] SaveOnboardingRequest request)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                               ?? User.FindFirst("sub")?.Value;
 
             if (string.IsNullOrWhiteSpace(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
             {
-                return Unauthorized(ApiResponse<object>.Fail("Invalid token"));
+                return Unauthorized(Envelope<object>.Fail("Invalid token"));
             }
 
             var command = new SaveOnboardingCommand(Repository);
             var result = await command.ExecuteAsync(userId, request);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<SaveOnboardingResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<SaveOnboardingResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -180,7 +180,7 @@ namespace PlayGround.Server.Controllers
         /// 이메일 인증 코드 발송
         /// </summary>
         [HttpPost("send-verification")]
-        public async Task<IActionResult> SendVerification([FromBody] SendVerificationRequest request)
+        public async Task<IActionResult> SendVerificationAsync([FromBody] SendVerificationRequest request)
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
 
@@ -188,7 +188,7 @@ namespace PlayGround.Server.Controllers
             var result = await command.ExecuteAsync(request, ipAddress);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<SendVerificationResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<SendVerificationResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -196,13 +196,13 @@ namespace PlayGround.Server.Controllers
         /// 이메일 인증 코드 확인
         /// </summary>
         [HttpPost("verify-email")]
-        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
+        public async Task<IActionResult> VerifyEmailAsync([FromBody] VerifyEmailRequest request)
         {
             var command = new VerifyEmailCommand(Repository);
             var result = await command.ExecuteAsync(request);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<VerifyEmailResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<VerifyEmailResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -210,7 +210,7 @@ namespace PlayGround.Server.Controllers
         /// 비밀번호 재설정 요청
         /// </summary>
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] PasswordResetRequestRequest request)
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] PasswordResetRequestRequest request)
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
 
@@ -218,7 +218,7 @@ namespace PlayGround.Server.Controllers
             var result = await command.ExecuteAsync(request, ipAddress);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<PasswordResetRequestResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<PasswordResetRequestResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -226,13 +226,13 @@ namespace PlayGround.Server.Controllers
         /// 비밀번호 재설정
         /// </summary>
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordRequest request)
         {
             var command = new ResetPasswordCommand(Repository, TokenService);
             var result = await command.ExecuteAsync(request);
 
             return result.Match<IActionResult>(
-                onSuccess: data => Ok(ApiResponse<ResetPasswordResult>.Success(data)),
+                onSuccess: data => Ok(Envelope<ResetPasswordResult>.Success(data)),
                 onFailure: info => ToErrorResponse(info));
         }
 
@@ -252,7 +252,7 @@ namespace PlayGround.Server.Controllers
             }
             catch (ArgumentException)
             {
-                return BadRequest(ApiResponse<object>.Fail($"Unsupported provider: {provider}"));
+                return BadRequest(Envelope<object>.Fail($"Unsupported provider: {provider}"));
             }
         }
 
@@ -260,7 +260,7 @@ namespace PlayGround.Server.Controllers
         /// 소셜 로그인 콜백
         /// </summary>
         [HttpGet("social/{provider}/callback")]
-        public async Task<IActionResult> SocialCallback(string provider, [FromQuery] string code, [FromQuery] string? state)
+        public async Task<IActionResult> SocialCallbackAsync(string provider, [FromQuery] string code, [FromQuery] string? state)
         {
             var clientBaseUrl = Configuration["ClientBaseUrl"] ?? "/";
 
@@ -347,7 +347,7 @@ namespace PlayGround.Server.Controllers
                 _ => 500
             };
 
-            return StatusCode(statusCode, ApiResponse<object>.Fail(info.Message));
+            return StatusCode(statusCode, Envelope<object>.Fail(info.Message));
         }
 
         #endregion

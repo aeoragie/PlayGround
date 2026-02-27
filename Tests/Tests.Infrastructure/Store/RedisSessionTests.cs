@@ -1,25 +1,26 @@
 using FluentAssertions;
 using Moq;
-using PlayGround.Infrastructure.Store;
+using Xunit;
 using StackExchange.Redis;
+using PlayGround.Infrastructure.Store;
 
 namespace PlayGround.Tests.Infrastructure.Store;
 
 public class RedisSessionTests
 {
-    private readonly Mock<IConnectionMultiplexer> mMockMultiplexer;
-    private readonly Mock<IDatabase> mMockDatabase;
-    private readonly RedisSession mSession;
+    private readonly Mock<IConnectionMultiplexer> MockMultiplexer;
+    private readonly Mock<IDatabase> MockDatabase;
+    private readonly RedisSession Session;
 
     public RedisSessionTests()
     {
-        mMockMultiplexer = new Mock<IConnectionMultiplexer>();
-        mMockDatabase = new Mock<IDatabase>();
-        mMockMultiplexer.Setup(m => m.GetDatabase(It.IsAny<int>(), It.IsAny<string>()))
-            .Returns(mMockDatabase.Object);
-        mMockMultiplexer.Setup(m => m.IsConnected).Returns(true);
+        MockMultiplexer = new Mock<IConnectionMultiplexer>();
+        MockDatabase = new Mock<IDatabase>();
+        MockMultiplexer.Setup(m => m.GetDatabase(It.IsAny<int>(), It.IsAny<string>()))
+            .Returns(MockDatabase.Object);
+        MockMultiplexer.Setup(m => m.IsConnected).Returns(true);
 
-        mSession = new RedisSession(mMockMultiplexer.Object);
+        Session = new RedisSession(MockMultiplexer.Object);
     }
 
     #region Constructor
@@ -38,20 +39,20 @@ public class RedisSessionTests
     public void Constructor_ShouldExposeDatabase()
     {
         // Assert
-        mSession.Database.Should().BeSameAs(mMockDatabase.Object);
+        Session.Database.Should().BeSameAs(MockDatabase.Object);
     }
 
     [Fact]
     public void IsConnected_ShouldDelegateToMultiplexer()
     {
         // Assert
-        mSession.IsConnected.Should().BeTrue();
+        Session.IsConnected.Should().BeTrue();
 
         // Arrange
-        mMockMultiplexer.Setup(m => m.IsConnected).Returns(false);
+        MockMultiplexer.Setup(m => m.IsConnected).Returns(false);
 
         // Assert
-        mSession.IsConnected.Should().BeFalse();
+        Session.IsConnected.Should().BeFalse();
     }
 
     #endregion
@@ -59,14 +60,14 @@ public class RedisSessionTests
     #region String Get/Set
 
     [Fact]
-    public async Task TryStringGetAsync_WithValue_ShouldReturnOk()
+    public async Task TryStringGetAsync_WithValue_ShouldReturnOkAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync((RedisValue)"test-value");
 
         // Act
-        var result = await mSession.TryStringGetAsync("key1");
+        var result = await Session.TryStringGetAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -75,14 +76,14 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryStringGetAsync_WithNullValue_ShouldReturnEmpty()
+    public async Task TryStringGetAsync_WithNullValue_ShouldReturnEmptyAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(RedisValue.Null);
 
         // Act
-        var result = await mSession.TryStringGetAsync("key1");
+        var result = await Session.TryStringGetAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -90,44 +91,44 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryStringGetAsync_WhenDisconnected_ShouldReturnFail()
+    public async Task TryStringGetAsync_WhenDisconnected_ShouldReturnFailAsync()
     {
         // Arrange
-        mMockMultiplexer.Setup(m => m.IsConnected).Returns(false);
+        MockMultiplexer.Setup(m => m.IsConnected).Returns(false);
 
         // Act
-        var result = await mSession.TryStringGetAsync("key1");
+        var result = await Session.TryStringGetAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeFalse();
     }
 
     [Fact]
-    public async Task TryStringGetAsync_WhenException_ShouldReturnFailWithError()
+    public async Task TryStringGetAsync_WhenException_ShouldReturnFailWithErrorAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ThrowsAsync(new RedisConnectionException(ConnectionFailureType.UnableToConnect, "timeout"));
 
         // Act
-        var result = await mSession.TryStringGetAsync("key1");
+        var result = await Session.TryStringGetAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error.Should().BeOfType<RedisConnectionException>();
+        result.Message.Should().BeOfType<RedisConnectionException>();
     }
 
     [Fact]
-    public async Task TryStringSetAsync_ShouldReturnOk()
+    public async Task TryStringSetAsync_ShouldReturnOkAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.StringSetAsync(
+        MockDatabase.Setup(db => db.StringSetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), It.IsAny<TimeSpan?>(),
                 It.IsAny<bool>(), It.IsAny<When>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TryStringSetAsync("key1", "value1");
+        var result = await Session.TryStringSetAsync("key1", "value1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -135,30 +136,30 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryStringSetAsync_WithExpiry_ShouldPassExpiry()
+    public async Task TryStringSetAsync_WithExpiry_ShouldPassExpiryAsync()
     {
         // Arrange
         var expiry = TimeSpan.FromMinutes(10);
-        mMockDatabase.Setup(db => db.StringSetAsync(
+        MockDatabase.Setup(db => db.StringSetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), expiry,
                 It.IsAny<bool>(), It.IsAny<When>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TryStringSetAsync("key1", "value1", expiry);
+        var result = await Session.TryStringSetAsync("key1", "value1", expiry);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
-    public async Task TryStringSetAsync_WhenDisconnected_ShouldReturnFail()
+    public async Task TryStringSetAsync_WhenDisconnected_ShouldReturnFailAsync()
     {
         // Arrange
-        mMockMultiplexer.Setup(m => m.IsConnected).Returns(false);
+        MockMultiplexer.Setup(m => m.IsConnected).Returns(false);
 
         // Act
-        var result = await mSession.TryStringSetAsync("key1", "value1");
+        var result = await Session.TryStringSetAsync("key1", "value1");
 
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -169,15 +170,15 @@ public class RedisSessionTests
     #region Generic Get/Set (JSON)
 
     [Fact]
-    public async Task TryGetAsync_WithSerializedValue_ShouldDeserialize()
+    public async Task TryGetAsync_WithSerializedValue_ShouldDeserializeAsync()
     {
         // Arrange
         var json = System.Text.Json.JsonSerializer.Serialize(new TestData { Id = 1, Name = "Player" });
-        mMockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync((RedisValue)json);
 
         // Act
-        var result = await mSession.TryGetAsync<TestData>("key1");
+        var result = await Session.TryGetAsync<TestData>("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -187,20 +188,20 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TrySetAsync_ShouldSerializeAndStore()
+    public async Task TrySetAsync_ShouldSerializeAndStoreAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.StringSetAsync(
+        MockDatabase.Setup(db => db.StringSetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), It.IsAny<TimeSpan?>(),
                 It.IsAny<bool>(), It.IsAny<When>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TrySetAsync("key1", new TestData { Id = 1, Name = "Player" });
+        var result = await Session.TrySetAsync("key1", new TestData { Id = 1, Name = "Player" });
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        mMockDatabase.Verify(db => db.StringSetAsync(
+        MockDatabase.Verify(db => db.StringSetAsync(
             (RedisKey)"key1",
             It.Is<RedisValue>(v => v.ToString().Contains("Player")),
             null, It.IsAny<bool>(), It.IsAny<When>(), It.IsAny<CommandFlags>()), Times.Once);
@@ -211,16 +212,16 @@ public class RedisSessionTests
     #region Hash
 
     [Fact]
-    public async Task TryHashSetAsync_ShouldReturnOk()
+    public async Task TryHashSetAsync_ShouldReturnOkAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.HashSetAsync(
+        MockDatabase.Setup(db => db.HashSetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), It.IsAny<RedisValue>(),
                 It.IsAny<When>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TryHashSetAsync("hash1", "field1", "value1");
+        var result = await Session.TryHashSetAsync("hash1", "field1", "value1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -228,16 +229,16 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryHashGetAsync_WithValue_ShouldDeserialize()
+    public async Task TryHashGetAsync_WithValue_ShouldDeserializeAsync()
     {
         // Arrange
         var json = System.Text.Json.JsonSerializer.Serialize("hello");
-        mMockDatabase.Setup(db => db.HashGetAsync(
+        MockDatabase.Setup(db => db.HashGetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync((RedisValue)json);
 
         // Act
-        var result = await mSession.TryHashGetAsync<string, string>("hash1", "field1");
+        var result = await Session.TryHashGetAsync<string, string>("hash1", "field1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -245,15 +246,15 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryHashGetAsync_WithNullValue_ShouldReturnEmpty()
+    public async Task TryHashGetAsync_WithNullValue_ShouldReturnEmptyAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.HashGetAsync(
+        MockDatabase.Setup(db => db.HashGetAsync(
                 It.IsAny<RedisKey>(), It.IsAny<RedisValue>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(RedisValue.Null);
 
         // Act
-        var result = await mSession.TryHashGetAsync<string, string>("hash1", "field1");
+        var result = await Session.TryHashGetAsync<string, string>("hash1", "field1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -261,7 +262,7 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryHashAllGetAsync_ShouldReturnDictionary()
+    public async Task TryHashAllGetAsync_ShouldReturnDictionaryAsync()
     {
         // Arrange
         var entries = new[]
@@ -269,11 +270,11 @@ public class RedisSessionTests
             new HashEntry("k1", System.Text.Json.JsonSerializer.Serialize(100)),
             new HashEntry("k2", System.Text.Json.JsonSerializer.Serialize(200))
         };
-        mMockDatabase.Setup(db => db.HashGetAllAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.HashGetAllAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(entries);
 
         // Act
-        var result = await mSession.TryHashAllGetAsync<int>("hash1");
+        var result = await Session.TryHashAllGetAsync<int>("hash1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -283,13 +284,13 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryHashSetAsync_WhenDisconnected_ShouldReturnFail()
+    public async Task TryHashSetAsync_WhenDisconnected_ShouldReturnFailAsync()
     {
         // Arrange
-        mMockMultiplexer.Setup(m => m.IsConnected).Returns(false);
+        MockMultiplexer.Setup(m => m.IsConnected).Returns(false);
 
         // Act
-        var result = await mSession.TryHashSetAsync("hash1", "field1", "value1");
+        var result = await Session.TryHashSetAsync("hash1", "field1", "value1");
 
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -300,14 +301,14 @@ public class RedisSessionTests
     #region Key
 
     [Fact]
-    public async Task TryKeyExistsAsync_WhenExists_ShouldReturnTrue()
+    public async Task TryKeyExistsAsync_WhenExists_ShouldReturnTrueAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.KeyExistsAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.KeyExistsAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TryKeyExistsAsync("key1");
+        var result = await Session.TryKeyExistsAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -315,14 +316,14 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryKeyDeleteAsync_ShouldReturnResult()
+    public async Task TryKeyDeleteAsync_ShouldReturnResultAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.KeyDeleteAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.KeyDeleteAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.TryKeyDeleteAsync("key1");
+        var result = await Session.TryKeyDeleteAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -330,15 +331,15 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task TryGetExpiryRemainingAsync_ShouldReturnTtl()
+    public async Task TryGetExpiryRemainingAsync_ShouldReturnTtlAsync()
     {
         // Arrange
         var ttl = TimeSpan.FromMinutes(5);
-        mMockDatabase.Setup(db => db.KeyTimeToLiveAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.KeyTimeToLiveAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(ttl);
 
         // Act
-        var result = await mSession.TryGetExpiryRemainingAsync("key1");
+        var result = await Session.TryGetExpiryRemainingAsync("key1");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -346,16 +347,16 @@ public class RedisSessionTests
     }
 
     [Fact]
-    public async Task SetExpiryAsync_ShouldDelegateToDatabase()
+    public async Task SetExpiryAsync_ShouldDelegateToDatabaseAsync()
     {
         // Arrange
         var expiry = TimeSpan.FromHours(1);
-        mMockDatabase.Setup(db => db.KeyExpireAsync(
+        MockDatabase.Setup(db => db.KeyExpireAsync(
                 It.IsAny<RedisKey>(), expiry, It.IsAny<ExpireWhen>(), It.IsAny<CommandFlags>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await mSession.SetExpiryAsync("key1", expiry);
+        var result = await Session.SetExpiryAsync("key1", expiry);
 
         // Assert
         result.Should().BeTrue();
@@ -366,42 +367,42 @@ public class RedisSessionTests
     #region Ping
 
     [Fact]
-    public async Task PingAsync_WhenHealthy_ShouldReturnTrue()
+    public async Task PingAsync_WhenHealthy_ShouldReturnTrueAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
             .ReturnsAsync(TimeSpan.FromMilliseconds(5));
 
         // Act
-        var result = await mSession.PingAsync();
+        var result = await Session.PingAsync();
 
         // Assert
         result.Should().BeTrue();
     }
 
     [Fact]
-    public async Task PingAsync_WhenSlow_ShouldReturnFalse()
+    public async Task PingAsync_WhenSlow_ShouldReturnFalseAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
             .ReturnsAsync(TimeSpan.FromMilliseconds(1500));
 
         // Act
-        var result = await mSession.PingAsync();
+        var result = await Session.PingAsync();
 
         // Assert
         result.Should().BeFalse();
     }
 
     [Fact]
-    public async Task PingAsync_WhenException_ShouldReturnFalse()
+    public async Task PingAsync_WhenException_ShouldReturnFalseAsync()
     {
         // Arrange
-        mMockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
+        MockDatabase.Setup(db => db.PingAsync(It.IsAny<CommandFlags>()))
             .ThrowsAsync(new RedisConnectionException(ConnectionFailureType.UnableToConnect, "down"));
 
         // Act
-        var result = await mSession.PingAsync();
+        var result = await Session.PingAsync();
 
         // Assert
         result.Should().BeFalse();
@@ -412,10 +413,10 @@ public class RedisSessionTests
     #region Dispose
 
     [Fact]
-    public async Task DisposeAsync_ShouldNotThrow()
+    public async Task DisposeAsync_ShouldNotThrowAsync()
     {
         // Act & Assert
-        await mSession.Invoking(s => s.DisposeAsync().AsTask()).Should().NotThrowAsync();
+        await Session.Invoking(s => s.DisposeAsync().AsTask()).Should().NotThrowAsync();
     }
 
     #endregion

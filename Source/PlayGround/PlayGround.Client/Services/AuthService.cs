@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using PlayGround.Shared.DTOs;
+using PlayGround.Shared.Http;
 
 namespace PlayGround.Client.Services
 {
@@ -25,29 +25,29 @@ namespace PlayGround.Client.Services
         /// <summary>
         /// 이메일 회원가입
         /// </summary>
-        public async Task<ApiResponse<AuthRegisterResult>> RegisterAsync(
+        public async Task<Envelope<AuthRegisterResult>> RegisterAsync(
             string email, string password, string fullName, string? role)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be empty");
 
             var request = new { Email = email, Password = password, FullName = fullName, Role = role };
             var response = await Http.PostAsJsonAsync("api/auth/register", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthRegisterResult>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<AuthRegisterResult>>();
 
             Debug.Assert(result != null, "Register response deserialization failed");
-            return result ?? ApiResponse<AuthRegisterResult>.Fail("Unexpected error");
+            return result ?? Envelope<AuthRegisterResult>.Fail("Unexpected error");
         }
 
         /// <summary>
         /// 이메일 로그인
         /// </summary>
-        public async Task<ApiResponse<AuthLoginResult>> LoginAsync(string email, string password)
+        public async Task<Envelope<AuthLoginResult>> LoginAsync(string email, string password)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be empty");
 
             var request = new { Email = email, Password = password };
             var response = await Http.PostAsJsonAsync("api/auth/login", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthLoginResult>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<AuthLoginResult>>();
 
             if (result?.IsSuccess == true && result.Data != null)
             {
@@ -55,7 +55,7 @@ namespace PlayGround.Client.Services
             }
 
             Debug.Assert(result != null, "Login response deserialization failed");
-            return result ?? ApiResponse<AuthLoginResult>.Fail("Unexpected error");
+            return result ?? Envelope<AuthLoginResult>.Fail("Unexpected error");
         }
 
         /// <summary>
@@ -79,14 +79,14 @@ namespace PlayGround.Client.Services
         /// <summary>
         /// 현재 사용자 조회
         /// </summary>
-        public async Task<ApiResponse<AuthCurrentUser>> GetCurrentUserAsync()
+        public async Task<Envelope<AuthCurrentUser>> GetCurrentUserAsync()
         {
             SetAuthorizationHeader();
             var response = await Http.GetAsync("api/auth/me");
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthCurrentUser>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<AuthCurrentUser>>();
 
             Debug.Assert(result != null, "GetCurrentUser response deserialization failed");
-            return result ?? ApiResponse<AuthCurrentUser>.Fail("Unexpected error");
+            return result ?? Envelope<AuthCurrentUser>.Fail("Unexpected error");
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace PlayGround.Client.Services
                 return false;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthRefreshResult>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<AuthRefreshResult>>();
             if (result?.IsSuccess == true && result.Data != null)
             {
                 mAccessToken = result.Data.AccessToken;
@@ -113,77 +113,77 @@ namespace PlayGround.Client.Services
         /// <summary>
         /// 이메일 인증 코드 발송
         /// </summary>
-        public async Task<ApiResponse<AuthSendVerificationResult>> SendVerificationAsync(string email, string? purpose)
+        public async Task<Envelope<AuthSendVerificationResult>> SendVerificationAsync(string email, string? purpose)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be empty");
 
             var request = new { Email = email, Purpose = purpose ?? "SignUp" };
             var response = await Http.PostAsJsonAsync("api/auth/send-verification", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthSendVerificationResult>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<AuthSendVerificationResult>>();
 
             Debug.Assert(result != null, "SendVerification response deserialization failed");
-            return result ?? ApiResponse<AuthSendVerificationResult>.Fail("Unexpected error");
+            return result ?? Envelope<AuthSendVerificationResult>.Fail("Unexpected error");
         }
 
         /// <summary>
         /// 이메일 인증 코드 확인
         /// </summary>
-        public async Task<ApiResponse<object>> VerifyEmailAsync(Guid verificationId, string code)
+        public async Task<Envelope<object>> VerifyEmailAsync(Guid verificationId, string code)
         {
             Debug.Assert(verificationId != Guid.Empty, "VerificationId cannot be empty");
 
             var request = new { VerificationId = verificationId, Code = code };
             var response = await Http.PostAsJsonAsync("api/auth/verify-email", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<object>>();
 
             Debug.Assert(result != null, "VerifyEmail response deserialization failed");
-            return result ?? ApiResponse<object>.Fail("Unexpected error");
+            return result ?? Envelope<object>.Fail("Unexpected error");
         }
 
         /// <summary>
         /// 비밀번호 재설정 요청
         /// </summary>
-        public async Task<ApiResponse<object>> ForgotPasswordAsync(string email)
+        public async Task<Envelope<object>> ForgotPasswordAsync(string email)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(email), "Email cannot be empty");
 
             var request = new { Email = email };
             var response = await Http.PostAsJsonAsync("api/auth/forgot-password", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<object>>();
 
             Debug.Assert(result != null, "ForgotPassword response deserialization failed");
-            return result ?? ApiResponse<object>.Fail("Unexpected error");
+            return result ?? Envelope<object>.Fail("Unexpected error");
         }
 
         /// <summary>
         /// 비밀번호 재설정
         /// </summary>
-        public async Task<ApiResponse<object>> ResetPasswordAsync(string token, string newPassword)
+        public async Task<Envelope<object>> ResetPasswordAsync(string token, string newPassword)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(token), "Token cannot be empty");
 
             var request = new { Token = token, NewPassword = newPassword };
             var response = await Http.PostAsJsonAsync("api/auth/reset-password", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<object>>();
 
             Debug.Assert(result != null, "ResetPassword response deserialization failed");
-            return result ?? ApiResponse<object>.Fail("Unexpected error");
+            return result ?? Envelope<object>.Fail("Unexpected error");
         }
 
         /// <summary>
         /// 온보딩 프로필 저장
         /// </summary>
-        public async Task<ApiResponse<object>> SaveOnboardingAsync(
+        public async Task<Envelope<object>> SaveOnboardingAsync(
             string? childName, string? sportType, string? ageGroup, string? region, string? teamName)
         {
             SetAuthorizationHeader();
 
             var request = new { ChildName = childName, SportType = sportType, AgeGroup = ageGroup, Region = region, TeamName = teamName };
             var response = await Http.PostAsJsonAsync("api/auth/onboarding", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+            var result = await response.Content.ReadFromJsonAsync<Envelope<object>>();
 
             Debug.Assert(result != null, "SaveOnboarding response deserialization failed");
-            return result ?? ApiResponse<object>.Fail("Unexpected error");
+            return result ?? Envelope<object>.Fail("Unexpected error");
         }
 
         private void SetAuthorizationHeader()

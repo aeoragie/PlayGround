@@ -3,9 +3,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using NLog;
 using Dapper;
-
+using NLog;
 using PlayGround.Shared.Result;
 
 namespace PlayGround.Infrastructure.Database.Base;

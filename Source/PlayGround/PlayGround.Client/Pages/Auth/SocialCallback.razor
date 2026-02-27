@@ -11,8 +11,7 @@
     {
         <div class="text-center">
             <h1 class="text-xl font-bold text-navy mb-3">로그인 실패</h1>
-            <div class="px-3.5 py-2.5 rounded-btn text-xs font-semibold mb-4
-                        bg-red-50 text-red-600 border border-red-200">
+            <div class="@Css.Alert.Error">
                 @mErrorMessage
             </div>
             <a href="/auth/login" class="btn-auth-submit block text-center no-underline">
@@ -24,7 +23,7 @@
     {
         <div class="text-center py-10">
             <h1 class="text-xl font-bold text-navy mb-3">로그인 중...</h1>
-            <p class="text-[13px] text-text-secondary">잠시만 기다려주세요.</p>
+            <p class="@Css.Auth.PageSubtitle">잠시만 기다려주세요.</p>
         </div>
     }
 

@@ -1,5 +1,4 @@
 using NLog;
-
 using PlayGround.Shared.Result;
 
 namespace PlayGround.Infrastructure.Database.Base;

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Xunit;
 using PlayGround.Infrastructure.Logging;
 
 namespace PlayGround.Tests.Infrastructure.Logging;

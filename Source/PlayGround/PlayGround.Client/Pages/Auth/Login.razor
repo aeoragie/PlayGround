@@ -9,8 +9,8 @@
 
     @* 헤더 *@
     <div class="mb-6">
-        <h1 class="text-xl font-bold text-navy mb-1">로그인</h1>
-        <p class="text-[13px] text-text-secondary">소셜 계정 또는 이메일로 시작하세요.</p>
+        <h1 class="@Css.Auth.PageTitle">로그인</h1>
+        <p class="@Css.Auth.PageSubtitle">소셜 계정 또는 이메일로 시작하세요.</p>
     </div>
 
     @* 탭 *@
@@ -20,31 +20,30 @@
     <SocialLoginButtons ShowAll="true" ActionText="계속하기" />
 
     @* 구분선 *@
-    <div class="flex items-center gap-3.5 mb-5">
-        <div class="flex-1 h-px bg-border"></div>
-        <span class="text-[11px] font-semibold text-text-light tracking-wide">또는 이메일</span>
-        <div class="flex-1 h-px bg-border"></div>
+    <div class="@Css.Divider.Container">
+        <div class="@Css.Divider.Line"></div>
+        <span class="@Css.Divider.Text">또는 이메일</span>
+        <div class="@Css.Divider.Line"></div>
     </div>
 
     @* 에러 메시지 *@
     @if (!string.IsNullOrEmpty(mErrorMessage))
     {
-        <div class="px-3.5 py-2.5 rounded-btn text-xs font-semibold mb-4
-                    bg-red-50 text-red-600 border border-red-200">
+        <div class="@Css.Alert.Error">
             @mErrorMessage
         </div>
     }
 
     @* 이메일 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">이메일</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">이메일</label>
         <input type="email" class="auth-input" placeholder="email@example.com"
                @bind="mEmail" @bind:event="oninput" />
     </div>
 
     @* 비밀번호 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">비밀번호</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">비밀번호</label>
         <input type="password" class="auth-input" placeholder="8자 이상"
                @bind="mPassword" @bind:event="oninput"
                @onkeydown="HandleKeyDown" />
@@ -67,9 +66,9 @@
     </button>
 
     @* 푸터 *@
-    <div class="text-center mt-[18px] text-[13px] text-text-secondary">
+    <div class="@Css.Auth.FooterText">
         계정이 없으신가요?
-        <a href="/auth/register" class="text-navy font-bold no-underline hover:text-primary">회원가입</a>
+        <a href="/auth/register" class="@Css.Auth.Link">회원가입</a>
     </div>
 
 </AuthLayout>
@@ -102,7 +101,7 @@
             }
             else
             {
-                mErrorMessage = result.Error ?? "로그인에 실패했습니다.";
+                mErrorMessage = string.IsNullOrEmpty(result.Message) ? "로그인에 실패했습니다." : result.Message;
             }
         }
         catch

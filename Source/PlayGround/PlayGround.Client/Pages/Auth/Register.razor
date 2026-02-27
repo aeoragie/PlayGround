@@ -9,8 +9,8 @@
 
     @* 헤더 *@
     <div class="mb-6">
-        <h1 class="text-xl font-bold text-navy mb-1">회원가입</h1>
-        <p class="text-[13px] text-text-secondary">소셜 계정 또는 이메일로 가입하세요.</p>
+        <h1 class="@Css.Auth.PageTitle">회원가입</h1>
+        <p class="@Css.Auth.PageSubtitle">소셜 계정 또는 이메일로 가입하세요.</p>
     </div>
 
     @* 탭 *@
@@ -23,45 +23,44 @@
     <SocialLoginButtons ShowAll="false" ActionText="가입하기" />
 
     @* 구분선 *@
-    <div class="flex items-center gap-3.5 mb-5">
-        <div class="flex-1 h-px bg-border"></div>
-        <span class="text-[11px] font-semibold text-text-light tracking-wide">또는 이메일</span>
-        <div class="flex-1 h-px bg-border"></div>
+    <div class="@Css.Divider.Container">
+        <div class="@Css.Divider.Line"></div>
+        <span class="@Css.Divider.Text">또는 이메일</span>
+        <div class="@Css.Divider.Line"></div>
     </div>
 
     @* 에러 메시지 *@
     @if (!string.IsNullOrEmpty(mErrorMessage))
     {
-        <div class="px-3.5 py-2.5 rounded-btn text-xs font-semibold mb-4
-                    bg-red-50 text-red-600 border border-red-200">
+        <div class="@Css.Alert.Error">
             @mErrorMessage
         </div>
     }
 
     @* 이름 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">이름</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">이름</label>
         <input type="text" class="auth-input" placeholder="이름을 입력하세요"
                @bind="mFullName" @bind:event="oninput" />
     </div>
 
     @* 이메일 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">이메일</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">이메일</label>
         <input type="email" class="auth-input" placeholder="email@example.com"
                @bind="mEmail" @bind:event="oninput" />
     </div>
 
     @* 비밀번호 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">비밀번호</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">비밀번호</label>
         <input type="password" class="auth-input" placeholder="8자 이상"
                @bind="mPassword" @bind:event="oninput" />
     </div>
 
     @* 비밀번호 확인 *@
-    <div class="mb-3.5">
-        <label class="block text-xs font-semibold text-slate mb-1.5">비밀번호 확인</label>
+    <div class="@Css.Form.FieldGroup">
+        <label class="@Css.Form.Label">비밀번호 확인</label>
         <input type="password" class="auth-input" placeholder="비밀번호를 다시 입력하세요"
                @bind="mConfirmPassword" @bind:event="oninput" />
     </div>
@@ -78,9 +77,9 @@
     </div>
 
     @* 푸터 *@
-    <div class="text-center mt-[18px] text-[13px] text-text-secondary">
+    <div class="@Css.Auth.FooterText">
         이미 계정이 있으신가요?
-        <a href="/auth/login" class="text-navy font-bold no-underline hover:text-primary">로그인</a>
+        <a href="/auth/login" class="@Css.Auth.Link">로그인</a>
     </div>
 
 </AuthLayout>
@@ -125,7 +124,7 @@
             var registerResult = await AuthService.RegisterAsync(mEmail, mPassword, mFullName, mSelectedRole);
             if (!registerResult.IsSuccess)
             {
-                mErrorMessage = registerResult.Error ?? "회원가입에 실패했습니다.";
+                mErrorMessage = registerResult.Message ?? "회원가입에 실패했습니다.";
                 return;
             }
 

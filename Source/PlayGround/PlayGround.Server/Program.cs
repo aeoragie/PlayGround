@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using PlayGround.Application.Interfaces;
 using PlayGround.Infrastructure.Database;
-using PlayGround.Infrastructure.Email;
+using PlayGround.Application.Interfaces;
+using PlayGround.Persistence.Email;
 using PlayGround.Persistence.Repositories;
 using PlayGround.Server.Services;
 
