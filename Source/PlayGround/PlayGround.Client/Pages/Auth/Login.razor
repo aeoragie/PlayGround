@@ -9,8 +9,8 @@
 
     @* 헤더 *@
     <div class="mb-6">
-        <h1 class="@Css.Auth.PageTitle">로그인</h1>
-        <p class="@Css.Auth.PageSubtitle">소셜 계정 또는 이메일로 시작하세요.</p>
+        <h1 class="@Css.Typography.PageTitle">로그인</h1>
+        <p class="@Css.Typography.PageSubtitle">소셜 계정 또는 이메일로 시작하세요.</p>
     </div>
 
     @* 탭 *@
@@ -50,8 +50,8 @@
     </div>
 
     @* 기억하기 + 비밀번호 찾기 *@
-    <div class="flex items-center justify-between mb-[18px]">
-        <label class="flex items-center gap-1.5 text-xs text-text-secondary cursor-pointer">
+    <div class="@Css.Form.Row">
+        <label class="@Css.Form.CheckLabel">
             <input type="checkbox" @bind="mRememberMe" class="accent-navy" />
             로그인 상태 유지
         </label>
@@ -66,9 +66,9 @@
     </button>
 
     @* 푸터 *@
-    <div class="@Css.Auth.FooterText">
+    <div class="@Css.Typography.FooterNote">
         계정이 없으신가요?
-        <a href="/auth/register" class="@Css.Auth.Link">회원가입</a>
+        <a href="/auth/register" class="@Css.Link.Navy">회원가입</a>
     </div>
 
 </AuthLayout>

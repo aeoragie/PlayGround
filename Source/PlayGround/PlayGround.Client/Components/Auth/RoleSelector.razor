@@ -5,10 +5,10 @@
     @foreach (var role in Roles)
     {
         var isSelected = SelectedRole == role.Value;
-        <div class="@GetCardClass(isSelected)" @onclick="() => SelectRole(role.Value)">
-            <div class="@GetIconClass(isSelected)">@role.Icon</div>
-            <div class="@GetNameClass(isSelected)">@role.Name</div>
-            <div class="@GetDescClass(isSelected)">@role.Description</div>
+        <div class="@Css.Card.Selectable(isSelected)" @onclick="() => SelectRole(role.Value)">
+            <div class="@Css.Card.CardIcon(isSelected)">@role.Icon</div>
+            <div class="@Css.Card.CardName(isSelected)">@role.Name</div>
+            <div class="@Css.Card.CardDesc(isSelected)">@role.Description</div>
         </div>
     }
 </div>
@@ -31,28 +31,4 @@
         SelectedRole = role;
         await SelectedRoleChanged.InvokeAsync(role);
     }
-
-    private static string GetCardClass(bool isSelected)
-    {
-        var baseClass = "py-3.5 px-2.5 rounded-btn border-[1.5px] text-center cursor-pointer transition-all";
-        return isSelected
-            ? $"{baseClass} border-navy bg-navy-subtle"
-            : $"{baseClass} border-border bg-surface hover:border-navy hover:bg-navy-subtle";
-    }
-
-    private static string GetIconClass(bool isSelected)
-    {
-        var baseClass = "w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-1.5 text-sm";
-        return isSelected
-            ? $"{baseClass} bg-navy text-white"
-            : $"{baseClass} bg-border-light text-text-light";
-    }
-
-    private static string GetNameClass(bool isSelected) => isSelected
-        ? "text-[11px] font-bold text-navy"
-        : "text-[11px] font-semibold text-text-secondary";
-
-    private static string GetDescClass(bool isSelected) => isSelected
-        ? "text-[10px] text-slate-light mt-0.5 leading-tight"
-        : "text-[10px] text-text-light mt-0.5 leading-tight";
 }

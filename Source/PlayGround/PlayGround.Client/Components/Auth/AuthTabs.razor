@@ -1,20 +1,16 @@
 @* 로그인/회원가입 탭 전환 *@
 
-<div class="flex bg-border-light rounded-btn p-[3px] mb-6">
+<div class="@Css.Tabs.Container">
     <a href="/auth/login"
-       class="@GetTabClass(IsLoginActive)">
+       class="@Css.Tabs.Tab(IsLoginActive)">
         로그인
     </a>
     <a href="/auth/register"
-       class="@GetTabClass(!IsLoginActive)">
+       class="@Css.Tabs.Tab(!IsLoginActive)">
         회원가입
     </a>
 </div>
 
 @code {
     [Parameter] public bool IsLoginActive { get; set; }
-
-    private static string GetTabClass(bool isActive) => isActive
-        ? "flex-1 py-2 px-4 rounded-[6px] text-[13px] font-semibold text-center no-underline text-navy bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all"
-        : "flex-1 py-2 px-4 rounded-[6px] text-[13px] font-semibold text-center no-underline text-text-light hover:text-text-secondary cursor-pointer transition-all";
 }
