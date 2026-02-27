@@ -20,6 +20,11 @@ CREATE TABLE [dbo].[Users]
     [LanguageCode] VARCHAR(10) NULL DEFAULT 'ko',
     [TimeZone] VARCHAR(50) NULL DEFAULT 'Korea Standard Time',
 
+    -- 온보딩 프로필
+    [SportType] VARCHAR(20) NULL,       -- 'Soccer','Baseball','Basketball' 등
+    [AgeGroup] VARCHAR(10) NULL,        -- 'U10','U12','U15','U18'
+    [Region] NVARCHAR(20) NULL,         -- 활동 지역
+
     [UserStatus] VARCHAR(20) NOT NULL DEFAULT 'Active',
     [UserRole] VARCHAR(20) NOT NULL DEFAULT 'Player',
 

@@ -1,0 +1,40 @@
+@* 소셜 로그인 버튼 그룹 *@
+@inject NavigationManager Navigation
+
+<div class="flex flex-col gap-2 mb-5">
+    <button class="@BtnClass" @onclick='() => HandleSocialLogin("google")'>
+        <span class="w-5 h-5 rounded bg-[#4285F4] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">G</span>
+        Google로 @ActionText
+    </button>
+    <button class="@BtnClass" @onclick='() => HandleSocialLogin("kakao")'>
+        <span class="w-5 h-5 rounded bg-[#FEE500] text-[#3C1E1E] text-[11px] font-bold flex items-center justify-center flex-shrink-0">K</span>
+        카카오로 @ActionText
+    </button>
+    @if (ShowAll)
+    {
+        <button class="@BtnClass" disabled>
+            <span class="w-5 h-5 rounded bg-black text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">A</span>
+            Apple로 @ActionText
+        </button>
+        <button class="@BtnClass" disabled>
+            <span class="w-5 h-5 rounded bg-[#06C755] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">L</span>
+            LINE으로 @ActionText
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter] public bool ShowAll { get; set; } = true;
+    [Parameter] public string ActionText { get; set; } = "계속하기";
+    [Parameter] public EventCallback<string> OnSocialLogin { get; set; }
+
+    private const string BtnClass =
+        "flex items-center gap-3 w-full px-4 py-[11px] rounded-btn text-[13px] font-semibold " +
+        "border border-border bg-surface text-text-primary cursor-pointer " +
+        "hover:border-slate-light hover:bg-[#FAFAFA] transition-all";
+
+    private void HandleSocialLogin(string provider)
+    {
+        Navigation.NavigateTo($"/api/auth/social/{provider}", forceLoad: true);
+    }
+}

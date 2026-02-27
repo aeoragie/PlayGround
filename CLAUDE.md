@@ -6,50 +6,48 @@
 
 ```
 Source/
-├── Core/                              (핵심 비즈니스 레이어)
-│   ├── Shared/                        범용 .NET 유틸리티 (도메인 무관, 의존성 없음)
+├── Core/                              (재사용 가능한 범용 레이어 - PlayGround 비종속)
+│   ├── Shared/                        범용 .NET 유틸리티 (도메인 무관, 의존성 없음) → Core.Shared.csproj
 │   │   ├── DTOs/                      ApiResponse<T>, PagedList<T>
 │   │   ├── Result/                    Result<T> 모나드 패턴
 │   │   │   └── Codes/                 범용 DetailCode, ErrorCode, SuccessCode 등
 │   │   ├── Extensions/               문자열, Enum, 변환 확장 메서드
 │   │   └── Validation/               범용 검증 유틸리티
 │   │
-│   ├── Domain/                        비즈니스 규칙, 엔티티, 도메인 Enum (Shared 참조)
-│   │   ├── Common/                    Entity, ValueObject, Enumeration 베이스
+│   └── Infrastructure/                외부 라이브러리 래핑 + DB 기반 라이브러리 (Shared 참조) → Core.Infrastructure.csproj
+│       ├── Database/
+│       │   └── Base/                  CommandBase, ProcedureBase, QueryBase, RepositoryBase, ResultBase
+│       ├── Store/                     Redis 래핑
+│       ├── Actor/                     Akka 래핑
+│       ├── Email/                     이메일 서비스
+│       └── Logging/                   NLog 설정/래핑
+│
+├── PlayGround/                        (PlayGround 프로젝트 전용 레이어)
+│   ├── PlayGround.Domain/             비즈니스 규칙, 엔티티, 도메인 Enum (Core.Shared 참조) → PlayGround.Domain.csproj
 │   │   ├── Enums/                     도메인 Enum (PlayerCategory, MatchStatus 등)
 │   │   │   └── Soccer/               축구 전용 Enum (SoccerPosition, PreferredFoot 등)
 │   │   ├── Codes/                     도메인 특화 ResultCode (SportsErrorCode 등)
-│   │   ├── SubDomains/                서브도메인별 엔티티, 값 객체
-│   │   └── Interfaces/               리포지토리 인터페이스 (포트 정의)
+│   │   └── SubDomains/                서브도메인별 엔티티, 값 객체
 │   │
-│   └── Application/                   유즈케이스, 서비스 오케스트레이션 (Domain, Shared 참조)
-│       ├── {기능}/Commands/           상태 변경 유즈케이스 (생성, 수정, 삭제)
-│       ├── {기능}/Queries/            조회 유즈케이스
-│       ├── Interfaces/                인프라 포트 (ICacheService 등)
-│       ├── Mappers/                   Entity ↔ DTO 변환
-│       └── Validators/                입력값 검증
-│
-├── Infrastructure/
-│   ├── Infrastructure/                외부 라이브러리 래핑 + DB 기반 라이브러리 (Application, Domain, Shared 참조)
+│   ├── PlayGround.Application/        유즈케이스, 서비스 오케스트레이션 (Domain, Core.Shared 참조) → PlayGround.Application.csproj
+│   │   ├── {기능}/Commands/           상태 변경 유즈케이스 (생성, 수정, 삭제)
+│   │   ├── {기능}/Queries/            조회 유즈케이스
+│   │   ├── Interfaces/                인프라 포트 (IEmailService 등)
+│   │   ├── Mappers/                   Entity ↔ DTO 변환
+│   │   └── Validators/                입력값 검증
+│   │
+│   ├── PlayGround.Persistence/        DB 전용 (Domain, Application, Core.Shared, Core.Infrastructure 참조) → PlayGround.Persistence.csproj
 │   │   ├── Database/
-│   │   │   └── Base/                  CommandBase, ProcedureBase, QueryBase, RepositoryBase, ResultBase
-│   │   ├── Caching/                   Redis 래핑
-│   │   ├── Messaging/                 Akka, SignalR 래핑
-│   │   └── Logging/                   NLog 설정/래핑
+│   │   │   └── Generated/            Generator.Database 생성 코드 출력 위치
+│   │   │       └── {DB명}/
+│   │   │           ├── Entities/      테이블 엔티티
+│   │   │           ├── Procedures/    프로시저
+│   │   │           └── Queries/       쿼리
+│   │   ├── Data/                      EF Core DbContext, Migrations
+│   │   └── Repositories/              리포지토리 구현체
 │   │
-│   └── Persistence/                   DB 전용 (Application, Domain, Shared, Infrastructure 참조)
-│       ├── Database/
-│       │   └── Generated/            Generator.Database 생성 코드 출력 위치
-│       │       └── {DB명}/
-│       │           ├── Entities/      테이블 엔티티
-│       │           ├── Procedures/    프로시저
-│       │           └── Queries/       쿼리
-│       ├── Data/                      EF Core DbContext, Migrations
-│       └── Repositories/              리포지토리 구현체
-│
-├── Presentation/                      (웹 애플리케이션)
-│   ├── Server/                        ASP.NET Core API Server
-│   └── Client/                        Blazor WebAssembly (프론트엔드)
+│   ├── PlayGround.Server/             ASP.NET Core API Server (모든 레이어 참조) → PlayGround.Server.csproj
+│   └── PlayGround.Client/             Blazor WebAssembly 프론트엔드 (Core.Shared 참조) → PlayGround.Client.csproj
 │       ├── Layout/                    MainLayout, DashboardLayout
 │       ├── Pages/                     Auth, Team, Player, Agent
 │       ├── Components/                KpiCard, StatusBadge 등 재사용 컴포넌트
@@ -65,14 +63,14 @@ Source/
 │       ├── Queries/                   쿼리 정의
 │       └── Indexes/                   인덱스 정의
 │
-├── AppHost/                           .NET Aspire 호스트 (오케스트레이션)
-├── ServiceDefaults/                   서비스 기본 설정 (OpenTelemetry, HealthCheck)
+├── AppHost/                           .NET Aspire 호스트 (오케스트레이션) → PlayGround.AppHost.csproj
+├── ServiceDefaults/                   서비스 기본 설정 (OpenTelemetry, HealthCheck) → PlayGround.ServiceDefaults.csproj
 │
 └── Tools/
     └── Generator.Database/            데이터베이스 코드 생성기 → Persistence 출력
 
 Tests/
-├── Tests.Unit/                        단위 테스트 (Domain, Application, Shared)
+├── Tests.Unit/                        단위 테스트 (Domain, Application, Core.Shared)
 ├── Tests.Integration/                 통합 테스트 (API 엔드포인트)
 └── Tests.Infrastructure/              인프라 테스트 (DB, 외부 서비스)
 ```
@@ -95,37 +93,43 @@ Tests/
 
 ## 아키텍처
 
-Clean Architecture 기반:
-- **Shared**: 범용 .NET 유틸리티 라이브러리 (의존성 없음, 도메인 무관)
+Clean Architecture 기반, Core(재사용)와 PlayGround(프로젝트 전용)로 분리:
+
+**Core 레이어** (PlayGround 비종속, 다른 프로젝트에서도 재사용 가능):
+- **Core.Shared**: 범용 .NET 유틸리티 라이브러리 (의존성 없음, 도메인 무관)
   - 어떤 프로젝트에서든 재사용 가능한 코드: Result<T>, ApiResponse<T>, Extensions
   - 도메인 특화 코드 포함 금지
-- **Domain**: 비즈니스 규칙, 엔티티, 도메인 Enum, 도메인 ResultCode (Shared 참조)
+- **Core.Infrastructure**: 외부 라이브러리 래핑 + DB 기반 라이브러리 (Core.Shared만 참조)
+  - DB 기반 클래스: RepositoryBase, CommandBase, ProcedureBase, QueryBase 등
+  - Redis, Akka 등 외부 라이브러리를 프레임워크에 맞게 래핑/확장
+  - Domain/Application 참조 금지 (PlayGround 비종속)
+
+**PlayGround 레이어** (프로젝트 전용):
+- **PlayGround.Domain**: 비즈니스 규칙, 엔티티, 도메인 Enum, 도메인 ResultCode (Core.Shared 참조)
   - 외부 라이브러리 의존 금지, 순수 비즈니스 로직만 포함
   - 도메인 Enum, SportsErrorCode 등 도메인 특화 코드 위치
-- **Application**: 유즈케이스 오케스트레이션 (Domain, Shared 참조)
+- **PlayGround.Application**: 유즈케이스 오케스트레이션 (Domain, Core.Shared 참조)
   - API 하나가 하는 일 = 유즈케이스 하나 (Command/Query 패턴)
-  - 인프라 인터페이스 정의 (포트), 구현은 Infrastructure/Persistence에서
-- **Infrastructure**: 외부 라이브러리 래핑 + DB 기반 라이브러리 (Application, Domain, Shared 참조)
-  - DB 기반 클래스: RepositoryBase, CommandBase, ProcedureBase, QueryBase 등
-  - Redis, Akka, SignalR 등 외부 라이브러리를 프로젝트에 맞게 래핑/확장
-- **Persistence**: DB 전용 (Application, Domain, Shared, Infrastructure 참조)
+  - 인프라 인터페이스 정의 (포트), 구현은 Persistence에서
+- **PlayGround.Persistence**: DB 전용 (Application, Domain, Core.Shared, Core.Infrastructure 참조)
   - Generated 코드, EF Core DbContext, 리포지토리 구현체
-- **Presentation**: Web UI + API (모든 레이어 참조)
+- **PlayGround.Server**: ASP.NET Core API (모든 레이어 참조)
+- **PlayGround.Client**: Blazor WebAssembly 프론트엔드 (Core.Shared 참조)
 
 ### 의존성 그래프
 
 ```
-Shared (의존성 없음)
+Core.Shared (의존성 없음)
   ↑
-Domain (Shared 참조)
+Core.Infrastructure (Core.Shared 참조)
   ↑
-Application (Domain, Shared 참조)
+PlayGround.Domain (Core.Shared 참조)
   ↑
-Infrastructure (Application, Domain, Shared 참조)
+PlayGround.Application (PlayGround.Domain, Core.Shared 참조)
   ↑
-Persistence (Application, Domain, Shared, Infrastructure 참조)
+PlayGround.Persistence (PlayGround.Application, PlayGround.Domain, Core.Shared, Core.Infrastructure 참조)
   ↑
-Presentation (모든 레이어 참조)
+PlayGround.Server (모든 레이어 참조)
 ```
 
 ### 데이터 흐름 패턴
@@ -334,9 +338,9 @@ public IReadOnlyList<PlayerDto> GetActivePlayers(int count = 10)
 
 - **빌드**: `dotnet build PlayGround.sln`
 - **실행 (Aspire)**: `dotnet run --project Source/AppHost`
-- **실행 (서버만)**: `dotnet run --project Source/Presentation/Server`
+- **실행 (서버만)**: `dotnet run --project Source/PlayGround/PlayGround.Server`
 - **테스트**: `dotnet test`
-- **Tailwind 빌드**: `cd Source/Presentation/Client && npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css`
+- **Tailwind 빌드**: `cd Source/PlayGround/PlayGround.Client && npx tailwindcss -i ./Styles/app.tailwind.css -o ./wwwroot/css/app.css`
 
 ## 중요 규칙
 

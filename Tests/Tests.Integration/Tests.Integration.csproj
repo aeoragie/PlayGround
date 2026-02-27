@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\Presentation\Server\Server.csproj" />
+    <ProjectReference Include="..\..\Source\PlayGround\PlayGround.Server\PlayGround.Server.csproj" />
   </ItemGroup>
 
 </Project>
